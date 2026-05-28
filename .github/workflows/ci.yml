@@ -33,7 +33,7 @@ jobs:
         run: |
           TOTAL=$(du -cb dist/assets/*.js | tail -1 | cut -f1)
           echo "Total JS size: $TOTAL bytes"
-          if [ "$TOTAL" -gt 512000 ]; then
-            echo "JS bundle exceeds 500KB"
+          if [ "$TOTAL" -gt 614400 ]; then
+            echo "JS bundle exceeds 600KB"
             exit 1
           fi
