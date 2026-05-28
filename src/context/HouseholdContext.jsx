@@ -18,6 +18,10 @@ export function HouseholdProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const loadHouseholdData = useCallback(async (userId) => {
+    if (!userId) {
+      setIsLoading(false)
+      return
+    }
     setIsLoading(true)
     try {
       // 1. Get household details from repository
@@ -47,16 +51,16 @@ export function HouseholdProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      loadHouseholdData(user.id)
-    } else {
-      // Reset state on session terminations (logout)
+    if (!isAuthenticated || !user) {
       setHousehold(null)
       setBaby(null)
       setMembers([])
       setMyProfile(null)
       setIsLoading(false)
+      return
     }
+
+    loadHouseholdData(user.id)
   }, [isAuthenticated, user, loadHouseholdData])
 
   const createNewHousehold = async (babyName, babyDob) => {

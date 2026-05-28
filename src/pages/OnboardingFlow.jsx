@@ -53,14 +53,6 @@ export default function OnboardingFlow() {
     }
   }, [isAuthenticated, hasHousehold, authLoading, householdLoading, step, navigate])
 
-  if (authLoading || (isAuthenticated && householdLoading)) {
-    return (
-      <div className="bg-surface-base min-h-dvh flex items-center justify-center">
-        <div className="text-ink-tertiary text-sm">Loading...</div>
-      </div>
-    )
-  }
-
   useEffect(() => {
     if (step === 'invitePartner' && household?.id && user?.id) {
       const generateInvite = async () => {
@@ -79,6 +71,14 @@ export default function OnboardingFlow() {
       generateInvite()
     }
   }, [step, household?.id, user?.id])
+
+  if (authLoading || (isAuthenticated && householdLoading)) {
+    return (
+      <div className="bg-surface-base min-h-dvh flex items-center justify-center">
+        <div className="text-ink-tertiary text-sm">Loading...</div>
+      </div>
+    )
+  }
 
   const handleSendMagicLink = async (e) => {
     e.preventDefault()
