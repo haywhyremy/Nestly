@@ -4,13 +4,14 @@ import { SegmentedToggle } from '../inputs/SegmentedToggle'
 import { TimePicker } from '../inputs/TimePicker'
 import { CarerAttribution } from '../inputs/CarerAttribution'
 import { PrimaryButton } from '../buttons/PrimaryButton'
+import { DestructiveButton } from '../buttons/DestructiveButton'
 import { useHousehold } from '../../context/HouseholdContext'
 import { useAuth } from '../../context/AuthContext'
 import { useDefaults } from '../../hooks/useDefaults'
-import { createEvent } from '../../db/repositories'
+import { createEvent, updateEvent, softDeleteEvent } from '../../db/repositories'
 import { trackEvent } from '../../services/analytics'
 
-export function LogNappySheet({ isOpen, onClose }) {
+export function LogNappySheet({ isOpen, onClose, editEvent = null, onSave = null }) {
   const { user } = useAuth()
   const { household, baby, myProfile } = useHousehold()
   const defaults = useDefaults(household?.id)
@@ -21,15 +22,20 @@ export function LogNappySheet({ isOpen, onClose }) {
 
   const sheetOpenTime = useRef(null)
 
-  // Reset fields to defaults when the sheet is opened
+  // Reset fields to defaults or event values when the sheet is opened
   useEffect(() => {
     if (isOpen) {
-      setNappyType(defaults.defaultNappyType || 'wet')
-      setEventTime(new Date())
+      if (editEvent) {
+        setNappyType(editEvent.eventSubtype || 'wet')
+        setEventTime(new Date(editEvent.eventTime))
+      } else {
+        setNappyType(defaults.defaultNappyType || 'wet')
+        setEventTime(new Date())
+      }
       sheetOpenTime.current = Date.now()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [isOpen, editEvent])
 
   const handleLogNappy = async () => {
     if (!household?.id || !baby?.id || !user?.id) {
@@ -42,20 +48,31 @@ export function LogNappySheet({ isOpen, onClose }) {
       const metadata = { nappy_type: nappyType }
       const loggedByName = myProfile?.displayLabel || myProfile?.displayName || 'Parent'
 
-      await createEvent({
-        type: 'nappy',
-        subtype: nappyType,
-        metadata,
-        eventTime: eventTime.toISOString(),
-        householdId: household.id,
-        babyId: baby.id,
-        loggedBy: user.id,
-        loggedByName
-      })
+      if (editEvent) {
+        await updateEvent(editEvent.clientId, {
+          eventSubtype: nappyType,
+          metadata,
+          eventTime: eventTime.toISOString()
+        })
+        if (onSave) {
+          onSave()
+        }
+      } else {
+        await createEvent({
+          type: 'nappy',
+          subtype: nappyType,
+          metadata,
+          eventTime: eventTime.toISOString(),
+          householdId: household.id,
+          babyId: baby.id,
+          loggedBy: user.id,
+          loggedByName
+        })
+      }
 
       // Track analytics with duration
       const durationMs = Date.now() - (sheetOpenTime.current || Date.now())
-      trackEvent('entry_logged', {
+      trackEvent(editEvent ? 'entry_edited' : 'entry_logged', {
         type: 'nappy',
         subtype: nappyType,
         household_id: household.id,
@@ -70,21 +87,57 @@ export function LogNappySheet({ isOpen, onClose }) {
     }
   }
 
+  const handleDeleteNappy = async () => {
+    if (!editEvent) return
+
+    const confirmed = window.confirm('Delete this entry? This cannot be undone.')
+    if (!confirmed) return
+
+    setIsSubmitting(true)
+    try {
+      await softDeleteEvent(editEvent.clientId)
+
+      trackEvent('entry_deleted', {
+        type: 'nappy',
+        subtype: editEvent.eventSubtype,
+        household_id: household?.id
+      })
+
+      onClose()
+    } catch (err) {
+      console.error('Failed to delete nappy entry:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const footerElement = (
-    <PrimaryButton
-      onClick={handleLogNappy}
-      disabled={isSubmitting}
-      className="bg-accent-clay w-full"
-    >
-      {isSubmitting ? 'Logging...' : 'Log nappy'}
-    </PrimaryButton>
+    <div className="flex flex-col gap-2 w-full">
+      <PrimaryButton
+        onClick={handleLogNappy}
+        disabled={isSubmitting}
+        className="bg-accent-clay w-full"
+      >
+        {isSubmitting ? (editEvent ? 'Saving...' : 'Logging...') : editEvent ? 'Save changes' : 'Log nappy'}
+      </PrimaryButton>
+
+      {editEvent && (
+        <DestructiveButton
+          onClick={handleDeleteNappy}
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          {isSubmitting ? 'Deleting...' : 'Delete this entry'}
+        </DestructiveButton>
+      )}
+    </div>
   )
 
   return (
     <Sheet
       isOpen={isOpen}
       onClose={onClose}
-      title="Log nappy"
+      title={editEvent ? 'Edit nappy' : 'Log nappy'}
       footer={footerElement}
     >
       <div className="space-y-6 pt-4">

@@ -10,10 +10,19 @@ import { ConflictCard } from '../components/cards/ConflictCard'
 import { GhostButton } from '../components/buttons/GhostButton'
 import { useTimeline } from '../hooks/useTimeline'
 import { useHousehold } from '../context/HouseholdContext'
+import { useAuth } from '../context/AuthContext'
+
+import { LogFeedSheet } from '../components/sheets/LogFeedSheet'
+import { LogNappySheet } from '../components/sheets/LogNappySheet'
+import { LogSleepSheet } from '../components/sheets/LogSleepSheet'
 
 export default function TimelinePage() {
+  const { user } = useAuth()
   const { household } = useHousehold()
   const [activeFilter, setActiveFilter] = useState('all')
+
+  const [editingEvent, setEditingEvent] = useState(null)
+  const [editSheetType, setEditSheetType] = useState(null)
 
   const { entries, loadMore, hasMore, isLoading } = useTimeline(household?.id, {
     eventType: activeFilter === 'all' ? null : activeFilter,
@@ -31,6 +40,18 @@ export default function TimelinePage() {
     const time = new Date(e.eventTime)
     return time >= todayStart && time <= todayEnd
   })
+
+  const handleCardTap = (event) => {
+    if (!user || !event) return
+
+    // Allow editing only if the event was logged by the current user
+    if (event.loggedBy === user.id) {
+      setEditingEvent(event)
+      setEditSheetType(event.eventType)
+    } else {
+      console.log('Read-only: Entry belongs to partner.')
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-dvh bg-surface-base select-none">
@@ -100,13 +121,13 @@ export default function TimelinePage() {
                 <ConflictCard
                   key={event.clientId || event.id}
                   event={event}
-                  onTap={() => console.log('conflict tap:', event.clientId)}
+                  onTap={() => handleCardTap(event)}
                 />
               ) : (
                 <LogEntryCard
                   key={event.clientId || event.id}
                   event={event}
-                  onTap={() => console.log('entry tap:', event.clientId)}
+                  onTap={() => handleCardTap(event)}
                 />
               )
             })}
@@ -121,6 +142,34 @@ export default function TimelinePage() {
           </div>
         )}
       </main>
+
+      {/* Edit Sheet Overlays */}
+      <LogFeedSheet
+        isOpen={editSheetType === 'feed'}
+        onClose={() => {
+          setEditingEvent(null)
+          setEditSheetType(null)
+        }}
+        editEvent={editingEvent}
+      />
+
+      <LogNappySheet
+        isOpen={editSheetType === 'nappy'}
+        onClose={() => {
+          setEditingEvent(null)
+          setEditSheetType(null)
+        }}
+        editEvent={editingEvent}
+      />
+
+      <LogSleepSheet
+        isOpen={editSheetType === 'sleep'}
+        onClose={() => {
+          setEditingEvent(null)
+          setEditSheetType(null)
+        }}
+        editEvent={editingEvent}
+      />
     </div>
   )
 }

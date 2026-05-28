@@ -4,12 +4,13 @@ import { TimePicker } from '../inputs/TimePicker'
 import { CarerAttribution } from '../inputs/CarerAttribution'
 import { PrimaryButton } from '../buttons/PrimaryButton'
 import { GhostButton } from '../buttons/GhostButton'
+import { DestructiveButton } from '../buttons/DestructiveButton'
 import { useHousehold } from '../../context/HouseholdContext'
 import { useAuth } from '../../context/AuthContext'
-import { createEvent } from '../../db/repositories'
+import { createEvent, updateEvent, softDeleteEvent } from '../../db/repositories'
 import { trackEvent } from '../../services/analytics'
 
-export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
+export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, onSave = null }) {
   const { user } = useAuth()
   const { household, baby, myProfile } = useHousehold()
 
@@ -24,13 +25,22 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
   // Reset fields to defaults when the sheet is opened
   useEffect(() => {
     if (isOpen) {
-      setMode(activeSleep ? 'end' : 'start')
-      setEventTime(new Date())
-      setPastStartTime(new Date(Date.now() - 60 * 60 * 1000))
-      setPastEndTime(new Date(Date.now() - 15 * 60 * 1000))
+      if (editEvent) {
+        setEventTime(new Date(editEvent.eventTime))
+        if (editEvent.eventSubtype === 'end') {
+          setMode('edit_end')
+        } else {
+          setMode('edit_start')
+        }
+      } else {
+        setMode(activeSleep ? 'end' : 'start')
+        setEventTime(new Date())
+        setPastStartTime(new Date(Date.now() - 60 * 60 * 1000))
+        setPastEndTime(new Date(Date.now() - 15 * 60 * 1000))
+      }
       sheetOpenTime.current = Date.now()
     }
-  }, [isOpen, activeSleep])
+  }, [isOpen, activeSleep, editEvent])
 
   const handleStartSleep = async () => {
     const loggedByName = myProfile?.displayLabel || myProfile?.displayName || 'Parent'
@@ -124,8 +134,57 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
     })
   }
 
+  const handleSaveEndSleep = async () => {
+    if (!editEvent) return
+
+    const originalEnd = new Date(editEvent.eventTime)
+    const durationMinutesOld = editEvent.metadata?.duration_minutes || 0
+    const startTime = new Date(originalEnd.getTime() - durationMinutesOld * 60 * 1000)
+
+    const durationMinutes = Math.max(
+      0,
+      Math.round((eventTime.getTime() - startTime.getTime()) / 60000)
+    )
+
+    await updateEvent(editEvent.clientId, {
+      metadata: {
+        end_time: eventTime.toISOString(),
+        duration_minutes: durationMinutes
+      },
+      eventTime: eventTime.toISOString()
+    })
+
+    if (onSave) {
+      onSave()
+    }
+  }
+
+  const handleDeleteSleep = async () => {
+    if (!editEvent) return
+
+    const confirmed = window.confirm('Delete this entry? This cannot be undone.')
+    if (!confirmed) return
+
+    setIsSubmitting(true)
+    try {
+      await softDeleteEvent(editEvent.clientId)
+
+      trackEvent('entry_deleted', {
+        type: 'sleep',
+        subtype: editEvent.eventSubtype,
+        household_id: household?.id
+      })
+
+      onClose()
+    } catch (err) {
+      console.error('Failed to delete sleep entry:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    if (e && e.preventDefault) e.preventDefault()
     if (!household?.id || !baby?.id || !user?.id) {
       console.error('Cannot log sleep: Missing household, baby, or user details.')
       return
@@ -139,6 +198,8 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
         await handleEndSleep()
       } else if (mode === 'past') {
         await handlePastSleep()
+      } else if (mode === 'edit_end') {
+        await handleSaveEndSleep()
       }
       onClose()
     } catch (err) {
@@ -166,6 +227,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
   }
 
   const sheetTitle =
+    mode === 'edit_start' || mode === 'edit_end' ? 'Edit sleep' :
     mode === 'start' ? 'Start sleep' :
     mode === 'end' ? 'End sleep' :
     'Log a past sleep'
@@ -177,13 +239,25 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
 
   const footerElement = (
     <div className="flex flex-col gap-2 w-full">
-      <PrimaryButton
-        onClick={handleSubmit}
-        disabled={isSubmitting}
-        className="bg-accent-dusk w-full"
-      >
-        {isSubmitting ? 'Logging...' : submitButtonText}
-      </PrimaryButton>
+      {mode !== 'edit_start' && (
+        <PrimaryButton
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className="bg-accent-dusk w-full"
+        >
+          {isSubmitting ? (mode === 'edit_end' ? 'Saving...' : 'Logging...') : mode === 'edit_end' ? 'Save changes' : submitButtonText}
+        </PrimaryButton>
+      )}
+
+      {(mode === 'edit_start' || mode === 'edit_end') && (
+        <DestructiveButton
+          onClick={handleDeleteSleep}
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          {isSubmitting ? 'Deleting...' : 'Delete this entry'}
+        </DestructiveButton>
+      )}
 
       {mode === 'start' && (
         <GhostButton onClick={() => setMode('past')} className="w-full">
@@ -222,6 +296,49 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep }) {
             
             <div className="border-t border-surface-sunken my-2" />
             
+            <TimePicker
+              value={eventTime}
+              onChange={setEventTime}
+              label="End time"
+            />
+          </div>
+        )}
+
+        {mode === 'edit_start' && (
+          <div className="space-y-4 animate-fade-in text-center py-6">
+            <span className="block text-sm font-semibold text-ink-secondary uppercase tracking-wider">
+              Start Time (Read-Only)
+            </span>
+            <div className="text-2xl font-bold text-ink-primary">
+              {eventTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <p className="text-xs text-ink-tertiary">
+              Sleep start times cannot be edited directly once logged.
+            </p>
+          </div>
+        )}
+
+        {mode === 'edit_end' && (
+          <div className="space-y-6 animate-fade-in">
+            {(() => {
+              const originalEnd = new Date(editEvent.eventTime)
+              const durationMinutesOld = editEvent.metadata?.duration_minutes || 0
+              const startTime = new Date(originalEnd.getTime() - durationMinutesOld * 60 * 1000)
+              const totalMinutes = Math.max(
+                0,
+                Math.round((eventTime.getTime() - startTime.getTime()) / 60000)
+              )
+              const hours = Math.floor(totalMinutes / 60)
+              const mins = totalMinutes % 60
+              return (
+                <div className="text-lg font-semibold text-ink-primary text-center my-4">
+                  Sleep duration: {hours}h {mins}m
+                </div>
+              )
+            })()}
+
+            <div className="border-t border-surface-sunken my-2" />
+
             <TimePicker
               value={eventTime}
               onChange={setEventTime}

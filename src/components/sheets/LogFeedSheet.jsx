@@ -9,10 +9,11 @@ import { PrimaryButton } from '../buttons/PrimaryButton'
 import { useHousehold } from '../../context/HouseholdContext'
 import { useAuth } from '../../context/AuthContext'
 import { useDefaults } from '../../hooks/useDefaults'
-import { createEvent } from '../../db/repositories'
+import { createEvent, updateEvent, softDeleteEvent } from '../../db/repositories'
 import { trackEvent } from '../../services/analytics'
+import { DestructiveButton } from '../buttons/DestructiveButton'
 
-export function LogFeedSheet({ isOpen, onClose }) {
+export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null }) {
   const { user } = useAuth()
   const { household, baby, myProfile } = useHousehold()
   const defaults = useDefaults(household?.id)
@@ -26,18 +27,26 @@ export function LogFeedSheet({ isOpen, onClose }) {
 
   const sheetOpenTime = useRef(null)
 
-  // Reset fields to fresh defaults whenever the sheet is opened
+  // Reset fields to fresh defaults or event values whenever the sheet is opened
   useEffect(() => {
     if (isOpen) {
-      setFeedType(defaults.defaultFeedType || 'bottle')
-      setVolume(defaults.defaultVolume || 90)
-      setSide(defaults.defaultSide || 'L')
-      setDuration(defaults.defaultDuration || 15)
-      setEventTime(new Date())
+      if (editEvent) {
+        setFeedType(editEvent.eventSubtype || 'bottle')
+        setVolume(editEvent.metadata?.volume_ml || 90)
+        setSide(editEvent.metadata?.side || 'L')
+        setDuration(editEvent.metadata?.duration_minutes || 15)
+        setEventTime(new Date(editEvent.eventTime))
+      } else {
+        setFeedType(defaults.defaultFeedType || 'bottle')
+        setVolume(defaults.defaultVolume || 90)
+        setSide(defaults.defaultSide || 'L')
+        setDuration(defaults.defaultDuration || 15)
+        setEventTime(new Date())
+      }
       sheetOpenTime.current = Date.now()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [isOpen, editEvent])
 
   const handleLogFeed = async () => {
     if (!household?.id || !baby?.id || !user?.id) {
@@ -54,20 +63,31 @@ export function LogFeedSheet({ isOpen, onClose }) {
 
       const loggedByName = myProfile?.displayLabel || myProfile?.displayName || 'Parent'
 
-      await createEvent({
-        type: 'feed',
-        subtype: feedType,
-        metadata,
-        eventTime: eventTime.toISOString(),
-        householdId: household.id,
-        babyId: baby.id,
-        loggedBy: user.id,
-        loggedByName
-      })
+      if (editEvent) {
+        await updateEvent(editEvent.clientId, {
+          eventSubtype: feedType,
+          metadata,
+          eventTime: eventTime.toISOString()
+        })
+        if (onSave) {
+          onSave()
+        }
+      } else {
+        await createEvent({
+          type: 'feed',
+          subtype: feedType,
+          metadata,
+          eventTime: eventTime.toISOString(),
+          householdId: household.id,
+          babyId: baby.id,
+          loggedBy: user.id,
+          loggedByName
+        })
+      }
 
       // Track analytics with duration
       const durationMs = Date.now() - (sheetOpenTime.current || Date.now())
-      trackEvent('entry_logged', {
+      trackEvent(editEvent ? 'entry_edited' : 'entry_logged', {
         type: 'feed',
         subtype: feedType,
         household_id: household.id,
@@ -82,21 +102,57 @@ export function LogFeedSheet({ isOpen, onClose }) {
     }
   }
 
+  const handleDeleteFeed = async () => {
+    if (!editEvent) return
+
+    const confirmed = window.confirm('Delete this entry? This cannot be undone.')
+    if (!confirmed) return
+
+    setIsSubmitting(true)
+    try {
+      await softDeleteEvent(editEvent.clientId)
+
+      trackEvent('entry_deleted', {
+        type: 'feed',
+        subtype: editEvent.eventSubtype,
+        household_id: household?.id
+      })
+
+      onClose()
+    } catch (err) {
+      console.error('Failed to delete feed entry:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const footerElement = (
-    <PrimaryButton
-      onClick={handleLogFeed}
-      disabled={isSubmitting}
-      className="w-full"
-    >
-      {isSubmitting ? 'Logging...' : 'Log feed'}
-    </PrimaryButton>
+    <div className="flex flex-col gap-2 w-full">
+      <PrimaryButton
+        onClick={handleLogFeed}
+        disabled={isSubmitting}
+        className="w-full"
+      >
+        {isSubmitting ? (editEvent ? 'Saving...' : 'Logging...') : editEvent ? 'Save changes' : 'Log feed'}
+      </PrimaryButton>
+      
+      {editEvent && (
+        <DestructiveButton
+          onClick={handleDeleteFeed}
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          {isSubmitting ? 'Deleting...' : 'Delete this entry'}
+        </DestructiveButton>
+      )}
+    </div>
   )
 
   return (
     <Sheet
       isOpen={isOpen}
       onClose={onClose}
-      title="Log feed"
+      title={editEvent ? 'Edit feed' : 'Log feed'}
       footer={footerElement}
     >
       <div className="space-y-6 pt-4">
