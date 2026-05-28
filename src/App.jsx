@@ -21,16 +21,15 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/join/:code" element={<JoinHouseholdPage />} />
+            <Route path="/onboarding" element={<OnboardingFlow />} />
 
             {/* Protected Route Gate */}
             <Route element={<AuthGuard />}>
-              <Route path="/onboarding" element={<OnboardingFlow />} />
-
               {/* Authenticated App Shell */}
-              <Route element={<AppShell />}>
-                <Route path="/app" element={<GlancePage />} />
-                <Route path="/app/timeline" element={<TimelinePage />} />
-                <Route path="/app/settings" element={<SettingsPage />} />
+              <Route path="/app" element={<AppShell />}>
+                <Route index element={<GlancePage />} />
+                <Route path="timeline" element={<TimelinePage />} />
+                <Route path="settings" element={<SettingsPage />} />
               </Route>
             </Route>
           </Routes>
