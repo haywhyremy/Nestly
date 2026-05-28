@@ -6,9 +6,17 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { GhostButton } from '../components/buttons/GhostButton'
 import { Mail } from 'lucide-react'
 
+const getTodayString = () => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 export default function OnboardingFlow() {
   const { isAuthenticated, signIn } = useAuth()
-  const { hasHousehold, isLoading: householdLoading } = useHousehold()
+  const { hasHousehold, createNewHousehold, isLoading: householdLoading } = useHousehold()
   const navigate = useNavigate()
 
   const [step, setStep] = useState('welcome')
@@ -16,15 +24,21 @@ export default function OnboardingFlow() {
   const [isSending, setIsSending] = useState(false)
   const [error, setError] = useState('')
 
+  // Create Household State
+  const [babyName, setBabyName] = useState('')
+  const [babyDob, setBabyDob] = useState(getTodayString())
+  const [isCreating, setIsCreating] = useState(false)
+  const [createError, setCreateError] = useState(null)
+
   useEffect(() => {
     if (isAuthenticated && !householdLoading) {
       if (hasHousehold) {
         navigate('/app', { replace: true })
-      } else {
+      } else if (step === 'welcome') {
         setStep('createHousehold')
       }
     }
-  }, [isAuthenticated, hasHousehold, householdLoading, navigate])
+  }, [isAuthenticated, hasHousehold, householdLoading, step, navigate])
 
   const handleSendMagicLink = async (e) => {
     e.preventDefault()
@@ -41,6 +55,23 @@ export default function OnboardingFlow() {
       setError(err.message || 'Failed to send sign-in link. Please try again.')
     } finally {
       setIsSending(false)
+    }
+  }
+
+  const handleCreateHousehold = async (e) => {
+    e.preventDefault()
+    if (!babyName.trim()) return
+
+    setIsCreating(true)
+    setCreateError(null)
+    try {
+      await createNewHousehold(babyName.trim(), babyDob)
+      setStep('invitePartner')
+    } catch (err) {
+      console.error('Failed to create household:', err)
+      setCreateError(err.message || 'Failed to create household. Please try again.')
+    } finally {
+      setIsCreating(false)
     }
   }
 
@@ -163,12 +194,67 @@ export default function OnboardingFlow() {
     )
   }
 
-  // Placeholder for step 19
   if (step === 'createHousehold') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-dvh bg-surface-base p-8 text-center text-ink-primary">
-        <h1 className="text-xl font-semibold mb-2">Create Household</h1>
-        <p className="text-sm text-ink-secondary">This onboarding step will be completed in STEP 19.</p>
+      <div className="flex flex-col justify-center min-h-dvh bg-surface-base p-8 max-w-md mx-auto text-ink-primary animate-fade-in">
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+        `}</style>
+        <div className="w-full">
+          <h1 className="text-xl font-semibold text-ink-primary">Name your baby</h1>
+          <p className="text-sm text-ink-tertiary mt-1 mb-8">You can always change this later.</p>
+
+          <form onSubmit={handleCreateHousehold} className="space-y-6">
+            <div>
+              <input
+                type="text"
+                required
+                placeholder="Baby's name"
+                value={babyName}
+                onChange={(e) => {
+                  setBabyName(e.target.value)
+                  setCreateError(null)
+                }}
+                disabled={isCreating}
+                className="w-full h-[52px] px-4 rounded-xl bg-surface-raised border border-surface-sunken text-base text-ink-primary placeholder:text-ink-tertiary focus:outline-none focus:ring-2 focus:ring-accent-sage transition-all"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="babyDob" className="block text-sm text-ink-secondary mb-1">
+                Date of birth (optional)
+              </label>
+              <input
+                id="babyDob"
+                type="date"
+                value={babyDob}
+                onChange={(e) => setBabyDob(e.target.value)}
+                disabled={isCreating}
+                className="w-full h-[52px] px-4 rounded-xl bg-surface-raised border border-surface-sunken text-base text-ink-primary focus:outline-none focus:ring-2 focus:ring-accent-sage transition-all"
+              />
+            </div>
+
+            <PrimaryButton
+              type="submit"
+              disabled={isCreating || !babyName.trim()}
+              className="mt-6"
+            >
+              {isCreating ? 'Creating...' : 'Continue'}
+            </PrimaryButton>
+          </form>
+
+          {createError && (
+            <div className="text-sm text-accent-coral mt-2 text-center animate-fade-in">
+              {createError}
+            </div>
+          )}
+        </div>
       </div>
     )
   }
