@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dawn Palette - Light Mode Surface Colors */
+  --surface-base: #FBF8F4;
+  --surface-raised: #FFFFFF;
+  --surface-sunken: #F2EDE6;
+
+  /* Dawn Palette - Light Mode Ink Colors */
+  --ink-primary: #1F1B16;
+  --ink-secondary: #6B6259;
+  --ink-tertiary: #A89F94;
+
+  /* Dawn Palette - Light Mode Accent Colors */
+  --accent-sage: #7A9B7E;
+  --accent-dusk: #9B7E9B;
+  --accent-clay: #C49B7A;
+  --accent-coral: #C97064;
+
+  /* Dawn Palette - Light Mode Signal Colors */
+  --signal-sync: #9B7E9B;
+  --signal-conflict: #D4A574;
+
+  /* Motion & Easing Properties */
+  --motion-quick: 180ms;
+  --motion-standard: 240ms;
+  --motion-gentle: 360ms;
+  
+  --ease-quick: cubic-bezier(0.4, 0, 1, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-gentle: cubic-bezier(0, 0, 0.2, 1);
+
+  /* System Font Stack */
+  --font-system: -system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.dark {
+  /* Dawn Palette - Dark Mode Surface Colors */
+  --surface-base: #1A1816;
+  --surface-raised: #242220;
+  --surface-sunken: #131110;
+
+  /* Dawn Palette - Dark Mode Ink Colors */
+  --ink-primary: #F0ECE6;
+  --ink-secondary: #A89F94;
+  --ink-tertiary: #6B6259;
+
+  /* Dawn Palette - Dark Mode Accent Colors */
+  --accent-sage: #8FB393;
+  --accent-dusk: #B399B3;
+  --accent-clay: #D4AB8A;
+  --accent-coral: #D98A7E;
+
+  /* Dawn Palette - Dark Mode Signal Colors (Adjusted for dark mode contrast) */
+  --signal-sync: #B399B3;
+  --signal-conflict: #D4AB8A;
+}
+
+/* Base body style using the tokens */
+@layer base {
+  body {
+    background-color: var(--surface-base);
+    color: var(--ink-primary);
+    font-family: var(--font-system);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* prefers-reduced-motion media query that kills animations/transitions */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: scroll !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
