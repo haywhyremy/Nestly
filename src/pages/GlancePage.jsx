@@ -1,13 +1,37 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { OfflineBanner } from '../components/layout/OfflineBanner'
+import { StatusBar } from '../components/layout/StatusBar'
+import { SleepBanner } from '../components/layout/SleepBanner'
+import { GlanceCard } from '../components/cards/GlanceCard'
+import { EmptyStateCard } from '../components/cards/EmptyStateCard'
 import { QuickLogRow } from '../components/layout/QuickLogRow'
 import { useHousehold } from '../context/HouseholdContext'
 import { useAuth } from '../context/AuthContext'
+import { useGlanceData } from '../hooks/useGlanceData'
+import { useOnlineStatus } from '../hooks/useOnlineStatus'
 import { trackEvent, setHouseholdGroup } from '../services/analytics'
 
 export default function GlancePage() {
   const { user } = useAuth()
   const { household, baby } = useHousehold()
+  
+  const { 
+    lastFeed, 
+    lastNappy, 
+    lastSleep, 
+    activeSleep, 
+    isLoading 
+  } = useGlanceData(household?.id)
+  
+  const { isOnline } = useOnlineStatus()
+
+  // Local Sync state stub
+  const syncState = { 
+    syncNow: () => {}, 
+    isSyncing: false, 
+    pendingCount: 0 
+  }
 
   // Track app opened and group analytics on mount/household resolution
   useEffect(() => {
@@ -16,6 +40,8 @@ export default function GlancePage() {
       trackEvent('app_opened', { household_id: household.id })
     }
   }, [household?.id])
+
+  const hasEntries = !!(lastFeed || lastNappy || lastSleep || activeSleep)
 
   return (
     <div className="flex flex-col min-h-dvh bg-surface-base animate-fade-in">
@@ -28,16 +54,48 @@ export default function GlancePage() {
           animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
-      
-      <main className="flex-1 flex flex-col items-center justify-center px-4">
-        <h1 className="text-2xl font-semibold text-ink-primary">
-          {baby?.name || 'Baby'}
-        </h1>
-        <p className="text-sm text-ink-tertiary mt-1">
-          Tap below to log a feed, nappy, or sleep
-        </p>
+
+      {/* Offline Alert Banner */}
+      <OfflineBanner isOnline={isOnline} />
+
+      {/* Sync Status Header Bar */}
+      <StatusBar 
+        babyName={baby?.name || 'Baby'} 
+        isSyncing={syncState.isSyncing} 
+        pendingCount={syncState.pendingCount} 
+      />
+
+      {/* Sleep Ongoing Notification Banner */}
+      <SleepBanner 
+        activeSleep={activeSleep} 
+        onTap={() => {
+          // Simply scroll down to QuickLogRow (as specified in the guidelines)
+          const quickLogElement = document.querySelector('.sticky');
+          if (quickLogElement) {
+            quickLogElement.scrollIntoView({ behavior: 'smooth' })
+          }
+        }} 
+      />
+
+      {/* Main Glance Card / Empty State Container */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6">
+        {isLoading ? (
+          <div className="text-sm text-ink-tertiary animate-pulse select-none">
+            Checking recent care logs...
+          </div>
+        ) : hasEntries ? (
+          <GlanceCard 
+            lastFeed={lastFeed} 
+            lastNappy={lastNappy} 
+            lastSleep={lastSleep} 
+            activeSleep={activeSleep} 
+          />
+        ) : (
+          <EmptyStateCard />
+        )}
       </main>
 
+      {/* Timeline Quick Link */}
       <div className="text-center py-2">
         <Link 
           to="/app/timeline" 
@@ -47,6 +105,7 @@ export default function GlancePage() {
         </Link>
       </div>
 
+      {/* Quick Logging Row buttons bar */}
       <QuickLogRow />
     </div>
   )
