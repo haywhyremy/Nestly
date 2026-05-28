@@ -7,7 +7,7 @@ export function AuthGuard() {
   const { hasHousehold, isLoading: householdLoading } = useHousehold()
   const location = useLocation()
 
-  if (authLoading || (isAuthenticated && householdLoading)) {
+  if (authLoading || householdLoading) {
     return (
       <div className="bg-surface-base min-h-dvh flex items-center justify-center">
         <div className="text-ink-tertiary text-sm">Loading...</div>

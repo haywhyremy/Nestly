@@ -16,7 +16,7 @@ const getTodayString = () => {
 }
 
 export default function OnboardingFlow() {
-  const { user, isAuthenticated, signIn } = useAuth()
+  const { user, isAuthenticated, isLoading: authLoading, signIn } = useAuth()
   const { household, hasHousehold, createNewHousehold, isLoading: householdLoading } = useHousehold()
   const navigate = useNavigate()
 
@@ -38,18 +38,28 @@ export default function OnboardingFlow() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    if (isAuthenticated && !householdLoading) {
-      if (hasHousehold) {
-        // If user already has household, they shouldn't do onboarding, but we want to let them invite
-        // if they are currently on the invite step
-        if (step !== 'invitePartner') {
-          navigate('/app', { replace: true })
+    if (!authLoading && !householdLoading) {
+      if (isAuthenticated) {
+        if (hasHousehold) {
+          // If user already has household, they shouldn't do onboarding, but we want to let them invite
+          // if they are currently on the invite step
+          if (step !== 'invitePartner') {
+            navigate('/app', { replace: true })
+          }
+        } else if (step === 'welcome') {
+          setStep('createHousehold')
         }
-      } else if (step === 'welcome') {
-        setStep('createHousehold')
       }
     }
-  }, [isAuthenticated, hasHousehold, householdLoading, step, navigate])
+  }, [isAuthenticated, hasHousehold, authLoading, householdLoading, step, navigate])
+
+  if (authLoading || (isAuthenticated && householdLoading)) {
+    return (
+      <div className="bg-surface-base min-h-dvh flex items-center justify-center">
+        <div className="text-ink-tertiary text-sm">Loading...</div>
+      </div>
+    )
+  }
 
   useEffect(() => {
     if (step === 'invitePartner' && household?.id && user?.id) {
