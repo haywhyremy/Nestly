@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { HouseholdProvider } from './context/HouseholdContext'
 import { AuthGuard } from './components/layout/AuthGuard'
 import { AppShell } from './components/layout/AppShell'
 
@@ -14,25 +15,27 @@ import SettingsPage from './pages/SettingsPage'
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/join/:code" element={<JoinHouseholdPage />} />
+      <HouseholdProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/join/:code" element={<JoinHouseholdPage />} />
 
-          {/* Protected Route Gate */}
-          <Route element={<AuthGuard />}>
-            <Route path="/onboarding" element={<OnboardingFlow />} />
+            {/* Protected Route Gate */}
+            <Route element={<AuthGuard />}>
+              <Route path="/onboarding" element={<OnboardingFlow />} />
 
-            {/* Authenticated App Shell */}
-            <Route element={<AppShell />}>
-              <Route path="/app" element={<GlancePage />} />
-              <Route path="/app/timeline" element={<TimelinePage />} />
-              <Route path="/app/settings" element={<SettingsPage />} />
+              {/* Authenticated App Shell */}
+              <Route element={<AppShell />}>
+                <Route path="/app" element={<GlancePage />} />
+                <Route path="/app/timeline" element={<TimelinePage />} />
+                <Route path="/app/settings" element={<SettingsPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </HouseholdProvider>
     </AuthProvider>
   );
 }
