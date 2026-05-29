@@ -9,6 +9,7 @@ import { SegmentedToggle } from '../components/inputs/SegmentedToggle'
 import { DestructiveButton } from '../components/buttons/DestructiveButton'
 import { SecondaryButton } from '../components/buttons/SecondaryButton'
 import { createInvite, updateProfile } from '../db/repositories'
+import { exportToCSV } from '../utils/csvExport'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -28,6 +29,27 @@ export default function SettingsPage() {
   
   // Local state for relative sync time
   const [relativeTime, setRelativeTime] = useState('Never')
+
+  // Local state for CSV data export
+  const [exportStatus, setExportStatus] = useState(null)
+  const [exportError, setExportError] = useState('')
+
+  const handleExportCSV = async () => {
+    if (!household?.id) return
+    setExportStatus('exporting')
+    setExportError('')
+    try {
+      await exportToCSV(household.id)
+      setExportStatus('done')
+      setTimeout(() => {
+        setExportStatus(null)
+      }, 2000)
+    } catch (err) {
+      console.error('Failed to export data:', err)
+      setExportStatus('error')
+      setExportError(err.message || 'Export failed')
+    }
+  }
 
   // Set profile form inputs when profile context finishes loading
   useEffect(() => {
@@ -292,13 +314,32 @@ export default function SettingsPage() {
             <span className="font-medium text-ink-secondary">Pending uploads</span>
             <span className="text-ink-primary font-semibold">{syncState.pendingCount}</span>
           </div>
-          <div className="px-4 py-3.5">
+          <div className="px-4 py-3.5 flex flex-col gap-3">
             <SecondaryButton 
               onClick={() => syncState.syncNow()}
               disabled={syncState.isSyncing}
             >
               {syncState.isSyncing ? 'Syncing...' : 'Sync now'}
             </SecondaryButton>
+            
+            <SecondaryButton
+              onClick={handleExportCSV}
+              disabled={exportStatus === 'exporting' || !household?.id}
+            >
+              {exportStatus === 'exporting' ? 'Exporting...' : 'Export all data as CSV'}
+            </SecondaryButton>
+            
+            {exportStatus === 'done' && (
+              <div className="text-xs text-accent-sage font-medium text-center animate-pulse">
+                Exported!
+              </div>
+            )}
+            
+            {exportStatus === 'error' && (
+              <div className="text-xs text-accent-coral font-medium text-center">
+                {exportError || 'Export failed'}
+              </div>
+            )}
           </div>
         </div>
 
