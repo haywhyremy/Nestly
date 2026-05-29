@@ -16,6 +16,7 @@ import { useSync } from '../hooks/useSync'
 import { LogFeedSheet } from '../components/sheets/LogFeedSheet'
 import { LogNappySheet } from '../components/sheets/LogNappySheet'
 import { LogSleepSheet } from '../components/sheets/LogSleepSheet'
+import { ConflictSheet } from '../components/sheets/ConflictSheet'
 
 export default function TimelinePage() {
   const { user } = useAuth()
@@ -24,6 +25,8 @@ export default function TimelinePage() {
 
   const [editingEvent, setEditingEvent] = useState(null)
   const [editSheetType, setEditSheetType] = useState(null)
+  const [conflictEvent, setConflictEvent] = useState(null)
+  const [isConflictSheetOpen, setIsConflictSheetOpen] = useState(false)
 
   const syncState = useSync(household?.id)
 
@@ -46,6 +49,13 @@ export default function TimelinePage() {
 
   const handleCardTap = (event) => {
     if (!user || !event) return
+
+    // Tapping a duplicate flags the Conflict Resolution Overlay
+    if (event.conflictStatus === 'pending') {
+      setConflictEvent(event)
+      setIsConflictSheetOpen(true)
+      return
+    }
 
     // Allow editing only if the event was logged by the current user
     if (event.loggedBy === user.id) {
@@ -184,6 +194,15 @@ export default function TimelinePage() {
           setEditSheetType(null)
         }}
         editEvent={editingEvent}
+      />
+
+      <ConflictSheet
+        isOpen={isConflictSheetOpen}
+        onClose={() => {
+          setConflictEvent(null)
+          setIsConflictSheetOpen(false)
+        }}
+        conflictEvent={conflictEvent}
       />
     </div>
   )
