@@ -10,6 +10,7 @@ import { useHousehold } from '../context/HouseholdContext'
 import { useAuth } from '../context/AuthContext'
 import { useGlanceData } from '../hooks/useGlanceData'
 import { useOnlineStatus } from '../hooks/useOnlineStatus'
+import { useSync } from '../hooks/useSync'
 import { trackEvent, setHouseholdGroup } from '../services/analytics'
 
 export default function GlancePage() {
@@ -26,12 +27,8 @@ export default function GlancePage() {
   
   const { isOnline } = useOnlineStatus()
 
-  // Local Sync state stub
-  const syncState = { 
-    syncNow: () => {}, 
-    isSyncing: false, 
-    pendingCount: 0 
-  }
+  // Core Sync orchestrator hook
+  const syncState = useSync(household?.id)
 
   // Track app opened and group analytics on mount/household resolution
   useEffect(() => {

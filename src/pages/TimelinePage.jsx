@@ -11,6 +11,7 @@ import { GhostButton } from '../components/buttons/GhostButton'
 import { useTimeline } from '../hooks/useTimeline'
 import { useHousehold } from '../context/HouseholdContext'
 import { useAuth } from '../context/AuthContext'
+import { useSync } from '../hooks/useSync'
 
 import { LogFeedSheet } from '../components/sheets/LogFeedSheet'
 import { LogNappySheet } from '../components/sheets/LogNappySheet'
@@ -23,15 +24,8 @@ export default function TimelinePage() {
 
   const [editingEvent, setEditingEvent] = useState(null)
   const [editSheetType, setEditSheetType] = useState(null)
-  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const handleRefresh = () => {
-    setIsRefreshing(true)
-    console.log('sync triggered')
-    setTimeout(() => {
-      setIsRefreshing(false)
-    }, 1000)
-  }
+  const syncState = useSync(household?.id)
 
   const { entries, loadMore, hasMore, isLoading } = useTimeline(household?.id, {
     eventType: activeFilter === 'all' ? null : activeFilter,
@@ -85,12 +79,12 @@ export default function TimelinePage() {
 
         <button
           type="button"
-          onClick={handleRefresh}
+          onClick={syncState.syncNow}
           className="text-ink-tertiary hover:text-ink-secondary active:text-ink-primary transition-colors p-1"
           aria-label="Synchronize data"
-          disabled={isRefreshing}
+          disabled={syncState.isSyncing}
         >
-          <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} />
+          <RefreshCw size={18} className={syncState.isSyncing ? 'animate-spin' : ''} />
         </button>
       </header>
 
