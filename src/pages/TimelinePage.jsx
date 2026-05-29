@@ -23,6 +23,15 @@ export default function TimelinePage() {
 
   const [editingEvent, setEditingEvent] = useState(null)
   const [editSheetType, setEditSheetType] = useState(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const handleRefresh = () => {
+    setIsRefreshing(true)
+    console.log('sync triggered')
+    setTimeout(() => {
+      setIsRefreshing(false)
+    }, 1000)
+  }
 
   const { entries, loadMore, hasMore, isLoading } = useTimeline(household?.id, {
     eventType: activeFilter === 'all' ? null : activeFilter,
@@ -76,11 +85,12 @@ export default function TimelinePage() {
 
         <button
           type="button"
-          onClick={() => console.log('sync triggered')}
+          onClick={handleRefresh}
           className="text-ink-tertiary hover:text-ink-secondary active:text-ink-primary transition-colors p-1"
           aria-label="Synchronize data"
+          disabled={isRefreshing}
         >
-          <RefreshCw size={18} />
+          <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} />
         </button>
       </header>
 
@@ -106,12 +116,23 @@ export default function TimelinePage() {
       {/* Main Events Feed Section */}
       <main className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {isLoading ? (
-          <div className="text-center text-sm text-ink-tertiary py-12 animate-pulse">
-            Loading timeline events...
+          <div className="text-center text-sm text-ink-tertiary py-12">
+            Loading...
           </div>
         ) : entries.length === 0 ? (
           <div className="text-center text-sm text-ink-tertiary py-12 font-medium">
-            Nothing logged today yet
+            {(() => {
+              switch (activeFilter) {
+                case 'feed':
+                  return 'No feeds logged today'
+                case 'nappy':
+                  return 'No nappies logged today'
+                case 'sleep':
+                  return 'No sleep logged today'
+                default:
+                  return 'Nothing logged today yet'
+              }
+            })()}
           </div>
         ) : (
           <div className="space-y-3 pb-20">

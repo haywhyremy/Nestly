@@ -8,6 +8,7 @@ export function GlanceCard({
   activeSleep
 }) {
   const [tick, setTick] = useState(0)
+  const [opacityClass, setOpacityClass] = useState('opacity-100')
 
   // Force a re-render every 60 seconds to keep the "time since" labels current
   useEffect(() => {
@@ -16,6 +17,18 @@ export function GlanceCard({
     }, 60000)
     return () => clearInterval(interval)
   }, [])
+
+  // Trigger brief fade transition on tick changes (when not preferring reduced motion)
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion || tick === 0) return
+
+    setOpacityClass('opacity-60')
+    const timer = setTimeout(() => {
+      setOpacityClass('opacity-100')
+    }, 150)
+    return () => clearTimeout(timer)
+  }, [tick])
 
   const renderHeroSection = () => {
     if (!lastFeed) {
@@ -51,7 +64,7 @@ export function GlanceCard({
           LAST FEED
         </span>
         <span
-          className="text-6xl font-semibold tracking-tight text-ink-primary tabular-nums"
+          className={`text-6xl font-semibold tracking-tight text-ink-primary tabular-nums transition-opacity duration-300 ${opacityClass}`}
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >
           {timeSince}

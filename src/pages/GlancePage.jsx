@@ -80,8 +80,8 @@ export default function GlancePage() {
       {/* Main Glance Card / Empty State Container */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-6">
         {isLoading ? (
-          <div className="text-sm text-ink-tertiary animate-pulse select-none">
-            Checking recent care logs...
+          <div className="text-sm text-ink-tertiary select-none">
+            Loading...
           </div>
         ) : hasEntries ? (
           <GlanceCard 
