@@ -15,6 +15,7 @@ import { useOnlineStatus } from '../hooks/useOnlineStatus'
 import { useSync } from '../hooks/useSync'
 import { trackEvent, setHouseholdGroup } from '../services/analytics'
 import { useNotificationBadge, updateNotificationBadge } from '../hooks/useNotificationBadge'
+import { InstallPromptBanner } from '../components/layout/InstallPromptBanner'
 
 export default function GlancePage() {
   const { user } = useAuth()
@@ -109,6 +110,9 @@ export default function GlancePage() {
           </div>
         </div>
       )}
+
+      {/* PWA Install Prompt Banner */}
+      <InstallPromptBanner hasLoggedEntry={!!(lastFeed || lastNappy || lastSleep)} />
 
       {/* Sleep Ongoing Notification Banner */}
       <SleepBanner 
