@@ -6,6 +6,7 @@ import { useHousehold } from '../context/HouseholdContext'
 import { useTheme } from '../context/ThemeContext'
 import { useSync } from '../hooks/useSync'
 import { SegmentedToggle } from '../components/inputs/SegmentedToggle'
+import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { DestructiveButton } from '../components/buttons/DestructiveButton'
 import { SecondaryButton } from '../components/buttons/SecondaryButton'
 import { GhostButton } from '../components/buttons/GhostButton'
@@ -28,9 +29,9 @@ export default function SettingsPage() {
   const [displayLabel, setDisplayLabel] = useState('')
   
   // Local state for invitation code generation
-  const [isGeneratingInvite, setIsGeneratingInvite] = useState(false)
-  const [inviteCode, setInviteCode] = useState('')
-  const [copied, setCopied] = useState(false)
+  const [settingsInviteCode, setSettingsInviteCode] = useState('')
+  const [settingsInviteLoading, setSettingsInviteLoading] = useState(false)
+  const [settingsInviteCopied, setSettingsInviteCopied] = useState(false)
   
   // Local state for relative sync time
   const [relativeTime, setRelativeTime] = useState('Never')
@@ -120,38 +121,49 @@ export default function SettingsPage() {
   }
 
   // Generate invite code and invoke navigator.share if supported
-  const handleInvitePartner = async () => {
+  const handleSettingsInvite = async () => {
     if (!household?.id || !user?.id) return
-    setIsGeneratingInvite(true)
+    setSettingsInviteLoading(true)
     try {
       const invite = await createInvite(household.id, user.id)
-      setInviteCode(invite.code)
-      
-      const inviteUrl = `${window.location.origin}/join/${invite.code}`
-      if (navigator.share) {
-        await navigator.share({
-          title: 'Join my Nestly household',
-          text: `Join my carer household on Nestly using code ${invite.code}:`,
-          url: inviteUrl
-        })
-      }
-    } catch (error) {
-      console.error('Failed to generate household invitation:', error)
+      setSettingsInviteCode(invite.code)
+    } catch (err) {
+      console.error('Failed to generate settings invite code:', err)
     } finally {
-      setIsGeneratingInvite(false)
+      setSettingsInviteLoading(false)
     }
   }
 
-  // Fallback copy invitation link to clipboard
-  const handleCopyInvite = async () => {
-    if (!inviteCode) return
-    const inviteUrl = `${window.location.origin}/join/${inviteCode}`
+  // Fallback and share invite
+  const handleSettingsShare = async () => {
+    if (!settingsInviteCode) return
+    const inviteUrl = `${window.location.origin}/join/${settingsInviteCode}`
+    const shareData = {
+      title: 'Join my household on Nestly',
+      text: 'Track our baby together',
+      url: inviteUrl
+    }
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData)
+        return
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Web Share API failed:', err)
+        } else {
+          return
+        }
+      }
+    }
+
+    // Fallback to clipboard
     try {
       await navigator.clipboard.writeText(inviteUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setSettingsInviteCopied(true)
+      setTimeout(() => setSettingsInviteCopied(false), 2000)
     } catch (err) {
-      console.error('Failed to copy invite code to clipboard:', err)
+      console.error('Clipboard copy failed:', err)
     }
   }
 
@@ -245,30 +257,27 @@ export default function SettingsPage() {
           </div>
 
           {members.length < 2 && (
-            <div className="px-4 py-3.5">
+            <div className="px-4 py-3.5 flex flex-col gap-3">
               <SecondaryButton 
-                onClick={handleInvitePartner} 
-                disabled={isGeneratingInvite}
+                onClick={handleSettingsInvite} 
+                disabled={settingsInviteLoading}
               >
-                {isGeneratingInvite ? 'Generating code...' : 'Invite partner'}
+                {settingsInviteLoading ? 'Generating link...' : 'Invite partner'}
               </SecondaryButton>
-              {inviteCode && (
-                <div className="mt-3 p-3 bg-surface-sunken rounded-lg flex flex-col gap-2 transition-all">
-                  <span className="text-xs text-ink-tertiary font-medium">Share invitation code:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-sm text-ink-primary flex-1 bg-surface-base px-2.5 py-1.5 rounded border border-surface-sunken select-all text-center">
-                      {inviteCode}
-                    </span>
-                    <button 
-                      onClick={handleCopyInvite} 
-                      className="text-xs text-accent-sage font-semibold px-3 py-2 bg-accent-sage/10 rounded-lg hover:bg-accent-sage/20 transition-colors"
-                    >
-                      {copied ? 'Copied URL!' : 'Copy Link'}
-                    </button>
+              {settingsInviteCode && (
+                <div className="flex flex-col gap-3">
+                  <div className="bg-surface-sunken border border-surface-sunken rounded-xl p-4 mt-1">
+                    <span className="block text-xs font-semibold text-ink-secondary uppercase tracking-wider mb-2">Invite URL</span>
+                    <p className="text-sm font-mono text-ink-primary break-all select-all">
+                      {`${window.location.origin}/join/${settingsInviteCode}`}
+                    </p>
                   </div>
-                  <span className="text-[10px] text-ink-tertiary leading-normal">
-                    Expires in 72 hours. Your partner can enter this code in the join screen or click the copied link.
-                  </span>
+                  <PrimaryButton
+                    onClick={handleSettingsShare}
+                    disabled={settingsInviteLoading || !settingsInviteCode}
+                  >
+                    {settingsInviteCopied ? 'Copied URL!' : 'Share invite'}
+                  </PrimaryButton>
                 </div>
               )}
             </div>

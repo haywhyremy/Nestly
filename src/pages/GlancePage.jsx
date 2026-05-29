@@ -1,5 +1,7 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { X } from 'lucide-react'
+import { GhostButton } from '../components/buttons/GhostButton'
 import { OfflineBanner } from '../components/layout/OfflineBanner'
 import { StatusBar } from '../components/layout/StatusBar'
 import { SleepBanner } from '../components/layout/SleepBanner'
@@ -16,7 +18,9 @@ import { useNotificationBadge, updateNotificationBadge } from '../hooks/useNotif
 
 export default function GlancePage() {
   const { user } = useAuth()
-  const { household, baby } = useHousehold()
+  const { household, baby, members = [] } = useHousehold()
+  const navigate = useNavigate()
+  const [isPartnerBannerDismissed, setIsPartnerBannerDismissed] = useState(false)
   
   const { 
     lastFeed, 
@@ -79,6 +83,32 @@ export default function GlancePage() {
         pendingCount={syncState.pendingCount} 
         syncError={syncState.syncError}
       />
+
+      {/* Partner Not Joined Banner */}
+      {members.length < 2 && !isPartnerBannerDismissed && (
+        <div className="mx-4 mt-2 bg-surface-raised border border-surface-sunken rounded-xl px-4 py-3 flex items-center justify-between shadow-sm animate-fade-in">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="text-xs text-ink-secondary leading-normal">
+              Your partner hasn't joined yet
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <GhostButton 
+              onClick={() => navigate('/app/settings')}
+              className="!py-1.5 !px-3 bg-accent-sage/10 text-accent-sage font-semibold text-xs rounded-lg active:brightness-95 hover:bg-accent-sage/20 transition-all w-auto"
+            >
+              Invite
+            </GhostButton>
+            <button 
+              onClick={() => setIsPartnerBannerDismissed(true)}
+              className="text-ink-tertiary hover:text-ink-primary transition-colors p-1 flex items-center justify-center"
+              aria-label="Dismiss banner"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Sleep Ongoing Notification Banner */}
       <SleepBanner 
