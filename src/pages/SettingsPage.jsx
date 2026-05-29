@@ -13,6 +13,7 @@ import { createInvite, updateProfile } from '../db/repositories'
 import { exportToCSV } from '../utils/csvExport'
 import db from '../db/dexie'
 import { supabase } from '../services/supabase'
+import { useNotificationBadge } from '../hooks/useNotificationBadge'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -20,6 +21,7 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme()
   const syncState = useSync(household?.id)
   const navigate = useNavigate()
+  const { isSupported, isEnabled, enable, disable } = useNotificationBadge()
 
   // Local state for profile form values
   const [displayName, setDisplayName] = useState('')
@@ -323,6 +325,38 @@ export default function SettingsPage() {
             />
           </div>
         </div>
+
+        {/* Section — Notifications */}
+        {isSupported && (
+          <>
+            <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+              Notifications
+            </div>
+            <div className="bg-surface-raised rounded-xl mx-4 overflow-hidden shadow-sm p-4 flex flex-col gap-3">
+              <div className="flex justify-between items-center text-sm font-medium text-ink-secondary mb-1">
+                <span>Show last feed in notifications</span>
+              </div>
+              <SegmentedToggle
+                options={[
+                  { value: 'on', label: 'On' },
+                  { value: 'off', label: 'Off' }
+                ]}
+                value={isEnabled ? 'on' : 'off'}
+                onChange={(val) => {
+                  if (val === 'on') {
+                    enable()
+                  } else {
+                    disable()
+                  }
+                }}
+                accentColor="bg-accent-sage"
+              />
+              <span className="text-xs text-ink-tertiary leading-normal mt-1">
+                Shows a persistent notification with the last feed time. Works best on Android.
+              </span>
+            </div>
+          </>
+        )}
 
         {/* Section 4 — Data */}
         <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">

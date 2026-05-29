@@ -12,6 +12,7 @@ import { useGlanceData } from '../hooks/useGlanceData'
 import { useOnlineStatus } from '../hooks/useOnlineStatus'
 import { useSync } from '../hooks/useSync'
 import { trackEvent, setHouseholdGroup } from '../services/analytics'
+import { useNotificationBadge, updateNotificationBadge } from '../hooks/useNotificationBadge'
 
 export default function GlancePage() {
   const { user } = useAuth()
@@ -37,6 +38,22 @@ export default function GlancePage() {
       trackEvent('app_opened', { household_id: household.id })
     }
   }, [household?.id])
+
+  const { isEnabled } = useNotificationBadge()
+
+  // Update notification badge on lastFeed change or periodic tick
+  useEffect(() => {
+    if (isEnabled && lastFeed) {
+      updateNotificationBadge(lastFeed)
+
+      // Periodically update the badge every 60 seconds to keep the elapsed time ticking
+      const interval = setInterval(() => {
+        updateNotificationBadge(lastFeed)
+      }, 60000)
+
+      return () => clearInterval(interval)
+    }
+  }, [isEnabled, lastFeed])
 
   const hasEntries = !!(lastFeed || lastNappy || lastSleep || activeSleep)
 
