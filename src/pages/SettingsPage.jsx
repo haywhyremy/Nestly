@@ -8,8 +8,11 @@ import { useSync } from '../hooks/useSync'
 import { SegmentedToggle } from '../components/inputs/SegmentedToggle'
 import { DestructiveButton } from '../components/buttons/DestructiveButton'
 import { SecondaryButton } from '../components/buttons/SecondaryButton'
+import { GhostButton } from '../components/buttons/GhostButton'
 import { createInvite, updateProfile } from '../db/repositories'
 import { exportToCSV } from '../utils/csvExport'
+import db from '../db/dexie'
+import { supabase } from '../services/supabase'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -159,8 +162,28 @@ export default function SettingsPage() {
     }
   }
 
-  const handleDeleteAccount = () => {
-    window.alert('Account deletion coming soon')
+  // Local state for account deletion
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteInput, setDeleteInput] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState(null)
+
+  const handleConfirmedDelete = async () => {
+    if (deleteInput !== 'DELETE') return
+    setIsDeleting(true)
+    setDeleteError(null)
+    try {
+      const { error } = await supabase.functions.invoke('delete-account', { method: 'POST' })
+      if (error) throw error
+
+      await db.delete()
+      await signOut()
+      navigate('/')
+    } catch (err) {
+      console.error('Failed to delete account:', err)
+      setDeleteError(err.message || 'Account deletion failed. Please try again.')
+      setIsDeleting(false)
+    }
   }
 
   const themeOptions = [
@@ -350,7 +373,9 @@ export default function SettingsPage() {
         <div className="bg-surface-raised rounded-xl mx-4 divide-y divide-surface-sunken overflow-hidden shadow-sm">
           <div className="px-4 py-3 flex items-center justify-between text-sm">
             <span className="font-medium text-ink-secondary">Version</span>
-            <span className="text-ink-primary font-semibold">1.0.0</span>
+            <span className="text-ink-primary font-semibold">
+              {typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '1.0.0'}
+            </span>
           </div>
           <div className="px-4 py-3 flex items-center justify-between text-sm">
             <span className="font-medium text-ink-secondary">Privacy Policy</span>
@@ -390,12 +415,56 @@ export default function SettingsPage() {
           Account
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 overflow-hidden shadow-sm p-4 flex flex-col gap-3">
-          <SecondaryButton onClick={handleSignOut}>
+          <SecondaryButton onClick={handleSignOut} disabled={isDeleting}>
             Sign out
           </SecondaryButton>
-          <DestructiveButton onClick={handleDeleteAccount}>
-            Delete account
-          </DestructiveButton>
+          
+          {!showDeleteConfirm ? (
+            <DestructiveButton onClick={() => setShowDeleteConfirm(true)}>
+              Delete account
+            </DestructiveButton>
+          ) : (
+            <div className="bg-accent-coral/10 rounded-xl p-4 flex flex-col gap-3.5 border border-accent-coral/20">
+              <p className="text-sm text-ink-secondary leading-normal">
+                This will permanently delete your account and all your data. Your partner will remain in the household. Entries you logged will be anonymised. This cannot be undone.
+              </p>
+              
+              <input
+                type="text"
+                value={deleteInput}
+                onChange={(e) => setDeleteInput(e.target.value)}
+                placeholder='Type "DELETE" to confirm'
+                disabled={isDeleting}
+                className="bg-surface-sunken rounded-lg px-3 py-2 text-sm text-ink-primary border-none w-full focus:outline-none focus:ring-1 focus:ring-accent-coral/30 transition-shadow"
+              />
+              
+              {deleteError && (
+                <div className="text-xs text-accent-coral font-medium">
+                  {deleteError}
+                </div>
+              )}
+              
+              <div className="flex flex-col gap-2">
+                <DestructiveButton
+                  onClick={handleConfirmedDelete}
+                  disabled={deleteInput !== 'DELETE' || isDeleting}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete my account'}
+                </DestructiveButton>
+                
+                <GhostButton
+                  onClick={() => {
+                    setShowDeleteConfirm(false)
+                    setDeleteInput('')
+                    setDeleteError(null)
+                  }}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </GhostButton>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
