@@ -27,6 +27,7 @@ export default function SettingsPage() {
   // Local state for profile form values
   const [displayName, setDisplayName] = useState('')
   const [displayLabel, setDisplayLabel] = useState('')
+  const [displayNameError, setDisplayNameError] = useState('')
   
   // Local state for invitation code generation
   const [settingsInviteCode, setSettingsInviteCode] = useState('')
@@ -102,6 +103,15 @@ export default function SettingsPage() {
     if (!user?.id || !myProfile) return
     
     const cleanedVal = value.trim()
+    
+    if (field === 'displayName') {
+      if (!cleanedVal) {
+        setDisplayNameError("Name can't be empty")
+        return
+      }
+      setDisplayNameError('')
+    }
+    
     const originalVal = field === 'displayName'
       ? (myProfile.displayName || myProfile.display_name || '')
       : (myProfile.displayLabel || myProfile.display_label || '')
@@ -168,6 +178,7 @@ export default function SettingsPage() {
   }
 
   const handleSignOut = async () => {
+    if (!window.confirm('Sign out of Nestly?')) return
     try {
       await signOut()
       navigate('/')
@@ -219,33 +230,32 @@ export default function SettingsPage() {
       `}</style>
 
       {/* Header Bar */}
-      <header className="px-4 py-4 flex items-center justify-between border-b border-surface-sunken sticky top-0 bg-surface-base z-10">
-        <Link to="/app" className="p-2 -ml-2 text-ink-secondary hover:text-ink-primary transition-colors">
-          <ChevronLeft className="w-6 h-6" />
+      <header className="flex items-center gap-2 px-4 py-3 border-b border-surface-sunken sticky top-0 bg-surface-base z-10 select-none">
+        <Link to="/app" className="p-1 -ml-1 text-ink-primary hover:text-ink-secondary transition-colors flex items-center justify-center">
+          <ChevronLeft size={20} />
         </Link>
-        <h1 className="text-lg font-bold text-ink-primary absolute left-1/2 -translate-x-1/2 select-none">
+        <h1 className="text-lg font-semibold text-ink-primary">
           Settings
         </h1>
-        <div className="w-10"></div>
       </header>
 
       <main className="flex-1 space-y-2 max-w-md mx-auto w-full">
         {/* Section 1 — Household */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           Household
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 divide-y divide-surface-sunken overflow-hidden shadow-sm">
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Baby</span>
-            <span className="text-ink-primary font-semibold">{baby?.name || 'Loading baby details...'}</span>
+            <span className="text-sm text-ink-primary">Baby</span>
+            <span className="text-sm text-ink-secondary font-semibold">{baby?.name || 'Loading baby details...'}</span>
           </div>
           
           <div className="px-4 py-3 flex flex-col items-start gap-2.5">
-            <span className="text-sm font-medium text-ink-secondary">Members</span>
+            <span className="text-sm text-ink-primary">Members</span>
             <div className="w-full space-y-2">
               {members.map((member) => (
                 <div key={member.id} className="flex justify-between items-center text-sm">
-                  <span className="text-ink-primary font-semibold">
+                  <span className="text-sm text-ink-secondary font-semibold">
                     {member.profiles?.display_name || member.profiles?.displayName || 'Unnamed Carer'}
                   </span>
                   <span className="text-xs text-ink-tertiary font-medium bg-surface-sunken px-2 py-0.5 rounded-full">
@@ -285,26 +295,36 @@ export default function SettingsPage() {
         </div>
 
         {/* Section 2 — Profile */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           Profile
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 divide-y divide-surface-sunken overflow-hidden shadow-sm">
           <div className="px-4 py-3 flex flex-col gap-1.5 items-start">
-            <label htmlFor="displayNameInput" className="text-sm font-medium text-ink-secondary">
+            <label htmlFor="displayNameInput" className="text-sm text-ink-primary">
               Display name
             </label>
             <input
               id="displayNameInput"
               type="text"
               value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              onChange={(e) => {
+                setDisplayName(e.target.value)
+                if (e.target.value.trim()) {
+                  setDisplayNameError('')
+                }
+              }}
               onBlur={() => handleSaveProfile('displayName', displayName)}
               placeholder="e.g. Papa, Mum"
               className="bg-surface-sunken rounded-lg px-3 py-2 text-sm text-ink-primary border-none w-full focus:outline-none focus:ring-1 focus:ring-accent-sage/30 transition-shadow"
             />
+            {displayNameError && (
+              <span className="text-xs text-accent-coral mt-1">
+                {displayNameError}
+              </span>
+            )}
           </div>
           <div className="px-4 py-3 flex flex-col gap-1.5 items-start">
-            <label htmlFor="displayLabelInput" className="text-sm font-medium text-ink-secondary">
+            <label htmlFor="displayLabelInput" className="text-sm text-ink-primary">
               Display label
             </label>
             <input
@@ -317,11 +337,14 @@ export default function SettingsPage() {
               placeholder="e.g. Dad, Mama"
               className="bg-surface-sunken rounded-lg px-3 py-2 text-sm text-ink-primary border-none w-full focus:outline-none focus:ring-1 focus:ring-accent-sage/30 transition-shadow"
             />
+            <span className="text-xs text-ink-tertiary self-end mt-1">
+              {displayLabel.length}/12
+            </span>
           </div>
         </div>
 
         {/* Section 3 — Appearance */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           Appearance
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 overflow-hidden shadow-sm">
@@ -338,7 +361,7 @@ export default function SettingsPage() {
         {/* Section — Notifications */}
         {isSupported && (
           <>
-            <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+            <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
               Notifications
             </div>
             <div className="bg-surface-raised rounded-xl mx-4 overflow-hidden shadow-sm p-4 flex flex-col gap-3">
@@ -368,17 +391,17 @@ export default function SettingsPage() {
         )}
 
         {/* Section 4 — Data */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           Data & Sync
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 divide-y divide-surface-sunken overflow-hidden shadow-sm">
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Last synced</span>
-            <span className="text-ink-primary font-semibold">{relativeTime}</span>
+            <span className="text-sm text-ink-primary">Last synced</span>
+            <span className="text-sm text-ink-secondary font-semibold">{relativeTime}</span>
           </div>
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Pending uploads</span>
-            <span className="text-ink-primary font-semibold">{syncState.pendingCount}</span>
+            <span className="text-sm text-ink-primary">Pending uploads</span>
+            <span className="text-sm text-ink-secondary font-semibold">{syncState.pendingCount}</span>
           </div>
           <div className="px-4 py-3.5 flex flex-col gap-3">
             <SecondaryButton 
@@ -410,18 +433,18 @@ export default function SettingsPage() {
         </div>
 
         {/* Section 5 — About */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           About
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 divide-y divide-surface-sunken overflow-hidden shadow-sm">
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Version</span>
-            <span className="text-ink-primary font-semibold">
+            <span className="text-sm text-ink-primary">Version</span>
+            <span className="text-sm text-ink-secondary font-semibold">
               {typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '1.0.0'}
             </span>
           </div>
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Privacy Policy</span>
+            <span className="text-sm text-ink-primary">Privacy Policy</span>
             <a 
               href="/privacy.html" 
               target="_blank" 
@@ -432,7 +455,7 @@ export default function SettingsPage() {
             </a>
           </div>
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Terms of Service</span>
+            <span className="text-sm text-ink-primary">Terms of Service</span>
             <a 
               href="/terms.html" 
               target="_blank" 
@@ -443,7 +466,7 @@ export default function SettingsPage() {
             </a>
           </div>
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-secondary">Support</span>
+            <span className="text-sm text-ink-primary">Support</span>
             <a 
               href="mailto:support@nestly.app" 
               className="text-accent-sage font-medium hover:underline text-sm"
@@ -454,7 +477,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Section 6 — Account */}
-        <div className="text-xs font-semibold text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
+        <div className="text-xs font-medium text-ink-tertiary uppercase tracking-wider px-4 pt-6 pb-2">
           Account
         </div>
         <div className="bg-surface-raised rounded-xl mx-4 overflow-hidden shadow-sm p-4 flex flex-col gap-3">
