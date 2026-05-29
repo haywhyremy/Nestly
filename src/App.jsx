@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { HouseholdProvider } from './context/HouseholdContext'
+import { ThemeProvider } from './context/ThemeContext'
 import { AuthGuard } from './components/layout/AuthGuard'
 import { AppShell } from './components/layout/AppShell'
 
@@ -16,24 +17,26 @@ function App() {
   return (
     <AuthProvider>
       <HouseholdProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/join/:code" element={<JoinHouseholdPage />} />
-            <Route path="/onboarding" element={<OnboardingFlow />} />
+        <ThemeProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/join/:code" element={<JoinHouseholdPage />} />
+              <Route path="/onboarding" element={<OnboardingFlow />} />
 
-            {/* Protected Route Gate */}
-            <Route element={<AuthGuard />}>
-              {/* Authenticated App Shell */}
-              <Route path="/app" element={<AppShell />}>
-                <Route index element={<GlancePage />} />
-                <Route path="timeline" element={<TimelinePage />} />
-                <Route path="settings" element={<SettingsPage />} />
+              {/* Protected Route Gate */}
+              <Route element={<AuthGuard />}>
+                {/* Authenticated App Shell */}
+                <Route path="/app" element={<AppShell />}>
+                  <Route index element={<GlancePage />} />
+                  <Route path="timeline" element={<TimelinePage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
-        </BrowserRouter>
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
       </HouseholdProvider>
     </AuthProvider>
   );
