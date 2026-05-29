@@ -123,3 +123,101 @@ export async function downloadNewEvents(householdId) {
 export async function getQueueLength() {
   return await db.syncQueue.count()
 }
+
+// ==========================================
+// 4. SUPABASE REHYDRATION SAFEGUARD
+// ==========================================
+
+export async function rehydrateFromServer(householdId) {
+  if (!householdId) return 0
+
+  // 1. Fetch all events for this household from Supabase ordered by updated_at ascending
+  const { data: remoteEvents, error: eventsError } = await supabase
+    .from('events')
+    .select('*')
+    .eq('household_id', householdId)
+    .order('updated_at', { ascending: true })
+
+  if (eventsError) throw eventsError
+
+  let transformedEvents = []
+  if (remoteEvents && remoteEvents.length > 0) {
+    transformedEvents = remoteEvents.map(row => ({
+      clientId: row.client_id,
+      householdId: row.household_id,
+      babyId: row.baby_id,
+      loggedBy: row.logged_by,
+      loggedByName: row.logged_by_name,
+      deviceId: row.device_id,
+      eventType: row.event_type,
+      eventSubtype: row.event_subtype,
+      metadata: row.metadata,
+      parentId: row.parent_id,
+      conflictStatus: row.conflict_status,
+      eventTime: row.event_time,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      deletedAt: row.deleted_at,
+      syncStatus: 'synced'
+    }))
+
+    // Bulk put events to Dexie
+    await db.events.bulkPut(transformedEvents)
+
+    // Update lastSyncTimestamp in metadata to the latest event's updated_at value
+    const latestUpdatedAt = remoteEvents[remoteEvents.length - 1].updated_at
+    await db.metadata.put({ key: 'lastSyncTimestamp', value: latestUpdatedAt })
+  }
+
+  // 2. Fetch and cache household details
+  const { data: households } = await supabase
+    .from('households')
+    .select('*')
+    .eq('id', householdId)
+
+  if (households && households.length > 0) {
+    const transformed = households.map(h => ({
+      id: h.id,
+      name: h.name,
+      createdAt: h.created_at,
+      updatedAt: h.updated_at
+    }))
+    await db.households.bulkPut(transformed)
+  }
+
+  // 3. Fetch and cache babies
+  const { data: babies } = await supabase
+    .from('babies')
+    .select('*')
+    .eq('household_id', householdId)
+
+  if (babies && babies.length > 0) {
+    const transformed = babies.map(b => ({
+      id: b.id,
+      householdId: b.household_id,
+      name: b.name,
+      dateOfBirth: b.date_of_birth,
+      createdAt: b.created_at,
+      updatedAt: b.updated_at
+    }))
+    await db.babies.bulkPut(transformed)
+  }
+
+  // 4. Fetch profiles
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('*')
+
+  if (profiles && profiles.length > 0) {
+    const transformed = profiles.map(p => ({
+      id: p.id,
+      displayName: p.display_name,
+      displayLabel: p.display_label,
+      createdAt: p.created_at,
+      updatedAt: p.updated_at
+    }))
+    await db.profiles.bulkPut(transformed)
+  }
+
+  return transformedEvents.length
+}
