@@ -8,6 +8,7 @@ import { useHousehold } from '../../context/HouseholdContext'
 import { useAuth } from '../../context/AuthContext'
 import db from '../../db/dexie'
 import { createEvent } from '../../db/repositories'
+import { trackEvent } from '../../services/analytics'
 
 /**
  * Overlay sheet for duplicate logs manual conflict resolution.
@@ -103,6 +104,11 @@ export function ConflictSheet({ isOpen, onClose, conflictEvent }) {
         loggedByName
       })
 
+      trackEvent('conflict_resolved', {
+        household_id: household.id,
+        resolution: 'keep_both'
+      })
+
       setResolved(true)
       onClose()
     } catch (err) {
@@ -154,6 +160,11 @@ export function ConflictSheet({ isOpen, onClose, conflictEvent }) {
         loggedByName
       })
 
+      trackEvent('conflict_resolved', {
+        household_id: household.id,
+        resolution: 'merged'
+      })
+
       setResolved(true)
       onClose()
     } catch (err) {
@@ -192,6 +203,11 @@ export function ConflictSheet({ isOpen, onClose, conflictEvent }) {
         babyId: baby.id,
         loggedBy: user.id,
         loggedByName
+      })
+
+      trackEvent('conflict_resolved', {
+        household_id: household.id,
+        resolution: 'deleted_one'
       })
 
       setResolved(true)

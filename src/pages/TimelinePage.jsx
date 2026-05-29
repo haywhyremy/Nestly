@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
@@ -12,6 +12,7 @@ import { useTimeline } from '../hooks/useTimeline'
 import { useHousehold } from '../context/HouseholdContext'
 import { useAuth } from '../context/AuthContext'
 import { useSync } from '../hooks/useSync'
+import { trackEvent } from '../services/analytics'
 
 import { LogFeedSheet } from '../components/sheets/LogFeedSheet'
 import { LogNappySheet } from '../components/sheets/LogNappySheet'
@@ -34,6 +35,12 @@ export default function TimelinePage() {
     eventType: activeFilter === 'all' ? null : activeFilter,
     pageSize: 20
   })
+
+  useEffect(() => {
+    if (household?.id) {
+      trackEvent('timeline_viewed', { household_id: household.id })
+    }
+  }, [household?.id])
 
   // Filter events to represent only those that happened today for the Ribbon graph
   const todayStart = new Date()

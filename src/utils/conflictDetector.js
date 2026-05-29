@@ -1,4 +1,5 @@
 import db from '../db/dexie'
+import { trackEvent } from '../services/analytics'
 
 const CONFLICT_WINDOW_MS = 10 * 60 * 1000 // 10 minutes in milliseconds
 
@@ -57,6 +58,12 @@ export async function detectConflicts(newEvents = [], householdId) {
         // Flag both in memory & local storage
         newEvent.conflictStatus = 'pending'
         await db.events.update(newEvent.clientId, { conflictStatus: 'pending' })
+
+        trackEvent('conflict_detected', {
+          household_id: householdId,
+          event_type: newEvent.eventType,
+          count: filteredMatches.length
+        })
 
         for (const existing of filteredMatches) {
           await db.events.update(existing.clientId, { conflictStatus: 'pending' })

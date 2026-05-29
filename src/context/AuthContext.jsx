@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../services/supabase'
 import { sendMagicLink, signOut as authSignOut } from '../services/auth'
+import { identify } from '../services/analytics'
 
 const AuthContext = createContext(null)
 
@@ -37,6 +38,12 @@ export function AuthProvider({ children }) {
       subscription.unsubscribe()
     }
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      identify(user.id, { email: user.email })
+    }
+  }, [user])
 
   const isAuthenticated = !!user
 

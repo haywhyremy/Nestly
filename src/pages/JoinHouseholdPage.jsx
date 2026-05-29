@@ -7,6 +7,7 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { GhostButton } from '../components/buttons/GhostButton'
 import { Mail, AlertCircle } from 'lucide-react'
 import { Toast } from '../components/layout/Toast'
+import { trackEvent } from '../services/analytics'
 
 export default function JoinHouseholdPage() {
   const { code } = useParams()
@@ -101,6 +102,9 @@ export default function JoinHouseholdPage() {
         try {
           const result = await acceptInvite(code, user.id, user.email)
           await refreshHousehold()
+          if (result?.member?.household_id) {
+            trackEvent('partner_joined', { household_id: result.member.household_id })
+          }
           setBaby(result.baby)
           setStatus('success')
         } catch (err) {

@@ -15,6 +15,7 @@ import { exportToCSV } from '../utils/csvExport'
 import db from '../db/dexie'
 import { supabase } from '../services/supabase'
 import { useNotificationBadge } from '../hooks/useNotificationBadge'
+import { trackEvent } from '../services/analytics'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -46,7 +47,8 @@ export default function SettingsPage() {
     setExportStatus('exporting')
     setExportError('')
     try {
-      await exportToCSV(household.id)
+      const count = await exportToCSV(household.id)
+      trackEvent('csv_exported', { household_id: household.id, entry_count: count })
       setExportStatus('done')
       setTimeout(() => {
         setExportStatus(null)

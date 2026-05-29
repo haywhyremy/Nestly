@@ -6,6 +6,7 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { GhostButton } from '../components/buttons/GhostButton'
 import { Mail, Loader2 } from 'lucide-react'
 import { createInvite } from '../db/repositories'
+import { trackEvent } from '../services/analytics'
 
 const getTodayString = () => {
   const today = new Date()
@@ -61,6 +62,7 @@ export default function OnboardingFlow() {
         try {
           const invite = await createInvite(household.id, user.id)
           setInviteCode(invite.code)
+          trackEvent('partner_invited', { household_id: household.id })
         } catch (err) {
           console.error('Failed to create invite:', err)
           setInviteError('Failed to generate invite code. Please try again.')
@@ -89,6 +91,7 @@ export default function OnboardingFlow() {
     try {
       const { error: signInError } = await signIn(email)
       if (signInError) throw signInError
+      trackEvent('user_signed_up', { method: 'magic_link' })
       setStep('waiting')
     } catch (err) {
       console.error('Magic link send failed:', err)
@@ -105,7 +108,10 @@ export default function OnboardingFlow() {
     setIsCreating(true)
     setCreateError(null)
     try {
-      await createNewHousehold(babyName.trim(), babyDob)
+      const result = await createNewHousehold(babyName.trim(), babyDob)
+      if (result?.household?.id) {
+        trackEvent('household_created', { household_id: result.household.id })
+      }
       setStep('invitePartner')
     } catch (err) {
       console.error('Failed to create household:', err)
