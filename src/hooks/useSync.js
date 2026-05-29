@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { processUploadQueue, downloadNewEvents, getQueueLength } from '../db/syncQueue'
 import { useOnlineStatus } from './useOnlineStatus'
+import { detectConflicts } from '../utils/conflictDetector'
 
 export function useSync(householdId) {
   const { isOnline } = useOnlineStatus()
@@ -19,7 +20,9 @@ export function useSync(householdId) {
     setIsSyncing(true)
     try {
       await processUploadQueue(householdId)
-      await downloadNewEvents(householdId)
+      const downloaded = await downloadNewEvents(householdId)
+      const conflictsFlagged = await detectConflicts(downloaded, householdId)
+      console.log('[Sync] Conflicts detected:', conflictsFlagged.length)
       setLastSynced(new Date())
       const count = await getQueueLength()
       setPendingCount(count)
