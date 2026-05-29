@@ -60,6 +60,7 @@ export default function GlancePage() {
         babyName={baby?.name || 'Baby'} 
         isSyncing={syncState.isSyncing} 
         pendingCount={syncState.pendingCount} 
+        syncError={syncState.syncError}
       />
 
       {/* Sleep Ongoing Notification Banner */}

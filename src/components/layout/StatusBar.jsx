@@ -4,7 +4,8 @@ import { RefreshCw, Settings } from 'lucide-react'
 export function StatusBar({
   babyName,
   isSyncing,
-  pendingCount = 0
+  pendingCount = 0,
+  syncError = false
 }) {
   return (
     <div className="flex items-center justify-between px-4 py-3 bg-surface-base select-none border-b border-surface-sunken/40">
@@ -25,6 +26,13 @@ export function StatusBar({
             {pendingCount} pending
           </span>
         ) : null}
+
+        {syncError && (
+          <div 
+            className="w-2 h-2 rounded-full bg-signal-conflict animate-pulse flex-shrink-0" 
+            title="Sync error — entries are safe locally"
+          />
+        )}
 
         <Link
           to="/app/settings"

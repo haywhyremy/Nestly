@@ -9,8 +9,10 @@ export function useSync(householdId) {
   const [isSyncing, setIsSyncing] = useState(false)
   const [lastSynced, setLastSynced] = useState(null)
   const [pendingCount, setPendingCount] = useState(0)
+  const [syncError, setSyncError] = useState(false)
 
   const syncingRef = useRef(false)
+  const failureCountRef = useRef(0)
 
   const syncNow = useCallback(async () => {
     if (!isOnline || syncingRef.current || !householdId) {
@@ -30,6 +32,10 @@ export function useSync(householdId) {
         setLastSynced(new Date())
         const count = await getQueueLength()
         setPendingCount(count)
+        
+        // Reset error states on success
+        setSyncError(false)
+        failureCountRef.current = 0
         return
       }
 
@@ -40,8 +46,17 @@ export function useSync(householdId) {
       setLastSynced(new Date())
       const count = await getQueueLength()
       setPendingCount(count)
+
+      // Reset error states on success
+      setSyncError(false)
+      failureCountRef.current = 0
     } catch (err) {
       console.error('Synchronization failed:', err)
+      setSyncError(true)
+      failureCountRef.current += 1
+      if (failureCountRef.current >= 3) {
+        console.warn('[Sync] 3 consecutive failures — entries are safe locally')
+      }
     } finally {
       syncingRef.current = false
       setIsSyncing(false)
@@ -95,7 +110,7 @@ export function useSync(householdId) {
     }
   }, [])
 
-  return { syncNow, isSyncing, lastSynced, pendingCount }
+  return { syncNow, isSyncing, lastSynced, pendingCount, syncError }
 }
 
 export default useSync;
