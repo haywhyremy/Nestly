@@ -31,9 +31,14 @@ jobs:
 
       - name: Check bundle size
         run: |
-          TOTAL=$(du -cb dist/assets/*.js | tail -1 | cut -f1)
-          echo "Total JS size: $TOTAL bytes"
-          if [ "$TOTAL" -gt 716800 ]; then
-            echo "JS bundle exceeds 700KB"
-            exit 1
-          fi
+          MAX_SIZE=409600
+          OVER=0
+          for f in dist/assets/*.js; do
+            SIZE=$(wc -c < "$f")
+            echo "$f: $SIZE bytes"
+            if [ "$SIZE" -gt "$MAX_SIZE" ]; then
+              echo "❌ $f exceeds 400KB"
+              OVER=1
+            fi
+          done
+          if [ "$OVER" -eq 1 ]; then exit 1; fi

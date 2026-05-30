@@ -188,6 +188,7 @@ export default function JoinHouseholdPage() {
               <input
                 type="email"
                 required
+                aria-label="Email address"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => {

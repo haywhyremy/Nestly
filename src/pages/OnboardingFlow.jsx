@@ -210,6 +210,7 @@ export default function OnboardingFlow() {
               <input
                 type="email"
                 required
+                aria-label="Email address"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => {
@@ -231,7 +232,7 @@ export default function OnboardingFlow() {
           </form>
 
           {error && (
-            <div className="mt-4 text-sm text-red-500 bg-red-500/10 p-3 rounded-xl border border-red-500/20 text-center animate-fade-in">
+            <div className="mt-4 text-sm text-accent-coral bg-accent-coral/10 p-3 rounded-xl border border-accent-coral/20 text-center animate-fade-in">
               {error}
             </div>
           )}
@@ -294,6 +295,7 @@ export default function OnboardingFlow() {
               <input
                 type="text"
                 required
+                aria-label="Baby's name"
                 placeholder="Baby's name"
                 value={babyName}
                 onChange={(e) => {
@@ -364,7 +366,7 @@ export default function OnboardingFlow() {
               <span className="text-xs text-ink-tertiary mt-2">Generating secure code...</span>
             </div>
           ) : inviteError ? (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl p-4 mt-6 text-sm text-center">
+            <div className="bg-accent-coral/10 border border-accent-coral/20 text-accent-coral rounded-xl p-4 mt-6 text-sm text-center">
               {inviteError}
             </div>
           ) : (

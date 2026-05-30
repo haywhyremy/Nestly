@@ -233,7 +233,7 @@ export default function SettingsPage() {
 
       {/* Header Bar */}
       <header className="flex items-center gap-2 px-4 py-3 border-b border-surface-sunken sticky top-0 bg-surface-base z-10 select-none">
-        <Link to="/app" className="p-1 -ml-1 text-ink-primary hover:text-ink-secondary transition-colors flex items-center justify-center">
+        <Link to="/app" aria-label="Go back to glance screen" className="p-1 -ml-1 text-ink-primary hover:text-ink-secondary transition-colors flex items-center justify-center">
           <ChevronLeft size={20} />
         </Link>
         <h1 className="text-lg font-semibold text-ink-primary">

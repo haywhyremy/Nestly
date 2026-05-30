@@ -7,6 +7,32 @@ export default defineConfig({
   define: {
     '__APP_VERSION__': JSON.stringify(process.env.npm_package_version || '1.0.0')
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('react-modal-sheet') || id.includes('@headlessui') || id.includes('lucide-react')) {
+              return 'vendor-ui';
+            }
+            if (id.includes('dexie') || id.includes('date-fns')) {
+              return 'vendor-data';
+            }
+            if (id.includes('@sentry') || id.includes('posthog-js')) {
+              return 'vendor-analytics';
+            }
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 300,
+  },
   plugins: [
     react(),
     VitePWA({
