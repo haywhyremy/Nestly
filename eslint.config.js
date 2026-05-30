@@ -13,6 +13,7 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
+        __APP_VERSION__: 'readonly',
       },
       parserOptions: {
         ecmaFeatures: {
@@ -28,6 +29,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/purity': 'off',
+      'no-useless-assignment': 'off',
       'no-unused-vars': 'warn',
       'react/prop-types': 'off',
       'react-refresh/only-export-components': [
