@@ -175,65 +175,56 @@ export default function LandingPage() {
           </div>
 
           {/* Right Column (iPhone Mockup) */}
-          <div className="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] mx-auto flex-shrink-0 animate-fade-in-up animation-delay-400 animate-float">
-            {/* Phone outer frame */}
-            <div className="absolute inset-0 rounded-[50px] bg-[#1F1B16] shadow-[0_20px_60px_rgba(31,27,22,0.3)] dark:shadow-[0_0_40px_rgba(127,155,126,0.15)] border border-[#3A3530]/20">
-              
-              {/* Screen area */}
-              <div className="absolute top-[12px] left-[12px] right-[12px] bottom-[12px] rounded-[40px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden flex flex-col justify-between p-4 pb-6 transition-colors duration-200">
-                
-                {/* Dynamic island */}
-                <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[90px] h-[25px] bg-[#1F1B16] rounded-full z-10 flex items-center justify-center">
-                  <div className="w-2.5 h-2.5 rounded-full bg-black/60 mr-1" />
-                </div>
-
-                {/* Status area */}
-                <div className="px-5 pt-10 flex justify-between items-center w-full">
-                  <span className="text-[10px] font-bold text-[#A89F94] dark:text-[#6C6C64] uppercase tracking-widest">Teeto</span>
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#7A9B7E] animate-pulse" />
-                </div>
-
-                {/* Spacer */}
-                <div className="mt-8 flex-1 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] dark:text-[#6C6C64] font-medium">Last Feed</span>
-                  <span className="text-[40px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-1 tracking-tight" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    2h 14m
-                  </span>
-                  <span className="text-[13px] text-[#6B6259] dark:text-[#9C9C94] mt-1 font-medium">90ml · Mum</span>
-
-                  {/* Secondary rows */}
-                  <div className="w-full mt-8 px-5 space-y-2.5">
-                    <div className="flex items-center justify-between bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-xl px-3 py-2.5 shadow-sm transition-colors duration-200">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#C49B7A]" />
-                        <span className="text-[11px] text-[#6B6259] dark:text-[#9C9C94]">Last nappy</span>
-                      </div>
-                      <span className="text-[11px] font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">45m · Wet</span>
+          <div className="mt-10 md:mt-0 flex justify-center animate-fade-in-up animation-delay-400">
+            <div className="relative animate-float">
+              {/* Phone frame */}
+              <div className="w-[260px] h-[520px] md:w-[280px] md:h-[560px] rounded-[50px] bg-[#1F1B16] p-[10px] shadow-[0_20px_60px_rgba(31,27,22,0.25)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(143,184,154,0.12)]">
+                {/* Screen */}
+                <div className="w-full h-full rounded-[40px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden relative">
+                  {/* Dynamic Island */}
+                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-[80px] h-[22px] bg-[#1F1B16] rounded-full z-10" />
+                  
+                  {/* Screen content */}
+                  <div className="pt-[44px] px-5 h-full flex flex-col">
+                    {/* Status row */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-medium text-[#1F1B16] dark:text-[#FAFAF8]">Teeto</span>
+                      <div className="w-[6px] h-[6px] rounded-full bg-[#7A9B7E]" />
                     </div>
-
-                    <div className="flex items-center justify-between bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-xl px-3 py-2.5 shadow-sm transition-colors duration-200">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#9B7E9B]" />
-                        <span className="text-[11px] text-[#6B6259] dark:text-[#9C9C94]">Sleep</span>
+                    
+                    {/* Glance card */}
+                    <div className="flex-1 flex flex-col items-center justify-center -mt-4">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] font-medium">Last Feed</span>
+                      <span className="text-[42px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-1" style={{ fontVariantNumeric: 'tabular-nums' }}>2h 14m</span>
+                      <span className="text-[12px] text-[#6B6259] dark:text-[#9C9C94] mt-1">90ml · Mum</span>
+                      
+                      {/* Secondary rows */}
+                      <div className="mt-5 w-full space-y-2 px-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-[6px] h-[6px] rounded-full bg-[#C49B7A]" />
+                          <span className="text-[10px] text-[#6B6259] dark:text-[#9C9C94]">Last nappy · 45m · Wet</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-[6px] h-[6px] rounded-full bg-[#9B7E9B] animate-pulse" />
+                          <span className="text-[10px] text-[#6B6259] dark:text-[#9C9C94]">Sleep · ongoing · 38m</span>
+                        </div>
                       </div>
-                      <span className="text-[11px] font-semibold text-[#9B7E9B] dark:text-[#B399B3] animate-pulse">Ongoing · 38m</span>
+                    </div>
+                    
+                    {/* Bottom buttons */}
+                    <div className="flex gap-2 pb-6 px-1">
+                      <div className="flex-1 py-2 rounded-xl bg-[#7A9B7E]/15 text-center">
+                        <span className="text-[10px] font-medium text-[#7A9B7E]">Feed</span>
+                      </div>
+                      <div className="flex-1 py-2 rounded-xl bg-[#C49B7A]/15 text-center">
+                        <span className="text-[10px] font-medium text-[#C49B7A]">Nappy</span>
+                      </div>
+                      <div className="flex-1 py-2 rounded-xl bg-[#9B7E9B]/15 text-center">
+                        <span className="text-[10px] font-medium text-[#9B7E9B]">Sleep</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Bottom buttons */}
-                <div className="absolute bottom-6 left-4 right-4 flex gap-2">
-                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#7A9B7E]/15 text-[#7A9B7E] dark:text-[#8FB89A] border border-[#7A9B7E]/10">
-                    Feed
-                  </div>
-                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#C49B7A]/15 text-[#C49B7A] dark:text-[#D4AB8A] border border-[#C49B7A]/10">
-                    Nappy
-                  </div>
-                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#9B7E9B]/15 text-[#9B7E9B] dark:text-[#B399B3] border border-[#9B7E9B]/10">
-                    Sleep
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
