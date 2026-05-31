@@ -60,6 +60,9 @@
 
 /* Base body style using the tokens */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     background-color: var(--surface-base);
     color: var(--ink-primary);
@@ -89,3 +92,35 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
+
+/* Entrance Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animation-delay-100 { animation-delay: 100ms; opacity: 0; }
+.animation-delay-200 { animation-delay: 200ms; opacity: 0; }
+.animation-delay-300 { animation-delay: 300ms; opacity: 0; }
+.animation-delay-400 { animation-delay: 400ms; opacity: 0; }
+.animation-delay-500 { animation-delay: 500ms; opacity: 0; }
+
