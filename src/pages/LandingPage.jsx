@@ -3,42 +3,42 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { PrimaryButton } from '../components/buttons/PrimaryButton'
 import { 
-  WifiOff, 
-  Users, 
-  ChevronDown, 
-  ChevronUp, 
-  Mail, 
   MessageSquare, 
+  WifiOff, 
   HelpCircle, 
+  Wifi, 
+  Users, 
   Shield, 
   Moon, 
-  Wifi 
+  ChevronDown, 
+  ChevronUp, 
+  Mail 
 } from 'lucide-react'
 
 const faqItems = [
   {
     question: "Is Nestly really free?",
-    answer: "Yes, Nestly is free. We might add paid premium integrations in the future, but core parent-sharing logs, offline mode, and data exports will always remain completely free."
+    answer: "Yes. Nestly is free. We may add premium features later, but the core logging will always be free."
   },
   {
     question: "Does it work without internet?",
-    answer: "Yes. Nestly is built offline-first. Your entries save instantly to local database storage (IndexedDB) on your phone. When a network connection returns, the app automatically uploads queued logs and downloads new ones."
+    answer: "Yes. Nestly saves everything locally on your phone. When you reconnect, it syncs automatically with your partner's device."
   },
   {
     question: "Can I use it with my nanny or grandparent?",
-    answer: "Right now, Nestly is optimized specifically for a close duo of two main carers. We plan to add support for multiple household roles and wider carer circles in a future update."
+    answer: "Right now, Nestly supports two carers per household. We're adding support for more carers soon."
   },
   {
-    question: "Is my baby's data safe?",
-    answer: "Absolutely. We secure your records in strict EU datacentres (London). There are no third-party advertisements or trackers inside Nestly. You can download your complete history in standard CSV format or delete your account instantly from Settings."
+    question: "Is my data safe?",
+    answer: "Your data is stored securely in the EU (London). We never sell your data. You can export or delete everything from Settings."
   },
   {
-    question: "Do I need to download an app store package?",
-    answer: "No. Nestly is a Progressive Web App (PWA). Just open the web address in your browser, select 'Add to Home Screen', and it installs ambiently as a full-screen, native-feeling app."
+    question: "Do I need to download an app?",
+    answer: "No app store needed. Nestly is a web app — open it in your browser and add it to your home screen for the best experience."
   },
   {
-    question: "What if my partner and I log at the same time?",
-    answer: "Nestly's offline sync engine detects potential duplicates logged within 10 minutes of each other. Instead of silently deleting entries, it flags them on the timeline so you can calmly resolve them together."
+    question: "What if we both log at the same time?",
+    answer: "Nestly detects potential duplicates and lets you calmly resolve them. No data is ever silently deleted."
   }
 ]
 
@@ -52,7 +52,7 @@ export default function LandingPage() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
 
-  // FAQ State
+  // FAQ Accordion State
   const [openFaqIndex, setOpenFaqIndex] = useState(null)
 
   // Redirect if authenticated
@@ -92,486 +92,578 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-surface-base min-h-dvh flex flex-col shadow-sm text-ink-primary font-system">
+    <div className="w-full bg-[#FBF8F4] text-[#1F1B16] font-system select-none overflow-x-hidden">
       
       {/* SECTION 1: HERO */}
-      <section className="min-h-dvh flex flex-col items-center justify-center px-6 text-center select-none relative bg-gradient-to-b from-surface-base to-[#F0EBE3] pt-12 pb-16">
-        
-        {/* Pill Badge */}
-        <div className="bg-accent-sage/10 text-accent-sage text-xs font-semibold px-3.5 py-1 rounded-full tracking-wide shadow-sm animate-fade-in">
-          Simple baby tracking for two
-        </div>
-
-        {/* Headline */}
-        <h1 
-          className="text-4xl font-bold text-ink-primary tracking-tight mt-6 leading-tight max-w-[320px] mx-auto animate-fade-in"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          The feed log that never gets lost.
-        </h1>
-
-        {/* Sub-headline */}
-        <p className="text-base text-ink-secondary mt-4 leading-relaxed max-w-[310px] mx-auto animate-fade-in">
-          You and your partner. One calm, shared log. Feeds, nappies, sleep — always in sync, even offline.
-        </p>
-        
-        {/* Two CTAs */}
-        <div className="mt-8 flex gap-3 w-full max-w-xs px-4 animate-fade-in">
-          <PrimaryButton 
-            onClick={(e) => handleScrollToSection(e, 'signup')}
-            className="flex-1 text-sm font-semibold !h-12 shadow-sm"
-          >
-            Start free
-          </PrimaryButton>
-          <a
-            href="#how-it-works"
-            onClick={(e) => handleScrollToSection(e, 'how-it-works')}
-            className="flex-1 !h-12 border border-ink-secondary/30 rounded-xl text-sm font-semibold text-ink-primary bg-surface-raised/40 hover:bg-surface-raised/80 active:brightness-95 flex items-center justify-center transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-sage/60"
-            aria-label="See how Nestly works"
-          >
-            See how it works
-          </a>
-        </div>
-
-        {/* Social Proof */}
-        <p className="text-[11px] text-ink-tertiary mt-6 italic select-none animate-fade-in">
-          Used by parents who ditched the WhatsApp thread
-        </p>
-
-        {/* Phone Mockup */}
-        <div className="w-[260px] h-[520px] rounded-[40px] bg-ink-primary p-[8px] shadow-2xl mx-auto mt-8 border border-ink-secondary/20 relative animate-fade-in">
-          {/* Notch / Dynamic Island */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-4 rounded-full bg-ink-primary z-10 flex items-center justify-center">
-            <div className="w-2.5 h-2.5 rounded-full bg-black/60 mr-1" />
-          </div>
-
-          {/* Screen */}
-          <div className="rounded-[32px] bg-surface-base overflow-hidden h-full flex flex-col justify-between p-4 pt-8 text-left border border-ink-secondary/10 relative select-none">
-            {/* Top Header */}
-            <div className="flex justify-between items-center px-2 py-1">
-              <span className="text-[10px] font-semibold text-ink-secondary uppercase tracking-widest">Teeto</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-accent-sage animate-pulse" />
+      <section className="min-h-dvh flex items-center bg-[#FBF8F4] py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-6 w-full md:grid md:grid-cols-2 md:gap-12 md:items-center">
+          
+          {/* Left Column (Text) */}
+          <div className="text-left flex flex-col items-start mb-12 md:mb-0">
+            <span className="inline-block bg-[#7A9B7E]/10 text-[#7A9B7E] text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide">
+              Simple baby tracking for two
+            </span>
+            <h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F1B16] leading-[1.1] mt-6 tracking-tight"
+              style={{ fontFamily: "'DM Serif Display', serif" }}
+            >
+              The feed log that never gets lost.
+            </h1>
+            <p className="text-lg text-[#6B6259] mt-6 leading-relaxed max-w-lg">
+              You and your partner. One calm, shared log. Feeds, nappies, sleep — always in sync, even offline.
+            </p>
+            
+            <div className="flex flex-wrap gap-3 mt-8 w-full sm:w-auto">
+              <PrimaryButton 
+                onClick={(e) => handleScrollToSection(e, 'signup')}
+                className="w-full sm:w-auto sm:px-8 shadow-sm font-semibold !h-12"
+              >
+                Start free →
+              </PrimaryButton>
+              <a
+                href="#how-it-works"
+                onClick={(e) => handleScrollToSection(e, 'how-it-works')}
+                className="px-6 py-3 rounded-xl border-2 border-[#1F1B16] text-[#1F1B16] text-sm font-semibold hover:bg-[#1F1B16] hover:text-[#FBF8F4] transition-colors flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A9B7E]"
+              >
+                See how it works
+              </a>
             </div>
 
-            {/* Glance Card Content */}
-            <div className="flex-1 flex flex-col justify-center items-center text-center px-2">
-              <span className="text-[10px] font-bold text-accent-sage uppercase tracking-wider mb-1">Last Feed</span>
-              <span className="text-4xl font-extrabold text-ink-primary tracking-tight">2h 14m</span>
-              <span className="text-xs text-ink-secondary mt-1">90ml · Mum</span>
+            <p className="text-sm text-[#A89F94] mt-8">
+              Trusted by parents who retired the WhatsApp group.
+            </p>
+          </div>
+
+          {/* Right Column (iPhone Mockup) */}
+          <div className="relative w-[280px] h-[560px] md:w-[300px] md:h-[600px] mx-auto flex-shrink-0">
+            {/* Phone outer frame */}
+            <div className="absolute inset-0 rounded-[50px] bg-[#1F1B16] shadow-[0_20px_60px_rgba(31,27,22,0.3)] border border-[#3A3530]/20">
               
-              {/* Secondary rows */}
-              <div className="w-full mt-6 space-y-2.5 text-xs text-ink-secondary">
-                <div className="flex items-center justify-between bg-surface-raised/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-surface-sunken">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-accent-clay" />
-                    <span>Last nappy</span>
-                  </div>
-                  <span className="font-semibold text-ink-primary">45m · Wet</span>
+              {/* Screen area */}
+              <div className="absolute top-[12px] left-[12px] right-[12px] bottom-[12px] rounded-[40px] bg-[#FBF8F4] overflow-hidden flex flex-col justify-between p-4 pb-6">
+                
+                {/* Dynamic island */}
+                <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[90px] h-[25px] bg-[#1F1B16] rounded-full z-10 flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-black/60 mr-1" />
                 </div>
-                <div className="flex items-center justify-between bg-surface-raised/60 backdrop-blur-sm rounded-xl px-3 py-2 border border-surface-sunken">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-accent-dusk" />
-                    <span>Sleep</span>
-                  </div>
-                  <span className="font-semibold text-accent-dusk animate-pulse">Ongoing · 38m</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Quick Log Visual Buttons */}
-            <div className="grid grid-cols-3 gap-1.5 pt-4">
-              <div className="h-10 rounded-xl bg-accent-sage/10 text-accent-sage border border-accent-sage/20 font-bold text-[10px] flex items-center justify-center tracking-wider uppercase shadow-sm">
-                Feed
-              </div>
-              <div className="h-10 rounded-xl bg-accent-clay/10 text-accent-clay border border-accent-clay/20 font-bold text-[10px] flex items-center justify-center tracking-wider uppercase shadow-sm">
-                Nappy
-              </div>
-              <div className="h-10 rounded-xl bg-accent-dusk/10 text-accent-dusk border border-accent-dusk/20 font-bold text-[10px] flex items-center justify-center tracking-wider uppercase shadow-sm">
-                Sleep
+                {/* Status area */}
+                <div className="px-5 pt-10 flex justify-between items-center w-full">
+                  <span className="text-[10px] font-bold text-[#A89F94] uppercase tracking-widest">Teeto</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#7A9B7E] animate-pulse" />
+                </div>
+
+                {/* Spacer */}
+                <div className="mt-8 flex-1 flex flex-col items-center justify-center text-center">
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] font-medium">Last Feed</span>
+                  <span className="text-[40px] font-bold text-[#1F1B16] leading-none mt-1 tracking-tight" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    2h 14m
+                  </span>
+                  <span className="text-[13px] text-[#6B6259] mt-1 font-medium">90ml · Mum</span>
+
+                  {/* Secondary rows */}
+                  <div className="w-full mt-8 px-5 space-y-2.5">
+                    <div className="flex items-center justify-between bg-white border border-[#F2EDE6] rounded-xl px-3 py-2.5 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#C49B7A]" />
+                        <span className="text-[11px] text-[#6B6259]">Last nappy</span>
+                      </div>
+                      <span className="text-[11px] font-semibold text-[#1F1B16]">45m · Wet</span>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-white border border-[#F2EDE6] rounded-xl px-3 py-2.5 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#9B7E9B]" />
+                        <span className="text-[11px] text-[#6B6259]">Sleep</span>
+                      </div>
+                      <span className="text-[11px] font-semibold text-[#9B7E9B] animate-pulse">Ongoing · 38m</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom buttons */}
+                <div className="absolute bottom-6 left-4 right-4 flex gap-2">
+                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#7A9B7E]/15 text-[#7A9B7E] border border-[#7A9B7E]/10">
+                    Feed
+                  </div>
+                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#C49B7A]/15 text-[#C49B7A] border border-[#C49B7A]/10">
+                    Nappy
+                  </div>
+                  <div className="flex-1 py-2.5 rounded-xl text-[11px] font-bold text-center uppercase tracking-wider bg-[#9B7E9B]/15 text-[#9B7E9B] border border-[#9B7E9B]/10">
+                    Sleep
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
-        </div>
 
-        <button 
-          onClick={(e) => handleScrollToSection(e, 'pain-points')}
-          className="absolute bottom-6 flex flex-col items-center gap-1 text-ink-tertiary hover:text-ink-secondary transition-colors focus:outline-none"
-          aria-label="Scroll to pain points"
-        >
-          <ChevronDown size={18} className="animate-bounce motion-reduce:animate-none" />
-        </button>
+        </div>
       </section>
 
       {/* SECTION 2: PAIN POINTS */}
-      <section id="pain-points" className="py-20 px-6 bg-surface-base border-t border-surface-sunken/40 select-none">
-        <h2 
-          className="text-2xl font-bold text-ink-primary text-center tracking-tight"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          WhatsApp wasn't built for this.
-        </h2>
+      <section id="pain-points" className="py-20 md:py-28 bg-[#FBF8F4] border-t border-[#F2EDE6]/40">
+        <div className="max-w-6xl mx-auto px-6">
+          
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-[#1F1B16] text-center tracking-tight"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            WhatsApp wasn't built for this.
+          </h2>
 
-        <div className="space-y-4 mt-10 max-w-md mx-auto">
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-coral/10 rounded-xl text-accent-coral flex-shrink-0 mt-0.5">
-              <MessageSquare size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+            
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] hover:shadow-lg transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center mb-6 text-[#7A9B7E]">
+                  <MessageSquare size={22} />
+                </div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Messages get buried</h3>
+                <p className="text-sm text-[#6B6259] mt-2.5 leading-relaxed">
+                  "Baby fed and slept" — but how much? When was the last nappy? You're scrolling through 47 messages in a busy conversation thread to find out.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Messages get buried</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                "Baby fed and slept" — but how much? Exactly when? Chat messages disappear in the middle of standard conversation. The scroll never ends.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-coral/10 rounded-xl text-accent-coral flex-shrink-0 mt-0.5">
-              <WifiOff size={20} />
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] hover:shadow-lg transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center mb-6 text-[#7A9B7E]">
+                  <WifiOff size={22} />
+                </div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Signal drops out</h3>
+                <p className="text-sm text-[#6B6259] mt-2.5 leading-relaxed">
+                  The nursery. A long drive. The clinic waiting room. Right when you need to log, the connection dies and standard chats freeze. Signal shouldn't block baby care.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Signal drops at the worst time</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                In the nursery. On a drive. At the clinic. Right when you need to log, loading circles spinner breaks normal workflows. Signal shouldn't stand in your way.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-coral/10 rounded-xl text-accent-coral flex-shrink-0 mt-0.5">
-              <HelpCircle size={20} />
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] hover:shadow-lg transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center mb-6 text-[#7A9B7E]">
+                  <HelpCircle size={22} />
+                </div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">"Did you already feed her?"</h3>
+                <p className="text-sm text-[#6B6259] mt-2.5 leading-relaxed">
+                  The 3am question that no exhausted parent should have to ask or answer. Baby's records should be visible ambiently, without requiring conversation.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">"Did you feed her already?"</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                The redundant question that triggers every argument at 3am.ambient parenting metrics should be clear and accessible without calling.
-              </p>
-            </div>
+
           </div>
         </div>
       </section>
 
       {/* SECTION 3: HOW IT WORKS */}
-      <section id="how-it-works" className="py-20 px-6 bg-[#F0EBE3] border-t border-surface-sunken/40 select-none">
-        <h2 
-          className="text-2xl font-bold text-ink-primary text-center tracking-tight"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          Three taps. Seven seconds. Done.
-        </h2>
-        <p className="text-sm text-ink-secondary text-center mt-2">
-          No typing. No scrolling. Just tap and confirm.
-        </p>
-
-        <div className="space-y-12 mt-12 max-w-md mx-auto">
+      <section id="how-it-works" className="py-20 md:py-28 bg-[#F2EDE6]">
+        <div className="max-w-6xl mx-auto px-6">
           
-          {/* Step 1 */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-4xl font-bold text-accent-sage/30 tracking-tight leading-none">01</span>
-              <h3 className="text-base font-semibold text-ink-primary">Tap to log</h3>
-            </div>
-            <p className="text-xs text-ink-secondary leading-relaxed -mt-1">
-              Feed, nappy, or sleep — one tap opens a pre-filled sheet. Smart defaults dynamically estimate parameters so you usually just hit confirm.
-            </p>
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-[#1F1B16] text-center tracking-tight"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            Three taps. Seven seconds.
+          </h2>
+          <p className="text-lg text-[#6B6259] text-center mt-3 max-w-md mx-auto leading-relaxed">
+            No typing. No scrolling. Just tap and go.
+          </p>
+
+          <div className="mt-16 space-y-24">
             
-            {/* Small Mockup 1 */}
-            <div className="w-[180px] h-[280px] rounded-[30px] bg-ink-primary p-[5px] shadow-xl mx-auto mt-4 border border-ink-secondary/15 relative">
-              <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-3 rounded-full bg-ink-primary z-10" />
-              <div className="rounded-[25px] bg-surface-base overflow-hidden h-full flex flex-col justify-between p-3.5 pt-6 text-left relative text-[10px]">
-                <span className="font-semibold text-ink-primary text-xs">Log feed</span>
-                
-                <div className="flex bg-surface-sunken rounded-lg p-0.5 mt-2.5">
-                  <div className="flex-1 text-center py-1 bg-accent-sage text-white rounded-md font-semibold text-[8px] shadow-sm">Bottle</div>
-                  <div className="flex-1 text-center py-1 text-ink-secondary font-medium text-[8px]">Breast</div>
-                </div>
-
-                <div className="mt-4 space-y-1">
-                  <span className="block text-[8px] font-bold text-ink-secondary uppercase tracking-wider">Volume</span>
-                  <div className="flex justify-between items-center bg-surface-raised border border-surface-sunken rounded-lg px-2.5 py-1">
-                    <span className="font-bold text-ink-secondary">-</span>
-                    <span className="font-bold text-ink-primary text-xs">90ml</span>
-                    <span className="font-bold text-ink-secondary">+</span>
-                  </div>
-                </div>
-
-                <div className="mt-auto pt-3">
-                  <div className="w-full py-2 bg-accent-sage text-white text-center font-bold rounded-lg tracking-wide uppercase text-[8px] shadow-sm">
-                    Log feed
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Step 2 */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-4xl font-bold text-accent-sage/30 tracking-tight leading-none">02</span>
-              <h3 className="text-base font-semibold text-ink-primary">It syncs automatically</h3>
-            </div>
-            <p className="text-xs text-ink-secondary leading-relaxed -mt-1">
-              Your partner sees the entry instantly on their phone. Works fully offline — logs save locally and update on Supabase when signal returns.
-            </p>
-
-            {/* Sync Illustration */}
-            <div className="flex items-center justify-center gap-4 mt-4 h-28 select-none">
-              {/* Phone Left */}
-              <div className="w-12 h-20 rounded-xl bg-surface-raised border border-surface-sunken shadow-sm p-1.5 relative">
-                <div className="w-4 h-0.5 rounded-full bg-ink-tertiary/40 mx-auto mb-1.5" />
-                <div className="w-full h-11 rounded bg-accent-sage/10 relative overflow-hidden">
-                  <div className="absolute inset-x-1.5 top-2 h-1 rounded bg-accent-sage/40" />
-                  <div className="absolute inset-x-1.5 top-4.5 h-1 rounded bg-accent-sage/20" />
-                  <div className="absolute inset-x-1.5 top-7 h-1 rounded bg-accent-sage/20" />
-                </div>
-              </div>
+            {/* Step 1 */}
+            <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
               
-              {/* Sync Arrows */}
-              <div className="flex flex-col items-center justify-center text-accent-sage animate-pulse">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
-                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                  <path d="M3 3v5h5" />
-                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                  <path d="M16 16h5v5" />
-                </svg>
+              {/* Text */}
+              <div className="flex flex-col items-start text-left mb-8 md:mb-0">
+                <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 tracking-tight leading-none">01</span>
+                <h3 className="text-2xl font-bold text-[#1F1B16] mt-2">Tap to log</h3>
+                <p className="text-base text-[#6B6259] mt-3 leading-relaxed">
+                  Feed, nappy, or sleep — one tap opens a pre-filled form. Smart defaults dynamically estimate volumes and times so you usually just hit confirm.
+                </p>
               </div>
 
-              {/* Phone Right */}
-              <div className="w-12 h-20 rounded-xl bg-surface-raised border border-surface-sunken shadow-sm p-1.5 relative">
-                <div className="w-4 h-0.5 rounded-full bg-ink-tertiary/40 mx-auto mb-1.5" />
-                <div className="w-full h-11 rounded bg-accent-sage/10 relative overflow-hidden">
-                  <div className="absolute inset-x-1.5 top-2 h-1 rounded bg-accent-sage/40" />
-                  <div className="absolute inset-x-1.5 top-4.5 h-1 rounded bg-accent-sage/20" />
-                  <div className="absolute inset-x-1.5 top-7 h-1 rounded bg-accent-sage/20" />
+              {/* Visual Mockup */}
+              <div className="relative w-[220px] h-[440px] mx-auto flex-shrink-0">
+                <div className="absolute inset-0 rounded-[40px] bg-[#1F1B16] shadow-xl border border-[#3A3530]/20">
+                  <div className="absolute top-[10px] left-[10px] right-[10px] bottom-[10px] rounded-[32px] bg-[#FBF8F4] overflow-hidden flex flex-col justify-between p-3.5 pb-5">
+                    
+                    {/* Notch */}
+                    <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#1F1B16] rounded-full z-10" />
+
+                    <span className="font-bold text-[#1F1B16] text-[13px] px-2 pt-6 block text-left">Log feed</span>
+                    
+                    <div className="flex bg-[#F2EDE6] rounded-lg p-0.5 mt-2">
+                      <div className="flex-1 text-center py-1 bg-[#7A9B7E] text-white rounded-md font-semibold text-[10px] shadow-sm">Bottle</div>
+                      <div className="flex-1 text-center py-1 text-[#6B6259] font-medium text-[10px]">Breast</div>
+                    </div>
+
+                    <div className="mt-4 space-y-1 px-1">
+                      <span className="block text-[9px] font-bold text-[#6B6259] uppercase tracking-wider">Volume</span>
+                      <div className="flex justify-between items-center bg-white border border-[#F2EDE6] rounded-lg px-3 py-1.5 shadow-sm">
+                        <span className="font-bold text-[#6B6259] text-xs">-</span>
+                        <span className="font-bold text-[#1F1B16] text-sm">90ml</span>
+                        <span className="font-bold text-[#6B6259] text-xs">+</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 space-y-1 px-1">
+                      <span className="block text-[9px] font-bold text-[#6B6259] uppercase tracking-wider">Time</span>
+                      <div className="flex justify-between items-center bg-white border border-[#F2EDE6] rounded-lg px-3 py-2 shadow-sm">
+                        <span className="text-[11px] text-[#1F1B16]">Now</span>
+                        <span className="text-[10px] text-[#A89F94]">Select</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-auto pt-3">
+                      <div className="w-full py-2.5 bg-[#7A9B7E] text-white text-center font-bold rounded-xl tracking-wider uppercase text-[10px] shadow-sm">
+                        Log feed
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Step 3 */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-4xl font-bold text-accent-sage/30 tracking-tight leading-none">03</span>
-              <h3 className="text-base font-semibold text-ink-primary">Glance, don't search</h3>
             </div>
-            <p className="text-xs text-ink-secondary leading-relaxed -mt-1">
-              Simply open the app — instantly view how long ago baby was fed, nappy status, and ongoing sleep counters in one centered card.
-            </p>
 
-            {/* Small Mockup 3 */}
-            <div className="w-[180px] h-[280px] rounded-[30px] bg-ink-primary p-[5px] shadow-xl mx-auto mt-4 border border-ink-secondary/15 relative">
-              <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-12 h-3 rounded-full bg-ink-primary z-10" />
-              <div className="rounded-[25px] bg-surface-base overflow-hidden h-full flex flex-col justify-between p-3.5 pt-6 text-left relative text-[9px]">
-                <div className="flex justify-between items-center px-1">
-                  <span className="text-[8px] font-bold text-ink-secondary tracking-widest uppercase">Teeto</span>
-                  <div className="w-1 h-1 rounded-full bg-accent-sage" />
-                </div>
+            {/* Step 2 */}
+            <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
+              
+              {/* Text (Ordered 2 on Desktop) */}
+              <div className="flex flex-col items-start text-left mb-8 md:mb-0 md:order-2">
+                <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 tracking-tight leading-none">02</span>
+                <h3 className="text-2xl font-bold text-[#1F1B16] mt-2">It syncs automatically</h3>
+                <p className="text-base text-[#6B6259] mt-3 leading-relaxed">
+                  Your partner sees the entry on their phone instantly. Works fully offline — logs save locally in database storage and auto-sync when network returns.
+                </p>
+              </div>
+
+              {/* Visual Mockup (Ordered 1 on Desktop) */}
+              <div className="md:order-1 flex items-center justify-center gap-4 relative max-w-sm mx-auto w-full py-6">
                 
-                <div className="flex-1 flex flex-col items-center justify-center text-center">
-                  <span className="text-[8px] font-bold text-accent-sage uppercase tracking-wider mb-0.5">Last Feed</span>
-                  <span className="text-2xl font-black text-ink-primary">2h 14m</span>
-                  <span className="text-[9px] text-ink-secondary mt-0.5">90ml · Mum</span>
+                {/* Phone Left */}
+                <div className="relative w-[130px] h-[260px] flex-shrink-0">
+                  <div className="absolute inset-0 rounded-[28px] bg-[#1F1B16] shadow-md border border-[#3A3530]/20">
+                    <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] rounded-[22px] bg-[#FBF8F4] overflow-hidden p-2 pt-5">
+                      <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[40px] h-[10px] bg-[#1F1B16] rounded-full z-10" />
+                      
+                      <div className="w-full h-full flex flex-col justify-between">
+                        <div className="h-6 w-full flex items-center justify-between px-1">
+                          <span className="text-[7px] font-bold text-[#A89F94]">Nestly</span>
+                          <div className="w-1 h-1 rounded-full bg-[#7A9B7E]" />
+                        </div>
+                        <div className="bg-white rounded-lg p-2 border border-[#F2EDE6] text-center shadow-xs my-auto">
+                          <span className="block text-[6px] uppercase tracking-wider text-[#A89F94]">Logged by Mum</span>
+                          <span className="block text-xs font-bold text-[#1F1B16] mt-0.5">90ml Feed</span>
+                        </div>
+                        <div className="h-5 w-full bg-[#7A9B7E]/10 border border-[#7A9B7E]/20 rounded-md flex items-center justify-center">
+                          <span className="text-[6px] font-bold uppercase text-[#7A9B7E]">Success</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-1 pt-2">
-                  <div className="h-7 rounded-lg bg-surface-raised border border-surface-sunken text-[8px] flex items-center justify-center font-bold text-ink-secondary">Feed</div>
-                  <div className="h-7 rounded-lg bg-surface-raised border border-surface-sunken text-[8px] flex items-center justify-center font-bold text-ink-secondary">Nappy</div>
-                  <div className="h-7 rounded-lg bg-surface-raised border border-surface-sunken text-[8px] flex items-center justify-center font-bold text-ink-secondary">Sleep</div>
+                {/* Curved Arrow */}
+                <div className="text-[#7A9B7E] flex-shrink-0 z-10">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="stroke-current animate-pulse">
+                    <path d="M12 2a10 10 0 0 0-7.07 17.07L7 21" />
+                    <path d="M2 17h5v5" />
+                    <path d="M12 22a10 10 0 0 0 7.07-17.07L17 3" />
+                    <path d="M22 7h-5V2" />
+                  </svg>
+                </div>
+
+                {/* Phone Right */}
+                <div className="relative w-[130px] h-[260px] flex-shrink-0">
+                  <div className="absolute inset-0 rounded-[28px] bg-[#1F1B16] shadow-md border border-[#3A3530]/20">
+                    <div className="absolute top-[6px] left-[6px] right-[6px] bottom-[6px] rounded-[22px] bg-[#FBF8F4] overflow-hidden p-2 pt-5">
+                      <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[40px] h-[10px] bg-[#1F1B16] rounded-full z-10" />
+                      
+                      <div className="w-full h-full flex flex-col justify-between">
+                        <div className="h-6 w-full flex items-center justify-between px-1">
+                          <span className="text-[7px] font-bold text-[#A89F94]">Nestly</span>
+                          <div className="w-1 h-1 rounded-full bg-[#7A9B7E]" />
+                        </div>
+                        <div className="bg-white rounded-lg p-2 border border-[#F2EDE6] text-center shadow-xs my-auto">
+                          <span className="block text-[6px] uppercase tracking-wider text-[#A89F94]">Synced Now</span>
+                          <span className="block text-xs font-bold text-[#1F1B16] mt-0.5">90ml Feed</span>
+                        </div>
+                        <div className="h-5 w-full bg-[#7A9B7E]/10 border border-[#7A9B7E]/20 rounded-md flex items-center justify-center">
+                          <span className="text-[6px] font-bold uppercase text-[#7A9B7E]">Glance view</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* Step 3 */}
+            <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
+              
+              {/* Text */}
+              <div className="flex flex-col items-start text-left mb-8 md:mb-0">
+                <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 tracking-tight leading-none">03</span>
+                <h3 className="text-2xl font-bold text-[#1F1B16] mt-2">Glance, don't search</h3>
+                <p className="text-base text-[#6B6259] mt-3 leading-relaxed">
+                  Open the app — instantly view when baby last fed, how much was consumed, and who logged it. No scroll search through messaging threads.
+                </p>
+              </div>
+
+              {/* Visual Mockup */}
+              <div className="relative w-[220px] h-[440px] mx-auto flex-shrink-0">
+                <div className="absolute inset-0 rounded-[40px] bg-[#1F1B16] shadow-xl border border-[#3A3530]/20">
+                  <div className="absolute top-[10px] left-[10px] right-[10px] bottom-[10px] rounded-[32px] bg-[#FBF8F4] overflow-hidden flex flex-col justify-between p-3.5 pb-5">
+                    
+                    {/* Notch */}
+                    <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#1F1B16] rounded-full z-10" />
+
+                    <div className="px-3 pt-6 flex justify-between items-center w-full">
+                      <span className="text-[8px] font-bold text-[#A89F94] uppercase tracking-widest">Teeto</span>
+                      <div className="w-1 h-1 rounded-full bg-[#7A9B7E]" />
+                    </div>
+
+                    <div className="flex-1 flex flex-col items-center justify-center text-center mt-3">
+                      <span className="text-[7px] uppercase tracking-wider text-[#A89F94] font-medium">Last Feed</span>
+                      <span className="text-[28px] font-bold text-[#1F1B16] leading-none mt-0.5 tracking-tight">2h 14m</span>
+                      <span className="text-[10px] text-[#6B6259] mt-0.5">90ml · Mum</span>
+                    </div>
+
+                    {/* Simple Bottom Row */}
+                    <div className="grid grid-cols-3 gap-1 pt-3">
+                      <div className="h-8 rounded-lg bg-white border border-[#F2EDE6] text-[8px] flex items-center justify-center font-bold text-[#6B6259] shadow-xs">Feed</div>
+                      <div className="h-8 rounded-lg bg-white border border-[#F2EDE6] text-[8px] flex items-center justify-center font-bold text-[#6B6259] shadow-xs">Nappy</div>
+                      <div className="h-8 rounded-lg bg-white border border-[#F2EDE6] text-[8px] flex items-center justify-center font-bold text-[#6B6259] shadow-xs">Sleep</div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
+            </div>
+
+          </div>
         </div>
       </section>
 
       {/* SECTION 4: KEY FEATURES */}
-      <section className="py-20 px-6 bg-surface-base select-none">
-        <h2 
-          className="text-2xl font-bold text-ink-primary text-center tracking-tight"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          Built for exhausted parents.
-        </h2>
+      <section className="py-20 md:py-28 bg-[#FBF8F4]">
+        <div className="max-w-6xl mx-auto px-6">
+          
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-[#1F1B16] text-center tracking-tight"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            Built for exhausted parents.
+          </h2>
 
-        <div className="space-y-4 mt-10 max-w-md mx-auto">
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-sage/10 rounded-xl text-accent-sage flex-shrink-0 mt-0.5">
-              <Wifi size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
+            
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] flex gap-4 items-start shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center text-[#7A9B7E] flex-shrink-0">
+                <Wifi size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Works offline</h3>
+                <p className="text-sm text-[#6B6259] mt-2 leading-relaxed">
+                  Log entries with zero signal. Everything saves locally and automatically syncs the second you reconnect.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Works offline</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                Log entries seamlessly with zero network signals. Everything safely cascades and merges on Supabase the second you connect.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-sage/10 rounded-xl text-accent-sage flex-shrink-0 mt-0.5">
-              <Users size={20} />
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] flex gap-4 items-start shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center text-[#7A9B7E] flex-shrink-0">
+                <Users size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Shared by two</h3>
+                <p className="text-sm text-[#6B6259] mt-2 leading-relaxed">
+                  Both carers see the same log, always synchronized. No more conflicting messages or timestamp thread searches.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Shared by two</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                Both carers reflect the exact same synchronized real-time state. Say goodbye to repetitive questions and timestamp texts.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-sage/10 rounded-xl text-accent-sage flex-shrink-0 mt-0.5">
-              <Shield size={20} />
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] flex gap-4 items-start shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center text-[#7A9B7E] flex-shrink-0">
+                <Shield size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Your data stays yours</h3>
+                <p className="text-sm text-[#6B6259] mt-2 leading-relaxed">
+                  Stored securely in the EU. Export your complete data as a CSV file or delete your account instantly from Settings. No ads. No tracking.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Your data stays yours</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                Securely encrypted in London (EU). Programmatic CSV downloads and single-click full account deletions from Settings. Zero trackers or third-party ads.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-surface-raised rounded-2xl p-5 border border-surface-sunken flex gap-4 items-start shadow-sm">
-            <div className="p-2.5 bg-accent-sage/10 rounded-xl text-accent-sage flex-shrink-0 mt-0.5">
-              <Moon size={20} />
+            <div className="bg-white rounded-2xl p-6 md:p-8 border border-[#F2EDE6] flex gap-4 items-start shadow-xs">
+              <div className="w-12 h-12 rounded-full bg-[#9B7E9B]/10 flex items-center justify-center text-[#9B7E9B] flex-shrink-0">
+                <Moon size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[#1F1B16]">Designed for 3am</h3>
+                <p className="text-sm text-[#6B6259] mt-2 leading-relaxed">
+                  Calming visual theme variables, large safe tap targets, offline indicators, and silent browser badges. Nestly is calm when you need it most.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold text-ink-primary">Designed for 3am</h3>
-              <p className="text-xs text-ink-secondary mt-1.5 leading-relaxed">
-                Serene variable themes, large safe tap targets, offline banners, and silent browser status bars. Nestly is calm exactly when you need it most.
-              </p>
-            </div>
+
           </div>
         </div>
       </section>
 
-      {/* SECTION 5: FAQ */}
-      <section className="py-20 px-6 bg-surface-sunken">
-        <h2 
-          className="text-2xl font-bold text-ink-primary text-center tracking-tight mb-10"
-          style={{ fontFamily: "'DM Serif Display', serif" }}
-        >
-          Questions parents ask.
-        </h2>
+      {/* SECTION 5: FAQ (Dark section for contrast) */}
+      <section className="py-20 md:py-28 bg-[#1F1B16]">
+        <div className="max-w-3xl mx-auto px-6">
+          
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-[#FBF8F4] text-center tracking-tight"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            Questions parents ask.
+          </h2>
 
-        <div className="space-y-3.5 max-w-md mx-auto">
-          {faqItems.map((item, index) => {
-            const isOpen = openFaqIndex === index
-            return (
-              <div 
-                key={index} 
-                className="bg-surface-raised border border-surface-sunken/60 rounded-xl overflow-hidden shadow-sm transition-all"
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(index)}
-                  className="w-full px-5 py-4 flex items-center justify-between text-left font-medium text-sm text-ink-primary hover:text-ink-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-sage/40 transition-colors"
+          <div className="mt-14 space-y-3">
+            {faqItems.map((item, index) => {
+              const isOpen = openFaqIndex === index
+              return (
+                <div 
+                  key={index} 
+                  className="border border-[#3A3530] rounded-xl overflow-hidden"
                 >
-                  <span>{item.question}</span>
-                  {isOpen ? (
-                    <ChevronUp size={16} className="text-ink-tertiary shrink-0 ml-2" />
-                  ) : (
-                    <ChevronDown size={16} className="text-ink-tertiary shrink-0 ml-2" />
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(index)}
+                    className="w-full flex items-center justify-between px-5 py-4 text-left text-[#FBF8F4] text-sm font-medium hover:bg-[#2A2520] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#7A9B7E]/50"
+                  >
+                    <span>{item.question}</span>
+                    {isOpen ? (
+                      <ChevronUp size={16} className="text-[#A89F94] transition-transform ml-2 shrink-0" />
+                    ) : (
+                      <ChevronDown size={16} className="text-[#A89F94] transition-transform ml-2 shrink-0" />
+                    )}
+                  </button>
+                  
+                  {isOpen && (
+                    <div className="px-5 pb-4 text-sm text-[#A89F94] leading-relaxed select-text animate-fade-in border-t border-[#3A3530]/40 pt-2">
+                      {item.answer}
+                    </div>
                   )}
-                </button>
-                
-                {isOpen && (
-                  <div className="px-5 pb-4 pt-0 text-xs text-ink-secondary leading-relaxed border-t border-surface-sunken/20 select-text animate-fade-in">
-                    {item.answer}
-                  </div>
-                )}
-              </div>
-            )
-          })}
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
 
-      {/* SECTION 6: FINAL CTA + SIGN UP */}
-      <section id="signup" className="py-20 px-8 bg-surface-base border-t border-surface-sunken/40 flex flex-col justify-center min-h-[350px]">
-        {!sent ? (
-          <div className="w-full text-center">
-            <h2 
-              className="text-2xl font-bold text-ink-primary tracking-tight mb-2"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
-            >
-              Ready to ditch the WhatsApp group?
-            </h2>
-            <p className="text-sm text-ink-secondary mb-8 leading-relaxed max-w-[280px] mx-auto">
-              Set up takes 30 seconds. No credit card. No app store downloads.
-            </p>
+      {/* SECTION 6: FINAL CTA */}
+      <section id="signup" className="py-20 md:py-28 bg-[#FBF8F4]">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-[#1F1B16] tracking-tight"
+            style={{ fontFamily: "'DM Serif Display', serif" }}
+          >
+            Ready to ditch the WhatsApp group?
+          </h2>
+          <p className="text-lg text-[#6B6259] mt-4 leading-relaxed max-w-md mx-auto">
+            Set up takes 30 seconds. No credit card. No app store.
+          </p>
 
-            <form onSubmit={handleSignUp} className="space-y-4 max-w-xs mx-auto">
-              <input
-                type="email"
-                required
-                aria-label="Email address"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                  setError('')
-                }}
-                disabled={isSending}
-                className="w-full h-[52px] px-4 rounded-xl bg-surface-raised border border-surface-sunken text-base text-ink-primary placeholder:text-ink-tertiary focus:outline-none focus:ring-2 focus:ring-accent-sage/30 transition-shadow"
-              />
+          {!sent ? (
+            <div className="mt-10 max-w-md mx-auto">
+              <form onSubmit={handleSignUp} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  required
+                  aria-label="Email address"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setError('')
+                  }}
+                  disabled={isSending}
+                  className="flex-1 h-[52px] px-4 rounded-xl bg-white border border-[#F2EDE6] text-base text-[#1F1B16] placeholder:text-[#A89F94] focus:outline-none focus:ring-2 focus:ring-[#7A9B7E] transition-shadow shadow-xs"
+                />
+                
+                <PrimaryButton 
+                  type="submit" 
+                  disabled={isSending || !email.trim()}
+                  className="sm:w-auto sm:px-8 font-semibold shadow-sm"
+                >
+                  {isSending ? 'Sending link...' : 'Start free'}
+                </PrimaryButton>
+              </form>
 
-              <PrimaryButton 
-                type="submit" 
-                disabled={isSending || !email.trim()}
-              >
-                {isSending ? 'Sending link...' : 'Start free'}
-              </PrimaryButton>
-            </form>
+              {error && (
+                <div className="mt-4 text-sm text-[#C97064] bg-[#C97064]/10 p-3 rounded-xl border border-[#C97064]/20 text-center animate-pulse">
+                  {error}
+                </div>
+              )}
 
-            {error && (
-              <div className="mt-4 text-sm text-accent-coral bg-accent-coral/10 p-3 rounded-xl border border-accent-coral/20 text-center animate-pulse max-w-xs mx-auto">
-                {error}
-              </div>
-            )}
-
-            <p className="text-xs text-ink-tertiary mt-4 leading-relaxed">
-              No password needed. We'll email you a secure magic link.
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center text-center py-6 animate-fade-in">
-            <style>{`
-              @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-              }
-              .animate-fade-in {
-                animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-              }
-            `}</style>
-            <div className="w-16 h-16 rounded-full bg-accent-sage/10 flex items-center justify-center text-accent-sage mb-6">
-              <Mail size={32} strokeWidth={1.5} />
+              <p className="text-xs text-[#A89F94] mt-4 leading-normal">
+                No password needed. We'll email you a secure sign-in magic link.
+              </p>
             </div>
-            <h2 
-              className="text-xl font-semibold text-ink-primary tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
-            >
-              Check your email
-            </h2>
-            <p className="text-sm text-ink-secondary mt-2 max-w-[280px] leading-relaxed">
-              We sent a sign-in link to <span className="font-semibold text-ink-primary">{email}</span>. Click the link to launch Nestly.
-            </p>
-          </div>
-        )}
+          ) : (
+            <div className="mt-10 flex flex-col items-center text-center py-6 animate-fade-in">
+              <style>{`
+                @keyframes fadeIn {
+                  from { opacity: 0; transform: translateY(10px); }
+                  to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in {
+                  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+              `}</style>
+              <div className="w-16 h-16 rounded-full bg-[#7A9B7E]/10 flex items-center justify-center text-[#7A9B7E] mb-6">
+                <Mail size={32} strokeWidth={1.5} />
+              </div>
+              <h3 
+                className="text-xl font-semibold text-[#1F1B16] tracking-tight"
+                style={{ fontFamily: "'DM Serif Display', serif" }}
+              >
+                Check your email
+              </h3>
+              <p className="text-sm text-[#6B6259] mt-2 max-w-[280px] leading-relaxed">
+                We sent a sign-in link to <span className="font-semibold text-[#1F1B16]">{email}</span>. Click the link to launch Nestly.
+              </p>
+            </div>
+          )}
+
+        </div>
       </section>
 
       {/* SECTION 7: FOOTER */}
-      <footer className="py-8 px-6 bg-surface-base border-t border-surface-sunken flex justify-between items-center text-xs text-ink-tertiary">
-        <span className="font-semibold text-sm tracking-tight text-ink-secondary">Nestly</span>
-        <div className="flex gap-4">
-          <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="hover:text-ink-secondary transition-colors">
-            Privacy Policy
-          </a>
-          <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="hover:text-ink-secondary transition-colors">
-            Terms of Service
-          </a>
+      <footer className="border-t border-[#F2EDE6] py-8 px-6 bg-[#FBF8F4]">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left select-text">
+          <span className="text-sm font-semibold text-[#1F1B16] tracking-tight">Nestly</span>
+          <div className="flex gap-6">
+            <a 
+              href="/privacy.html" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-xs text-[#A89F94] hover:text-[#1F1B16] transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <a 
+              href="/terms.html" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-xs text-[#A89F94] hover:text-[#1F1B16] transition-colors"
+            >
+              Terms of Service
+            </a>
+          </div>
         </div>
       </footer>
-      
+
     </div>
   );
 }
