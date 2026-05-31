@@ -42,6 +42,14 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
     }
   }, [isOpen, activeSleep, editEvent])
 
+  if (!household || !baby) {
+    return (
+      <Sheet isOpen={isOpen} onClose={onClose} title="Loading...">
+        <p className="text-sm text-ink-tertiary text-center py-8">Setting up...</p>
+      </Sheet>
+    )
+  }
+
   const handleStartSleep = async () => {
     const loggedByName = myProfile?.displayLabel || myProfile?.displayName || 'Parent'
     await createEvent({

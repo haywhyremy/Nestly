@@ -34,8 +34,15 @@ export function LogNappySheet({ isOpen, onClose, editEvent = null, onSave = null
       }
       sheetOpenTime.current = Date.now()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, editEvent])
+
+  if (!household || !baby) {
+    return (
+      <Sheet isOpen={isOpen} onClose={onClose} title="Loading...">
+        <p className="text-sm text-ink-tertiary text-center py-8">Setting up...</p>
+      </Sheet>
+    )
+  }
 
   const handleLogNappy = async () => {
     if (!household?.id || !baby?.id || !user?.id) {

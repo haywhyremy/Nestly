@@ -8,6 +8,7 @@ import { useHousehold } from '../../context/HouseholdContext'
 
 export function QuickLogRow() {
   const { household } = useHousehold()
+  // Guard: if no household yet, render buttons but don't try to query
   const { activeSleep } = useGlanceData(household?.id)
 
   const [isFeedOpen, setIsFeedOpen] = useState(false)
