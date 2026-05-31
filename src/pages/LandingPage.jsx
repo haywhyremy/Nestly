@@ -21,27 +21,27 @@ import {
 const faqItems = [
   {
     question: "Is Nestly really free?",
-    answer: "Yes. Nestly is free. We may add premium features later, but the core logging will always be free."
+    answer: "Yes. The core tracking features are completely free. We may add optional premium features in the future, but logging feeds, nappies, and sleep will always be free."
   },
   {
     question: "Does it work without internet?",
-    answer: "Yes. Nestly saves everything locally on your phone. When you reconnect, it syncs automatically with your partner's device."
+    answer: "Absolutely. Nestly saves everything to your phone first. When you get signal again, it syncs automatically with your partner's device. You'll never lose an entry."
   },
   {
     question: "Can I use it with my nanny or grandparent?",
-    answer: "Right now, Nestly supports two carers per household. We're adding support for more carers soon."
+    answer: "Right now Nestly supports two carers per household. We're working on adding more carers — it's coming soon."
   },
   {
-    question: "Is my data safe?",
-    answer: "Your data is stored securely in the EU (London). We never sell your data. You can export or delete everything from Settings."
+    question: "Is my baby's data safe?",
+    answer: "Your data is stored securely in London (EU). We never share or sell your data. You can export everything as a CSV file or delete your entire account from Settings at any time."
   },
   {
     question: "Do I need to download an app?",
-    answer: "No app store needed. Nestly is a web app — open it in your browser and add it to your home screen for the best experience."
+    answer: "No app store needed. Nestly is a web app — open it in your phone's browser and add it to your home screen. It works just like a native app, with offline support."
   },
   {
     question: "What if we both log at the same time?",
-    answer: "Nestly detects potential duplicates and lets you calmly resolve them. No data is ever silently deleted."
+    answer: "Nestly detects potential overlapping entries and gently asks you to confirm. Nothing is ever silently deleted — you stay in control."
   }
 ]
 
@@ -141,16 +141,16 @@ export default function LandingPage() {
           {/* Left Column (Text) */}
           <div className="text-left flex flex-col items-start mb-12 md:mb-0">
             <span className="inline-block bg-[#7A9B7E]/10 dark:bg-[#8FB89A]/10 text-[#7A9B7E] dark:text-[#8FB89A] text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide animate-fade-in-up">
-              Simple baby tracking for two
+              Baby tracking for parents who share the load
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-[1.1] mt-6 tracking-tight animate-fade-in-up animation-delay-100"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              The feed log that never gets lost.
+              Never wonder when baby last ate.
             </h1>
             <p className="text-lg text-[#6B6259] dark:text-[#9C9C94] mt-6 leading-relaxed max-w-lg animate-fade-in-up animation-delay-200">
-              You and your partner. One calm, shared log. Feeds, nappies, sleep — always in sync, even offline.
+              A shared log for two parents. Track feeds, nappies, and sleep in seconds — always in sync, even without signal.
             </p>
             
             {/* Button list stacking on mobile, side-by-side on desktop */}
@@ -159,7 +159,7 @@ export default function LandingPage() {
                 href="#signup"
                 className="w-full sm:w-auto sm:px-8 h-[52px] rounded-xl font-semibold text-base text-white dark:text-[#111110] bg-[#7A9B7E] dark:bg-[#8FB89A] hover:bg-[#6A8B6E] dark:hover:bg-[#7AA888] active:bg-[#5A7B5E] dark:active:bg-[#6A9878] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7A9B7E]"
               >
-                Start free →
+                Start tracking — it's free
               </a>
               <a
                 href="#how-it-works"
@@ -170,7 +170,7 @@ export default function LandingPage() {
             </div>
 
             <p className="text-sm text-[#A89F94] dark:text-[#6C6C64] mt-8 animate-fade-in-up animation-delay-300">
-              Trusted by parents who retired the WhatsApp group.
+              For parents who are tired of guessing and asking.
             </p>
           </div>
 
@@ -194,7 +194,7 @@ export default function LandingPage() {
                     
                     {/* Glance card */}
                     <div className="flex-1 flex flex-col items-center justify-center -mt-4">
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] font-medium">Last Feed</span>
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] dark:text-[#6C6C64] font-medium">Last Feed</span>
                       <span className="text-[42px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-1" style={{ fontVariantNumeric: 'tabular-nums' }}>2h 14m</span>
                       <span className="text-[12px] text-[#6B6259] dark:text-[#9C9C94] mt-1">90ml · Mum</span>
                       
@@ -243,7 +243,7 @@ export default function LandingPage() {
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              WhatsApp wasn't built for this.
+              Sound familiar?
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 stagger-children">
@@ -253,9 +253,9 @@ export default function LandingPage() {
                   <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 dark:bg-[#8FB89A]/10 flex items-center justify-center mb-6 text-[#7A9B7E] dark:text-[#8FB89A]">
                     <MessageSquare size={22} />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Messages get buried</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">"Wait — did you already feed her?"</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2.5 leading-relaxed">
-                    "Baby fed and slept" — but how much? When was the last nappy? You're scrolling through 47 messages in a busy conversation thread to find out.
+                    When you're both running on two hours of sleep, it's impossible to remember who fed, how much, and when. Critical details slip through the cracks.
                   </p>
                 </div>
               </div>
@@ -265,9 +265,9 @@ export default function LandingPage() {
                   <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 dark:bg-[#8FB89A]/10 flex items-center justify-center mb-6 text-[#7A9B7E] dark:text-[#8FB89A]">
                     <WifiOff size={22} />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Signal drops out</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Logging feels like another chore</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2.5 leading-relaxed">
-                    The nursery. A long drive. The clinic waiting room. Right when you need to log, the connection dies and standard chats freeze. Signal shouldn't block baby care.
+                    You're holding a baby in one arm, burping cloth on your shoulder, and somehow you're supposed to type notes with your free thumb? It needs to be faster than that.
                   </p>
                 </div>
               </div>
@@ -277,9 +277,9 @@ export default function LandingPage() {
                   <div className="w-12 h-12 rounded-full bg-[#7A9B7E]/10 dark:bg-[#8FB89A]/10 flex items-center justify-center mb-6 text-[#7A9B7E] dark:text-[#8FB89A]">
                     <HelpCircle size={22} />
                   </div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">"Did you already feed her?"</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">You're never quite sure what happened while you slept</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2.5 leading-relaxed">
-                    The 3am question that no exhausted parent should have to ask or answer. Baby's records should be visible ambiently, without requiring conversation.
+                    You wake up for your shift. Was baby fed at 3am or 4am? How much? Was there a nappy change? You need answers without waking your partner.
                   </p>
                 </div>
               </div>
@@ -296,10 +296,10 @@ export default function LandingPage() {
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              Three taps. Seven seconds.
+              Three taps. Seven seconds. Done.
             </h2>
             <p className="reveal text-lg text-[#6B6259] dark:text-[#9C9C94] text-center mt-3 max-w-md mx-auto leading-relaxed">
-              No typing. No scrolling. Just tap and go.
+              No typing. No forms. Just tap and confirm.
             </p>
 
             <div className="mt-16 space-y-24">
@@ -312,7 +312,7 @@ export default function LandingPage() {
                   <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 dark:text-[#8FB89A]/20 tracking-tight leading-none">01</span>
                   <h3 className="text-2xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-2">Tap to log</h3>
                   <p className="text-base text-[#6B6259] dark:text-[#9C9C94] mt-3 leading-relaxed">
-                    Feed, nappy, or sleep — one tap opens a pre-filled form. Smart defaults dynamically estimate volumes and times so you usually just hit confirm.
+                    Feed, nappy, or sleep — one tap opens a pre-filled form. Smart defaults remember your last entry, so you usually just hit confirm.
                   </p>
                 </div>
 
@@ -366,9 +366,9 @@ export default function LandingPage() {
                 {/* Text (Ordered 2 on Desktop) */}
                 <div className="reveal-right flex flex-col items-start text-left mb-8 md:mb-0 md:order-2">
                   <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 dark:text-[#8FB89A]/20 tracking-tight leading-none">02</span>
-                  <h3 className="text-2xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-2">It syncs automatically</h3>
+                  <h3 className="text-2xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-2">Your partner sees it instantly</h3>
                   <p className="text-base text-[#6B6259] dark:text-[#9C9C94] mt-3 leading-relaxed">
-                    Your partner sees the entry on their phone instantly. Works fully offline — logs save locally in database storage and auto-sync when network returns.
+                    The entry appears on their phone automatically. Works fully offline too — logs save locally and sync the moment signal returns.
                   </p>
                 </div>
 
@@ -445,7 +445,7 @@ export default function LandingPage() {
                   <span className="text-6xl md:text-7xl font-bold text-[#7A9B7E]/20 dark:text-[#8FB89A]/20 tracking-tight leading-none">03</span>
                   <h3 className="text-2xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-2">Glance, don't search</h3>
                   <p className="text-base text-[#6B6259] dark:text-[#9C9C94] mt-3 leading-relaxed">
-                    Open the app — instantly view when baby last fed, how much was consumed, and who logged it. No scroll search through messaging threads.
+                    Open the app and immediately see when baby last ate, how much, and who logged it. No scrolling. No asking. Just answers.
                   </p>
                 </div>
 
@@ -493,7 +493,7 @@ export default function LandingPage() {
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              Built for exhausted parents.
+              Built for the hardest job you'll ever love.
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14 stagger-children">
@@ -503,9 +503,9 @@ export default function LandingPage() {
                   <Wifi size={22} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Works offline</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Works without signal</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 leading-relaxed">
-                    Log entries with zero signal. Everything saves locally and automatically syncs the second you reconnect.
+                    Log entries in the nursery, on a flight, in a dead zone. Everything saves locally and syncs when connection returns.
                   </p>
                 </div>
               </div>
@@ -515,9 +515,9 @@ export default function LandingPage() {
                   <Users size={22} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Shared by two</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Shared between two carers</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 leading-relaxed">
-                    Both carers see the same log, always synchronized. No more conflicting messages or timestamp thread searches.
+                    Both parents see the same log, always up to date. No more morning handover confusion or forgotten details.
                   </p>
                 </div>
               </div>
@@ -527,9 +527,9 @@ export default function LandingPage() {
                   <Shield size={22} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Your data stays yours</h3>
+                  <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Your data, your control</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 leading-relaxed">
-                    Stored securely in the EU. Export your complete data as a CSV file or delete your account instantly from Settings. No ads. No tracking.
+                    Stored securely in the EU. Export everything as CSV. Delete your account anytime. No ads. No tracking. No selling your data.
                   </p>
                 </div>
               </div>
@@ -541,7 +541,7 @@ export default function LandingPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Designed for 3am</h3>
                   <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 leading-relaxed">
-                    Calming visual theme variables, large safe tap targets, offline indicators, and silent browser badges. Nestly is calm when you need it most.
+                    Dark mode. Large buttons. One-handed use. Nestly stays calm when everything else feels chaotic.
                   </p>
                 </div>
               </div>
@@ -558,7 +558,7 @@ export default function LandingPage() {
               className="reveal text-3xl md:text-4xl font-bold text-[#FAFAF8] text-center tracking-tight"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              Questions parents ask.
+              Common questions from parents
             </h2>
 
             {/* Structured 2-column FAQ grid on desktop */}
@@ -606,10 +606,10 @@ export default function LandingPage() {
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              Ready to ditch the WhatsApp group?
+              Start logging in 30 seconds.
             </h2>
             <p className="reveal text-lg text-[#6B6259] dark:text-[#9C9C94] mt-4 leading-relaxed max-w-md mx-auto">
-              Set up takes 30 seconds. No credit card. No app store.
+              Free. No app store. No credit card. Just your email.
             </p>
 
             {!sent ? (
@@ -645,7 +645,7 @@ export default function LandingPage() {
                 )}
 
                 <p className="text-xs text-[#A89F94] dark:text-[#6C6C64] mt-4 leading-normal">
-                  No password needed. We'll email you a secure sign-in magic link.
+                  No password needed. We'll email you a secure sign-in link.
                 </p>
               </div>
             ) : (

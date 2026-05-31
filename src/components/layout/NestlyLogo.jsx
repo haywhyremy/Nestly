@@ -8,25 +8,18 @@ export default function NestlyLogo({ size = 32, className = '' }) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Baby footprint - left foot */}
-      {/* Sole of foot - oval shape */}
-      <ellipse cx="17" cy="24" rx="7" ry="9" fill="currentColor" opacity="0.85" />
-      {/* Five toes - small circles */}
-      <circle cx="10.5" cy="14" r="2.2" fill="currentColor" opacity="0.85" />
-      <circle cx="13.5" cy="12" r="2.4" fill="currentColor" opacity="0.85" />
-      <circle cx="17" cy="11.2" r="2.5" fill="currentColor" opacity="0.85" />
-      <circle cx="20.5" cy="12" r="2.3" fill="currentColor" opacity="0.85" />
-      <circle cx="23.2" cy="14.2" r="2" fill="currentColor" opacity="0.85" />
-      
-      {/* Small checkmark / tick - representing "logged" */}
+      {/* Baby footprint — bold, solid, immediately recognizable */}
+      {/* Foot sole — rounded teardrop shape */}
       <path
-        d="M28 19l3 3 5-6"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.9"
+        d="M20 36c-5.5 0-10-3.5-10-9.5C10 20 15 15 20 15s10 5 10 11.5C30 32.5 25.5 36 20 36z"
+        fill="currentColor"
       />
+      {/* Toes — five solid circles, arranged in an arc */}
+      <circle cx="11" cy="12.5" r="3" fill="currentColor" />
+      <circle cx="16" cy="8.5" r="3.2" fill="currentColor" />
+      <circle cx="21.5" cy="7" r="3.3" fill="currentColor" />
+      <circle cx="27" cy="8.5" r="3" fill="currentColor" />
+      <circle cx="31" cy="13" r="2.7" fill="currentColor" />
     </svg>
   );
 }
