@@ -21,7 +21,7 @@ export function SegmentedToggle({
             className={`flex-1 h-12 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center ${
               isActive
                 ? `${accentColor} text-white shadow-sm`
-                : 'bg-transparent text-ink-secondary active:bg-surface-sunken/20 hover:text-ink-primary'
+                : 'bg-transparent text-ink-primary active:bg-surface-sunken/20 hover:text-ink-primary'
             }`}
           >
             {option.label}

@@ -314,7 +314,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
 
         {mode === 'edit_start' && (
           <div className="space-y-4 animate-fade-in text-center py-6">
-            <span className="block text-sm font-semibold text-ink-secondary uppercase tracking-wider">
+            <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider">
               Start Time (Read-Only)
             </span>
             <div className="text-2xl font-bold text-ink-primary">
@@ -358,7 +358,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
         {mode === 'past' && (
           <div className="space-y-4 animate-fade-in">
             <div>
-              <span className="block text-sm font-semibold text-ink-secondary mb-1">
+              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
                 Started at
               </span>
               <TimePicker
@@ -371,7 +371,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
             <div className="border-t border-surface-sunken my-2" />
 
             <div>
-              <span className="block text-sm font-semibold text-ink-secondary mb-1">
+              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
                 Ended at
               </span>
               <TimePicker

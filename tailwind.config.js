@@ -9,24 +9,24 @@ export default {
     extend: {
       colors: {
         surface: {
-          base: 'var(--surface-base, #FBF8F4)',
-          raised: 'var(--surface-raised, #FFFFFF)',
-          sunken: 'var(--surface-sunken, #F2EDE6)',
+          base: 'var(--surface-base)',
+          raised: 'var(--surface-raised)',
+          sunken: 'var(--surface-sunken)',
         },
         ink: {
-          primary: 'var(--ink-primary, #1F1B16)',
-          secondary: 'var(--ink-secondary, #6B6259)',
-          tertiary: 'var(--ink-tertiary, #A89F94)',
+          primary: 'var(--ink-primary)',
+          secondary: 'var(--ink-secondary)',
+          tertiary: 'var(--ink-tertiary)',
         },
         accent: {
-          sage: 'var(--accent-sage, #7A9B7E)',
-          dusk: 'var(--accent-dusk, #9B7E9B)',
-          clay: 'var(--accent-clay, #C49B7A)',
-          coral: 'var(--accent-coral, #C97064)',
+          sage: 'var(--accent-sage)',
+          dusk: 'var(--accent-dusk)',
+          clay: 'var(--accent-clay)',
+          coral: 'var(--accent-coral)',
         },
         signal: {
-          sync: 'var(--signal-sync, #9B7E9B)',
-          conflict: 'var(--signal-conflict, #D4A574)',
+          sync: 'var(--signal-sync)',
+          conflict: 'var(--signal-conflict)',
         },
       },
       fontFamily: {

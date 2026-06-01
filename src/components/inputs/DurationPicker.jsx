@@ -20,7 +20,7 @@ export function DurationPicker({
 
   return (
     <div className="w-full select-none">
-      <span className="block text-sm font-semibold text-ink-secondary uppercase tracking-wider mb-2">
+      <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
         Duration
       </span>
       <div className="flex items-center justify-center gap-6 bg-surface-raised border border-surface-sunken p-4 rounded-xl">
@@ -35,7 +35,7 @@ export function DurationPicker({
           />
         </div>
 
-        <div className="text-xl font-light text-ink-tertiary">:</div>
+        <div className="text-xl font-medium text-ink-primary">:</div>
 
         <div className="flex flex-col items-center gap-1">
           <Stepper

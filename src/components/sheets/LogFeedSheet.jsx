@@ -175,7 +175,7 @@ export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null 
 
         {feedType === 'bottle' ? (
           <div className="space-y-2 animate-fade-in">
-            <span className="block text-sm font-semibold text-ink-secondary uppercase tracking-wider mb-2">
+            <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
               Volume
             </span>
             <Stepper
@@ -190,7 +190,7 @@ export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null 
         ) : (
           <div className="space-y-6 animate-fade-in">
             <div className="space-y-2">
-              <span className="block text-sm font-semibold text-ink-secondary uppercase tracking-wider mb-2">
+              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
                 Side
               </span>
               <SegmentedToggle
