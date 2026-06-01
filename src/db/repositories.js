@@ -246,7 +246,7 @@ export async function getMyHousehold(userId) {
   const cachedHouseholds = await db.households.toArray()
   if (cachedHouseholds.length > 0) {
     const cachedHousehold = cachedHouseholds[0]
-    const cachedBabies = await db.babies.where('householdId').eq(cachedHousehold.id).toArray()
+    const cachedBabies = await db.babies.where('householdId').equals(cachedHousehold.id).toArray()
     const cachedProfiles = await db.profiles.toArray()
 
     const members = cachedProfiles.map(p => ({

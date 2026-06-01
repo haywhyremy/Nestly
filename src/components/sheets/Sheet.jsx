@@ -5,15 +5,12 @@ export function Sheet({
   onClose,
   title,
   children,
-  footer,
-  snapPoints = [0.65]
+  footer
 }) {
   return (
     <ModalSheet
       isOpen={isOpen}
       onClose={onClose}
-      snapPoints={snapPoints}
-      initialSnap={0}
     >
       <ModalSheet.Container
         role="dialog"

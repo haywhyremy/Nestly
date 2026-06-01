@@ -29,7 +29,7 @@ export function useTimeline(householdId, options = {}) {
           .toArray()
       : await db.events
           .where('householdId')
-          .eq(householdId)
+          .equals(householdId)
           .toArray()
 
     // Filter out deleted events and sort descending by eventTime
