@@ -22,8 +22,8 @@ export function TimePicker({
   return (
     <div className="flex items-center justify-between w-full py-3 select-none">
       <div className="flex items-center">
-        <Clock size={20} strokeWidth={1.75} className="text-ink-tertiary" />
-        <span className="text-base font-medium text-ink-primary ml-2">
+        <Clock size={20} strokeWidth={1.75} className="text-[#A89F94] dark:text-[#6B6259]" />
+        <span className="text-base font-medium text-[#1F1B16] dark:text-[#F0ECE6] ml-2">
           {displayLabel}
         </span>
       </div>
@@ -32,7 +32,7 @@ export function TimePicker({
         type="datetime-local"
         value={formattedInputVal}
         onChange={handleInputChange}
-        className="bg-surface-sunken rounded-lg px-3 py-2 text-sm text-ink-primary border-none focus:outline-none focus:ring-2 focus:ring-accent-sage cursor-pointer transition-all"
+        className="bg-[#F2EDE6] dark:bg-[#131110] rounded-lg px-3 py-2 text-sm text-[#1F1B16] dark:text-[#F0ECE6] border-none focus:outline-none focus:ring-2 focus:ring-[#7A9B7E] dark:focus:ring-[#8FB393] cursor-pointer transition-all"
       />
     </div>
   )

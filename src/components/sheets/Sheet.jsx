@@ -15,15 +15,15 @@ export function Sheet({
       <ModalSheet.Container
         role="dialog"
         aria-modal="true"
-        className="bg-surface-raised rounded-t-3xl shadow-none"
+        className="bg-[#FFFFFF] dark:bg-[#242220] rounded-t-3xl shadow-none"
         style={{
           boxShadow: '0 -4px 16px rgba(31, 27, 22, 0.08)'
         }}
       >
         <ModalSheet.Header>
-          <div className="w-10 h-1 rounded-full bg-ink-tertiary mx-auto mt-3" />
+          <div className="w-10 h-1 rounded-full bg-[#A89F94] dark:bg-[#6B6259] mx-auto mt-3" />
           {title && (
-            <h2 className="text-xl font-semibold text-ink-primary px-6 pt-4">
+            <h2 className="text-xl font-semibold text-[#1F1B16] dark:text-[#F0ECE6] px-6 pt-4">
               {title}
             </h2>
           )}
@@ -34,7 +34,7 @@ export function Sheet({
         </ModalSheet.Content>
 
         {footer && (
-          <div className="px-6 pb-6 pt-2 bg-surface-raised border-t border-surface-sunken">
+          <div className="px-6 pb-6 pt-2 bg-[#FFFFFF] dark:bg-[#242220] border-t border-[#F2EDE6] dark:border-[#131110]">
             {footer}
           </div>
         )}

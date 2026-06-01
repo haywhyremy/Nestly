@@ -175,7 +175,7 @@ export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null 
 
         {feedType === 'bottle' ? (
           <div className="space-y-2 animate-fade-in">
-            <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
+            <span className="block text-xs font-medium text-[#6B6259] dark:text-[#A89F94] uppercase tracking-wider mb-2">
               Volume
             </span>
             <Stepper
@@ -190,7 +190,7 @@ export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null 
         ) : (
           <div className="space-y-6 animate-fade-in">
             <div className="space-y-2">
-              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
+              <span className="block text-xs font-medium text-[#6B6259] dark:text-[#A89F94] uppercase tracking-wider mb-2">
                 Side
               </span>
               <SegmentedToggle
@@ -212,7 +212,7 @@ export function LogFeedSheet({ isOpen, onClose, editEvent = null, onSave = null 
           </div>
         )}
 
-        <div className="border-t border-surface-sunken my-2" />
+        <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
 
         <TimePicker
           value={eventTime}

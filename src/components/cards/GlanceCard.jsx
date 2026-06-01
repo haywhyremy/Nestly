@@ -34,13 +34,13 @@ export function GlanceCard({
     if (!lastFeed) {
       return (
         <div className="text-center py-6 select-none">
-          <span className="block text-xs font-semibold tracking-widest uppercase text-ink-tertiary mb-1">
+          <span className="block text-xs font-semibold tracking-widest uppercase text-[#A89F94] dark:text-[#6B6259] mb-1">
             LAST FEED
           </span>
-          <span className="text-6xl font-semibold tracking-tight text-ink-primary">
+          <span className="text-6xl font-semibold tracking-tight text-[#1F1B16] dark:text-[#F0ECE6]">
             —
           </span>
-          <p className="text-sm text-ink-tertiary mt-2">
+          <p className="text-sm text-[#A89F94] dark:text-[#6B6259] mt-2">
             No feeds logged yet
           </p>
         </div>
@@ -60,16 +60,16 @@ export function GlanceCard({
 
     return (
       <div className="text-center py-6 select-none animate-fade-in">
-        <span className="block text-xs font-semibold tracking-widest uppercase text-ink-tertiary mb-1">
+        <span className="block text-xs font-semibold tracking-widest uppercase text-[#A89F94] dark:text-[#6B6259] mb-1">
           LAST FEED
         </span>
         <span
-          className={`text-6xl font-semibold tracking-tight text-ink-primary tabular-nums transition-opacity duration-300 ${opacityClass}`}
+          className={`text-6xl font-semibold tracking-tight text-[#1F1B16] dark:text-[#F0ECE6] tabular-nums transition-opacity duration-300 ${opacityClass}`}
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >
           {timeSince}
         </span>
-        <p className="text-base text-ink-secondary mt-1">
+        <p className="text-base text-[#6B6259] dark:text-[#A89F94] mt-1">
           {subLine}
         </p>
       </div>
@@ -81,7 +81,7 @@ export function GlanceCard({
       return (
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-accent-clay flex-shrink-0" />
-          <span className="text-sm text-ink-tertiary">
+          <span className="text-sm text-[#A89F94] dark:text-[#6B6259]">
             No nappies logged yet
           </span>
         </div>
@@ -98,7 +98,7 @@ export function GlanceCard({
     return (
       <div className="flex items-center gap-3 animate-fade-in">
         <div className="w-2 h-2 rounded-full bg-accent-clay flex-shrink-0" />
-        <span className="text-sm text-ink-secondary">
+        <span className="text-sm text-[#6B6259] dark:text-[#A89F94]">
           Last nappy · {timeSince} · {subtypeLabel} · {loggedByName || 'Parent'}
         </span>
       </div>
@@ -111,7 +111,7 @@ export function GlanceCard({
       return (
         <div className="flex items-center gap-3 animate-fade-in">
           <div className="w-2 h-2 rounded-full bg-accent-dusk flex-shrink-0 animate-pulse" />
-          <span className="text-sm text-ink-secondary">
+          <span className="text-sm text-[#6B6259] dark:text-[#A89F94]">
             Sleep · ongoing · {timeSince}
           </span>
         </div>
@@ -126,7 +126,7 @@ export function GlanceCard({
       return (
         <div className="flex items-center gap-3 animate-fade-in">
           <div className="w-2 h-2 rounded-full bg-accent-dusk flex-shrink-0" />
-          <span className="text-sm text-ink-secondary">
+          <span className="text-sm text-[#6B6259] dark:text-[#A89F94]">
             Last sleep · {durationText} · ended {timeSince}
           </span>
         </div>
@@ -136,7 +136,7 @@ export function GlanceCard({
     return (
       <div className="flex items-center gap-3">
         <div className="w-2 h-2 rounded-full bg-accent-dusk flex-shrink-0" />
-        <span className="text-sm text-ink-tertiary">
+        <span className="text-sm text-[#A89F94] dark:text-[#6B6259]">
           No sleep logged yet
         </span>
       </div>

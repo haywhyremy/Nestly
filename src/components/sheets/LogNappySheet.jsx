@@ -159,7 +159,7 @@ export function LogNappySheet({ isOpen, onClose, editEvent = null, onSave = null
           accentColor="bg-accent-clay"
         />
 
-        <div className="border-t border-surface-sunken my-2" />
+        <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
 
         <TimePicker
           value={eventTime}

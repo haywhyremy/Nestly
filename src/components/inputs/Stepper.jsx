@@ -105,20 +105,20 @@ export function Stepper({
         onMouseLeave={handleActionEnd}
         onTouchStart={handleMinusStart}
         onTouchEnd={handleActionEnd}
-        className="w-12 h-12 rounded-xl bg-surface-sunken flex items-center justify-center active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-12 h-12 rounded-xl bg-[#F2EDE6] dark:bg-[#131110] flex items-center justify-center active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         aria-label="Decrease value"
       >
-        <Minus size={20} strokeWidth={1.75} className="text-ink-primary" />
+        <Minus size={20} strokeWidth={1.75} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
       </button>
 
       <div className="flex items-baseline justify-center min-w-[80px] text-center">
         <span
-          className="text-xl font-mono tabular-nums text-ink-primary font-semibold"
+          className="text-xl font-mono tabular-nums text-[#1F1B16] dark:text-[#F0ECE6] font-semibold"
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >
           {value}
         </span>
-        <span className="text-sm text-ink-secondary ml-1 font-medium">
+        <span className="text-sm text-[#6B6259] dark:text-[#A89F94] ml-1 font-medium">
           {unit}
         </span>
       </div>
@@ -131,10 +131,10 @@ export function Stepper({
         onMouseLeave={handleActionEnd}
         onTouchStart={handlePlusStart}
         onTouchEnd={handleActionEnd}
-        className="w-12 h-12 rounded-xl bg-surface-sunken flex items-center justify-center active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-12 h-12 rounded-xl bg-[#F2EDE6] dark:bg-[#131110] flex items-center justify-center active:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         aria-label="Increase value"
       >
-        <Plus size={20} strokeWidth={1.75} className="text-ink-primary" />
+        <Plus size={20} strokeWidth={1.75} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
       </button>
     </div>
   )

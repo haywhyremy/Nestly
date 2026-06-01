@@ -228,7 +228,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
     const mins = totalMinutes % 60
 
     return (
-      <div className="text-lg font-semibold text-ink-primary text-center my-4">
+      <div className="text-lg font-semibold text-[#1F1B16] dark:text-[#F0ECE6] text-center my-4">
         Baby has been sleeping for {hours}h {mins}m
       </div>
     )
@@ -302,7 +302,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
           <div className="space-y-6 animate-fade-in">
             {renderEndModeDuration()}
             
-            <div className="border-t border-surface-sunken my-2" />
+            <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
             
             <TimePicker
               value={eventTime}
@@ -314,10 +314,10 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
 
         {mode === 'edit_start' && (
           <div className="space-y-4 animate-fade-in text-center py-6">
-            <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider">
+            <span className="block text-xs font-medium text-[#6B6259] dark:text-[#A89F94] uppercase tracking-wider">
               Start Time (Read-Only)
             </span>
-            <div className="text-2xl font-bold text-ink-primary">
+            <div className="text-2xl font-bold text-[#1F1B16] dark:text-[#F0ECE6]">
               {eventTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
             <p className="text-xs text-ink-tertiary">
@@ -339,13 +339,13 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
               const hours = Math.floor(totalMinutes / 60)
               const mins = totalMinutes % 60
               return (
-                <div className="text-lg font-semibold text-ink-primary text-center my-4">
+                <div className="text-lg font-semibold text-[#1F1B16] dark:text-[#F0ECE6] text-center my-4">
                   Sleep duration: {hours}h {mins}m
                 </div>
               )
             })()}
 
-            <div className="border-t border-surface-sunken my-2" />
+            <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
 
             <TimePicker
               value={eventTime}
@@ -358,7 +358,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
         {mode === 'past' && (
           <div className="space-y-4 animate-fade-in">
             <div>
-              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
+              <span className="block text-xs font-medium text-[#6B6259] dark:text-[#A89F94] uppercase tracking-wider mb-2">
                 Started at
               </span>
               <TimePicker
@@ -368,10 +368,10 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
               />
             </div>
 
-            <div className="border-t border-surface-sunken my-2" />
+            <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
 
             <div>
-              <span className="block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2">
+              <span className="block text-xs font-medium text-[#6B6259] dark:text-[#A89F94] uppercase tracking-wider mb-2">
                 Ended at
               </span>
               <TimePicker
@@ -383,7 +383,7 @@ export function LogSleepSheet({ isOpen, onClose, activeSleep, editEvent = null, 
           </div>
         )}
 
-        <div className="border-t border-surface-sunken my-2" />
+        <div className="border-t border-[#F2EDE6] dark:border-[#131110] my-2" />
 
         <CarerAttribution
           name={myProfile?.displayLabel || myProfile?.displayName || 'Parent'}

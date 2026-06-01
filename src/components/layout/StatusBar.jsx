@@ -10,7 +10,7 @@ export function StatusBar({
   return (
     <div className="flex items-center justify-between px-4 py-3 bg-surface-base select-none border-b border-surface-sunken/40">
       {/* Left side: Baby Name */}
-      <span className="text-sm font-semibold text-ink-primary">
+      <span className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">
         {babyName || 'Baby'}
       </span>
 

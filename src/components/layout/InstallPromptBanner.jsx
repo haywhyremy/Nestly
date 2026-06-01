@@ -28,7 +28,7 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
 
   return (
     <>
-      <div className="mx-4 mt-2 bg-surface-raised border border-surface-sunken rounded-2xl p-4 shadow-sm animate-fade-in flex flex-col gap-3">
+      <div className="mx-4 mt-2 bg-[#FFFFFF] dark:bg-[#242220] border border-[#F2EDE6] dark:border-[#131110] rounded-2xl p-4 shadow-sm animate-fade-in flex flex-col gap-3">
         <style>{`
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -41,10 +41,10 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
 
         {/* Row 1: Header/Prompt copy */}
         <div className="flex items-start">
-          <div className="p-2 bg-accent-sage/10 rounded-xl text-accent-sage mt-0.5 flex-shrink-0">
+          <div className="p-2 bg-[#7A9B7E]/10 rounded-xl text-[#7A9B7E] dark:text-[#8FB393] mt-0.5 flex-shrink-0">
             <Smartphone size={20} />
           </div>
-          <span className="text-sm text-ink-primary font-medium ml-3 leading-normal">
+          <span className="text-sm text-[#1F1B16] dark:text-[#F0ECE6] font-medium ml-3 leading-normal">
             Add Nestly to your home screen for quick access
           </span>
         </div>
@@ -53,13 +53,13 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
         <div className="flex gap-2">
           <SecondaryButton 
             onClick={handleShowMeHow} 
-            className="flex-1 !h-11 text-sm font-semibold rounded-xl bg-accent-sage/10 text-accent-sage hover:bg-accent-sage/20 active:brightness-95 transition-all"
+            className="flex-1 !h-11 text-sm font-semibold rounded-xl bg-[#7A9B7E]/10 text-[#7A9B7E] dark:text-[#8FB393] hover:bg-[#7A9B7E]/20 active:brightness-95 transition-all"
           >
             Show me how
           </SecondaryButton>
           <GhostButton 
             onClick={dismiss} 
-            className="flex-1 !py-2.5 text-xs text-ink-tertiary font-medium bg-transparent hover:text-ink-secondary active:text-ink-primary transition-all text-center flex items-center justify-center"
+            className="flex-1 !py-2.5 text-xs text-[#A89F94] dark:text-[#6B6259] hover:text-[#6B6259] dark:hover:text-[#A89F94] active:text-[#1F1B16] dark:active:text-[#F0ECE6] bg-transparent transition-all text-center flex items-center justify-center"
           >
             Maybe later
           </GhostButton>
@@ -74,7 +74,7 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
         footer={
           <GhostButton 
             onClick={() => setShowGuide(false)}
-            className="w-full !py-3 text-sm font-semibold text-accent-sage hover:text-accent-sage hover:bg-accent-sage/5 rounded-xl transition-all"
+            className="w-full !py-3 text-sm font-semibold text-[#7A9B7E] dark:text-[#8FB393] hover:text-[#7A9B7E] dark:hover:text-[#8FB393] hover:bg-[#7A9B7E]/5 rounded-xl transition-all"
           >
             Got it
           </GhostButton>
@@ -84,16 +84,16 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
           {platform === 'ios' ? (
             <>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                <div className="w-8 h-8 rounded-full bg-[#7A9B7E]/10 text-[#7A9B7E] dark:text-[#8FB393] font-bold flex items-center justify-center flex-shrink-0 text-sm">
                   1
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-ink-primary">Tap the Share button</h4>
-                  <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                  <h4 className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">Tap the Share button</h4>
+                  <p className="text-xs text-[#6B6259] dark:text-[#A89F94] mt-0.5 leading-relaxed">
                     Tap the Safari toolbar Share icon at the bottom of the screen.
                   </p>
-                  <div className="mt-2.5 text-accent-sage flex items-center justify-start">
-                    <div className="p-2 bg-accent-sage/5 rounded-lg border border-accent-sage/10">
+                  <div className="mt-2.5 text-[#7A9B7E] dark:text-[#8FB393] flex items-center justify-start">
+                    <div className="p-2 bg-[#7A9B7E]/5 rounded-lg border border-[#7A9B7E]/10">
                       <svg width="20" height="20" viewBox="0 0 20 20" className="stroke-current fill-none">
                         <path d="M10 2v10M6 6l4-4 4 4M4 10v6a2 2 0 002 2h8a2 2 0 002-2v-6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -103,12 +103,12 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                <div className="w-8 h-8 rounded-full bg-[#7A9B7E]/10 text-[#7A9B7E] dark:text-[#8FB393] font-bold flex items-center justify-center flex-shrink-0 text-sm">
                   2
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-ink-primary">Scroll down and tap 'Add to Home Screen'</h4>
-                  <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                  <h4 className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">Scroll down and tap 'Add to Home Screen'</h4>
+                  <p className="text-xs text-[#6B6259] dark:text-[#A89F94] mt-0.5 leading-relaxed">
                     Scroll through the actions list and select Add to Home Screen.
                   </p>
                 </div>
@@ -116,15 +116,15 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
             </>
           ) : (
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+              <div className="w-8 h-8 rounded-full bg-[#7A9B7E]/10 text-[#7A9B7E] dark:text-[#8FB393] font-bold flex items-center justify-center flex-shrink-0 text-sm">
                 i
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-semibold text-ink-primary">Install via browser</h4>
-                <p className="text-xs text-ink-secondary mt-1 leading-relaxed">
+                <h4 className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">Install via browser</h4>
+                <p className="text-xs text-[#6B6259] dark:text-[#A89F94] mt-1 leading-relaxed">
                   In your browser, tap the menu or share button and select 'Add to Home Screen' or 'Install App'.
                 </p>
-                <p className="text-xs text-ink-secondary mt-2 leading-relaxed">
+                <p className="text-xs text-[#6B6259] dark:text-[#A89F94] mt-2 leading-relaxed">
                   On desktop, look for the install icon (usually a small monitor or plus sign) in your browser's address bar.
                 </p>
               </div>
