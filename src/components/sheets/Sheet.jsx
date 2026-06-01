@@ -17,6 +17,7 @@ export function Sheet({
         aria-modal="true"
         className="bg-[#FFFFFF] dark:bg-[#242220] rounded-t-3xl shadow-none"
         style={{
+          backgroundColor: 'var(--surface-raised, #FFFFFF)',
           boxShadow: '0 -4px 16px rgba(31, 27, 22, 0.08)'
         }}
       >

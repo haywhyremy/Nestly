@@ -197,3 +197,35 @@
 }
 
 
+/* ====================================
+   react-modal-sheet dark mode overrides
+   The library applies its own white background
+   that Tailwind dark: classes cannot override.
+   These CSS rules target the library's internal
+   class names with enough specificity to win.
+   ==================================== */
+
+/* Sheet container background */
+.dark [class*="react-modal-sheet-container"] {
+  background-color: #242220 !important;
+}
+
+/* Sheet backdrop */
+.dark [class*="react-modal-sheet-backdrop"] {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Sheet header (drag handle area) */
+.dark [class*="react-modal-sheet-header"] {
+  background-color: #242220 !important;
+}
+
+/* Sheet content area */
+.dark [class*="react-modal-sheet-content"] {
+  background-color: #242220 !important;
+}
+
+/* Also handle the drag indicator */
+.dark [class*="react-modal-sheet-drag-indicator"] {
+  background-color: #6B6259 !important;
+}
