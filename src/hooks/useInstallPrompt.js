@@ -79,7 +79,9 @@ export function useInstallPrompt(hasLoggedEntry = false) {
         console.error('PWA install prompt failed:', err)
       }
       deferredPrompt.current = null
+      return true
     }
+    return false
   };
 
   const dismiss = () => {

@@ -8,7 +8,7 @@ import { trackEvent } from '../../services/analytics'
 
 export function InstallPromptBanner({ hasLoggedEntry = false }) {
   const { canPrompt, platform, promptInstall, dismiss } = useInstallPrompt(hasLoggedEntry)
-  const [showIOSGuide, setShowIOSGuide] = useState(false)
+  const [showGuide, setShowGuide] = useState(false)
 
   // Track analytics event when the banner successfully appears
   useEffect(() => {
@@ -18,10 +18,9 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
   }, [canPrompt, hasLoggedEntry, platform])
 
   const handleShowMeHow = async () => {
-    if (platform === 'ios') {
-      setShowIOSGuide(true)
-    } else {
-      await promptInstall()
+    const prompted = await promptInstall()
+    if (!prompted) {
+      setShowGuide(true)
     }
   }
 
@@ -67,15 +66,14 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
         </div>
       </div>
 
-      {/* iOS Manual Installation Guide Overlay */}
+      {/* Manual Installation Guide Overlay */}
       <Sheet
-        isOpen={showIOSGuide}
-        onClose={() => setShowIOSGuide(false)}
-        title="Add to Home Screen"
-        snapPoints={[0.55]}
+        isOpen={showGuide}
+        onClose={() => setShowGuide(false)}
+        title="Add Nestly to your home screen"
         footer={
           <GhostButton 
-            onClick={() => setShowIOSGuide(false)}
+            onClick={() => setShowGuide(false)}
             className="w-full !py-3 text-sm font-semibold text-accent-sage hover:text-accent-sage hover:bg-accent-sage/5 rounded-xl transition-all"
           >
             Got it
@@ -83,36 +81,55 @@ export function InstallPromptBanner({ hasLoggedEntry = false }) {
         }
       >
         <div className="space-y-6 mt-4">
-          <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
-              1
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-ink-primary">Tap the Share button</h4>
-              <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
-                Tap the Safari toolbar Share icon at the bottom of the screen.
-              </p>
-              <div className="mt-2.5 text-accent-sage flex items-center justify-start">
-                <div className="p-2 bg-accent-sage/5 rounded-lg border border-accent-sage/10">
-                  <svg width="20" height="20" viewBox="0 0 20 20" className="stroke-current fill-none">
-                    <path d="M10 2v10M6 6l4-4 4 4M4 10v6a2 2 0 002 2h8a2 2 0 002-2v-6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+          {platform === 'ios' ? (
+            <>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                  1
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-semibold text-ink-primary">Tap the Share button</h4>
+                  <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                    Tap the Safari toolbar Share icon at the bottom of the screen.
+                  </p>
+                  <div className="mt-2.5 text-accent-sage flex items-center justify-start">
+                    <div className="p-2 bg-accent-sage/5 rounded-lg border border-accent-sage/10">
+                      <svg width="20" height="20" viewBox="0 0 20 20" className="stroke-current fill-none">
+                        <path d="M10 2v10M6 6l4-4 4 4M4 10v6a2 2 0 002 2h8a2 2 0 002-2v-6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
-              2
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                  2
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-semibold text-ink-primary">Scroll down and tap 'Add to Home Screen'</h4>
+                  <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
+                    Scroll through the actions list and select Add to Home Screen.
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 rounded-full bg-accent-sage/10 text-accent-sage font-bold flex items-center justify-center flex-shrink-0 text-sm">
+                i
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-semibold text-ink-primary">Install via browser</h4>
+                <p className="text-xs text-ink-secondary mt-1 leading-relaxed">
+                  In your browser, tap the menu or share button and select 'Add to Home Screen' or 'Install App'.
+                </p>
+                <p className="text-xs text-ink-secondary mt-2 leading-relaxed">
+                  On desktop, look for the install icon (usually a small monitor or plus sign) in your browser's address bar.
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-ink-primary">Scroll down and tap 'Add to Home Screen'</h4>
-              <p className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
-                Scroll through the actions list and select Add to Home Screen.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </Sheet>
     </>

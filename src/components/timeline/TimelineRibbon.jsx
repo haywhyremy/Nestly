@@ -3,7 +3,7 @@ export function TimelineRibbon({ events = [] }) {
   const validEvents = events.filter((e) => e && e.eventTime && !e.deletedAt)
 
   const renderDots = () => {
-    return validEvents.map((event) => {
+    return validEvents.map((event, index) => {
       const date = new Date(event.eventTime)
       const eventHour = date.getHours()
       const eventMinutes = date.getMinutes()
@@ -28,7 +28,7 @@ export function TimelineRibbon({ events = [] }) {
 
       return (
         <div
-          key={event.clientId || event.id}
+          key={event.clientId || event.id || `ribbon-dot-${index}`}
           className={`absolute w-2 h-2 rounded-full top-1/2 -translate-y-1/2 ${dotColorClass} shadow-sm transition-all duration-300 hover:scale-125`}
           style={{ left: `${leftPercent}%`, transform: 'translate(-50%, -50%)' }}
           title={`${event.eventType} at ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`}

@@ -147,17 +147,18 @@ export default function TimelinePage() {
           </div>
         ) : (
           <div className="space-y-3 pb-20">
-            {entries.map((event) => {
+            {entries.map((event, index) => {
               const isConflict = event.conflictStatus === 'pending'
+              const keyVal = event.clientId || event.id || `timeline-card-${index}`;
               return isConflict ? (
                 <ConflictCard
-                  key={event.clientId || event.id}
+                  key={keyVal}
                   event={event}
                   onTap={() => handleCardTap(event)}
                 />
               ) : (
                 <LogEntryCard
-                  key={event.clientId || event.id}
+                  key={keyVal}
                   event={event}
                   onTap={() => handleCardTap(event)}
                 />
