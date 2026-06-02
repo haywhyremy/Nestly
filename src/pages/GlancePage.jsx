@@ -7,6 +7,7 @@ import { StatusBar } from '../components/layout/StatusBar'
 import { SleepBanner } from '../components/layout/SleepBanner'
 import { GlanceCard } from '../components/cards/GlanceCard'
 import { EmptyStateCard } from '../components/cards/EmptyStateCard'
+import GlanceSkeleton from '../components/cards/GlanceSkeleton'
 import { QuickLogRow } from '../components/layout/QuickLogRow'
 import { useHousehold } from '../context/HouseholdContext'
 import { useAuth } from '../context/AuthContext'
@@ -127,11 +128,9 @@ export default function GlancePage() {
       />
 
       {/* Main Glance Card / Empty State Container */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 w-full max-w-md mx-auto">
         {isLoading ? (
-          <div className="text-sm text-ink-tertiary select-none">
-            Loading...
-          </div>
+          <GlanceSkeleton />
         ) : hasEntries ? (
           <GlanceCard 
             lastFeed={lastFeed} 

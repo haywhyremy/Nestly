@@ -12,6 +12,7 @@ import OnboardingFlow from './pages/OnboardingFlow'
 import GlancePage from './pages/GlancePage'
 import TimelinePage from './pages/TimelinePage'
 import SettingsPage from './pages/SettingsPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
                   <Route path="settings" element={<SettingsPage />} />
                 </Route>
               </Route>
+
+              {/* Catch-all 404 Route */}
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </BrowserRouter>
         </ThemeProvider>
