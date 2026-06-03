@@ -102,6 +102,9 @@ export default function LandingPage() {
           <a href="#" className="flex items-center gap-2 text-xl font-bold text-[#1F1B16] dark:text-[#FAFAF8]" style={{ fontFamily: "'DM Serif Display', serif" }}>
             <NestlyLogo size={28} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
             <span>Nestly</span>
+            <span className="ml-2 text-[9px] font-bold uppercase tracking-wider bg-[#7A9B7E]/15 text-[#7A9B7E] dark:bg-[#8FB89A]/15 dark:text-[#8FB89A] px-2 py-0.5 rounded-full">
+              Beta
+            </span>
           </a>
           
           {/* Right: Nav links (desktop) + dark mode toggle + CTA */}
@@ -678,29 +681,25 @@ export default function LandingPage() {
         </section>
 
         {/* SECTION 7: FOOTER */}
-        <footer className="border-t border-[#F2EDE6] dark:border-[#2A2A28] py-8 px-6 bg-[#FBF8F4] dark:bg-[#111110] transition-colors duration-200">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left select-text">
-            {/* Left: Logo + Wordmark */}
-            <a href="#" className="flex items-center gap-2 text-sm font-semibold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight" style={{ fontFamily: "'DM Serif Display', serif" }}>
+        <footer className="border-t border-[#F2EDE6] dark:border-[#2A2A28] py-8 px-6 bg-[#FBF8F4] dark:bg-[#111110]">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Logo */}
+            <div className="flex items-center gap-2">
               <NestlyLogo size={24} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
-              <span>Nestly</span>
-            </a>
+              <span className="text-sm font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Nestly</span>
+            </div>
             
+            {/* Credit */}
+            <p className="text-xs text-[#A89F94] dark:text-[#6C6C64]">
+              Made by Remy with ❤️ · © 2025
+            </p>
+            
+            {/* Legal links */}
             <div className="flex gap-6">
-              <a 
-                href="/privacy.html" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-xs text-[#A89F94] dark:text-[#6C6C64] hover:text-[#1F1B16] dark:hover:text-[#FAFAF8] transition-colors duration-200"
-              >
+              <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-xs text-[#A89F94] dark:text-[#6C6C64] hover:text-[#1F1B16] dark:hover:text-[#FAFAF8] transition-colors">
                 Privacy Policy
               </a>
-              <a 
-                href="/terms.html" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-xs text-[#A89F94] dark:text-[#6C6C64] hover:text-[#1F1B16] dark:hover:text-[#FAFAF8] transition-colors duration-200"
-              >
+              <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="text-xs text-[#A89F94] dark:text-[#6C6C64] hover:text-[#1F1B16] dark:hover:text-[#FAFAF8] transition-colors">
                 Terms of Service
               </a>
             </div>

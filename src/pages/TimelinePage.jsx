@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, RefreshCw } from 'lucide-react'
-import { format } from 'date-fns'
+import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react'
+import { format, isToday } from 'date-fns'
 
 import { FilterChips } from '../components/timeline/FilterChips'
 import { TimelineRibbon } from '../components/timeline/TimelineRibbon'
@@ -23,6 +23,7 @@ export default function TimelinePage() {
   const { user } = useAuth()
   const { household } = useHousehold()
   const [activeFilter, setActiveFilter] = useState('all')
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   const [editingEvent, setEditingEvent] = useState(null)
   const [editSheetType, setEditSheetType] = useState(null)
@@ -33,7 +34,8 @@ export default function TimelinePage() {
 
   const { entries, loadMore, hasMore, isLoading } = useTimeline(household?.id, {
     eventType: activeFilter === 'all' ? null : activeFilter,
-    pageSize: 20
+    pageSize: 20,
+    selectedDate: selectedDate
   })
 
   useEffect(() => {
@@ -42,16 +44,16 @@ export default function TimelinePage() {
     }
   }, [household?.id])
 
-  // Filter events to represent only those that happened today for the Ribbon graph
-  const todayStart = new Date()
-  todayStart.setHours(0, 0, 0, 0)
-  const todayEnd = new Date()
-  todayEnd.setHours(23, 59, 59, 999)
+  // Filter events to represent only those that happened on the selected date for the Ribbon graph
+  const dayStart = new Date(selectedDate)
+  dayStart.setHours(0, 0, 0, 0)
+  const dayEnd = new Date(selectedDate)
+  dayEnd.setHours(23, 59, 59, 999)
 
-  const todayEvents = entries.filter((e) => {
+  const selectedDateEvents = entries.filter((e) => {
     if (!e?.eventTime) return false
     const time = new Date(e.eventTime)
-    return time >= todayStart && time <= todayEnd
+    return time >= dayStart && time <= dayEnd
   })
 
   const handleCardTap = (event) => {
@@ -85,14 +87,9 @@ export default function TimelinePage() {
           <ChevronLeft size={24} />
         </Link>
 
-        <div className="flex flex-col items-center">
-          <span className="text-xs font-semibold text-ink-tertiary uppercase tracking-widest">
-            Today
-          </span>
-          <span className="text-sm font-medium text-ink-primary">
-            {format(new Date(), 'EEE, d MMM')}
-          </span>
-        </div>
+        <h1 className="text-base font-semibold text-ink-primary">
+          Timeline
+        </h1>
 
         <button
           type="button"
@@ -105,9 +102,52 @@ export default function TimelinePage() {
         </button>
       </header>
 
-      {/* Visual Timeline Ribbon Chart for Today */}
+      {/* Date Navigator */}
+      <div className="flex items-center justify-between px-4 py-3 bg-surface-base border-b border-surface-sunken/20">
+        {/* Previous day */}
+        <button
+          onClick={() => setSelectedDate(prev => {
+            const d = new Date(prev)
+            d.setDate(d.getDate() - 1)
+            return d
+          })}
+          className="w-10 h-10 rounded-full bg-[#F2EDE6] dark:bg-[#242220] flex items-center justify-center active:brightness-95 transition-colors"
+          aria-label="Previous day"
+        >
+          <ChevronLeft size={18} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
+        </button>
+
+        {/* Current date display */}
+        <button
+          onClick={() => setSelectedDate(new Date())}
+          className="text-center focus:outline-none"
+        >
+          <p className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">
+            {isToday(selectedDate) ? 'Today' : format(selectedDate, 'EEEE')}
+          </p>
+          <p className="text-xs text-[#6B6259] dark:text-[#9C9C94] mt-0.5">
+            {format(selectedDate, 'd MMM yyyy')}
+          </p>
+        </button>
+
+        {/* Next day — disabled if already on today */}
+        <button
+          onClick={() => setSelectedDate(prev => {
+            const d = new Date(prev)
+            d.setDate(d.getDate() + 1)
+            return d
+          })}
+          disabled={isToday(selectedDate)}
+          className="w-10 h-10 rounded-full bg-[#F2EDE6] dark:bg-[#242220] flex items-center justify-center active:brightness-95 transition-colors disabled:opacity-30"
+          aria-label="Next day"
+        >
+          <ChevronRight size={18} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
+        </button>
+      </div>
+
+      {/* Visual Timeline Ribbon Chart for Selected Date */}
       <div className="mt-4">
-        <TimelineRibbon events={todayEvents} />
+        <TimelineRibbon events={selectedDateEvents} />
       </div>
 
       {/* Event Category Filter Chips bar */}
@@ -133,15 +173,29 @@ export default function TimelinePage() {
         ) : entries.length === 0 ? (
           <div className="text-center text-sm text-ink-tertiary py-12 font-medium">
             {(() => {
-              switch (activeFilter) {
-                case 'feed':
-                  return 'No feeds logged today'
-                case 'nappy':
-                  return 'No nappies logged today'
-                case 'sleep':
-                  return 'No sleep logged today'
-                default:
-                  return 'Nothing logged today yet'
+              if (isToday(selectedDate)) {
+                switch (activeFilter) {
+                  case 'feed':
+                    return 'No feeds logged today'
+                  case 'nappy':
+                    return 'No nappies logged today'
+                  case 'sleep':
+                    return 'No sleep logged today'
+                  default:
+                    return 'Nothing logged today yet'
+                }
+              } else {
+                const formattedDate = format(selectedDate, 'd MMM')
+                switch (activeFilter) {
+                  case 'feed':
+                    return `No feeds on ${formattedDate}`
+                  case 'nappy':
+                    return `No nappies on ${formattedDate}`
+                  case 'sleep':
+                    return `No sleep on ${formattedDate}`
+                  default:
+                    return `Nothing logged on ${formattedDate}`
+                }
               }
             })()}
           </div>
