@@ -97,7 +97,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="w-full bg-[#FBF8F4] dark:bg-[#111110] text-[#1F1B16] dark:text-[#FAFAF8] font-system select-none overflow-x-hidden pt-20 transition-colors duration-200">
+    <div className="w-full bg-[#FBF8F4] dark:bg-[#111110] text-[#1F1B16] dark:text-[#FAFAF8] select-none overflow-x-hidden pt-20 transition-colors duration-200" style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}>
       
       {/* FIXED TOP NAVIGATION HEADER */}
       <header className="fixed top-0 left-0 right-0 z-50 py-4 px-6 bg-[#FBF8F4]/80 dark:bg-[#111110]/80 backdrop-blur-md border-b border-[#F2EDE6]/50 dark:border-[#2A2A28]/50 transition-all duration-200">
@@ -121,7 +121,7 @@ export default function LandingPage() {
             className="flex items-center gap-2 cursor-pointer"
           >
             <NestlyLogo size={28} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
-            <span className="text-xl font-bold text-[#1F1B16] dark:text-[#FAFAF8]" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <span className="text-xl font-bold text-[#1F1B16] dark:text-[#FAFAF8]" style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}>
               Nestly
             </span>
           </a>
@@ -167,7 +167,7 @@ export default function LandingPage() {
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-[1.1] mt-6 tracking-tight animate-fade-in-up animation-delay-100"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Never wonder when baby last ate.
             </h1>
@@ -300,7 +300,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Sound familiar?
             </h2>
@@ -353,7 +353,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Three taps. Seven seconds. Done.
             </h2>
@@ -633,7 +633,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Built for the hardest job you'll ever love.
             </h2>
@@ -698,7 +698,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Common questions from parents
             </h2>
@@ -746,7 +746,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
             >
               Start logging in 30 seconds.
             </h2>
@@ -807,7 +807,7 @@ export default function LandingPage() {
                 </div>
                 <h3 
                   className="text-xl font-semibold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
+                  style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
                 >
                   Check your email
                 </h3>

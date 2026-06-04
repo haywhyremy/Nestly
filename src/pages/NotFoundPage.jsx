@@ -9,8 +9,8 @@ export default function NotFoundPage() {
       
       {/* 404 number */}
       <h1 
-        className="text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-6"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        className="text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-6 tracking-tight"
+        style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }}
       >
         404
       </h1>
