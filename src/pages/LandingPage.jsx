@@ -99,11 +99,26 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 py-4 px-6 bg-[#FBF8F4]/80 dark:bg-[#111110]/80 backdrop-blur-md border-b border-[#F2EDE6]/50 dark:border-[#2A2A28]/50 transition-all duration-200">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           {/* Left: Logo + Wordmark */}
-          <a href="#" className="flex items-center gap-2 text-xl font-bold text-[#1F1B16] dark:text-[#FAFAF8]" style={{ fontFamily: "'DM Serif Display', serif" }}>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault()
+              // Reset all form states
+              setSent(false)
+              setEmail('')
+              setError('')
+              // Scroll to top
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              // Clear the hash from the URL
+              if (window.location.hash) {
+                window.history.replaceState(null, '', window.location.pathname)
+              }
+            }}
+            className="flex items-center gap-2 cursor-pointer"
+          >
             <NestlyLogo size={28} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
-            <span>Nestly</span>
-            <span className="ml-2 text-[9px] font-bold uppercase tracking-wider bg-[#7A9B7E]/15 text-[#7A9B7E] dark:bg-[#8FB89A]/15 dark:text-[#8FB89A] px-2 py-0.5 rounded-full">
-              Beta
+            <span className="text-xl font-bold text-[#1F1B16] dark:text-[#FAFAF8]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Nestly
             </span>
           </a>
           
@@ -148,7 +163,7 @@ export default function LandingPage() {
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-[1.1] mt-6 tracking-tight animate-fade-in-up animation-delay-100"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Never wonder when baby last ate.
             </h1>
@@ -180,29 +195,63 @@ export default function LandingPage() {
           {/* Right Column (iPhone Mockup) */}
           <div className="mt-10 md:mt-0 flex justify-center animate-fade-in-up animation-delay-400">
             <div className="relative animate-float">
-              {/* Phone frame */}
-              <div className="w-[260px] h-[520px] md:w-[280px] md:h-[560px] rounded-[50px] bg-[#1F1B16] p-[10px] shadow-[0_20px_60px_rgba(31,27,22,0.25)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(143,184,154,0.12)]">
-                {/* Screen */}
-                <div className="w-full h-full rounded-[40px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden relative">
-                  {/* Dynamic Island */}
-                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-[80px] h-[22px] bg-[#1F1B16] rounded-full z-10" />
+              {/* Phone outer shadow for depth */}
+              <div className="absolute inset-0 rounded-[52px] bg-gradient-to-b from-[#2A2725] to-[#1A1816] blur-[2px] scale-[1.01]" />
+              
+              {/* Phone body */}
+              <div className="relative w-[260px] h-[530px] md:w-[280px] md:h-[570px] rounded-[50px] bg-gradient-to-b from-[#2A2725] to-[#1F1B16] p-[10px] shadow-[0_25px_70px_rgba(31,27,22,0.35)] dark:shadow-[0_25px_70px_rgba(0,0,0,0.6),0_0_50px_rgba(143,184,154,0.1)]">
+                
+                {/* Side button details — subtle raised lines on the right edge */}
+                <div className="absolute right-[-2px] top-[120px] w-[3px] h-[30px] rounded-r-full bg-[#3A3530]" />
+                <div className="absolute right-[-2px] top-[170px] w-[3px] h-[50px] rounded-r-full bg-[#3A3530]" />
+                {/* Left side button */}
+                <div className="absolute left-[-2px] top-[140px] w-[3px] h-[25px] rounded-l-full bg-[#3A3530]" />
+                <div className="absolute left-[-2px] top-[180px] w-[3px] h-[45px] rounded-l-full bg-[#3A3530]" />
+                <div className="absolute left-[-2px] top-[235px] w-[3px] h-[45px] rounded-l-full bg-[#3A3530]" />
+                
+                {/* Screen bezel — subtle inner border */}
+                <div className="w-full h-full rounded-[40px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden relative border border-[#E8E0D6] dark:border-[#2A2A28]">
                   
-                  {/* Screen content */}
-                  <div className="pt-[44px] px-5 h-full flex flex-col">
+                  {/* Dynamic Island */}
+                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#1F1B16] dark:bg-[#000000] rounded-full z-10">
+                    {/* Camera dot inside dynamic island */}
+                    <div className="absolute right-[18px] top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-full bg-[#2A2725] dark:bg-[#1A1A1A]">
+                      <div className="absolute inset-[2px] rounded-full bg-[#1F1B16] dark:bg-[#0A0A0A]" />
+                    </div>
+                  </div>
+                  
+                  {/* Status bar — time and indicators */}
+                  <div className="absolute top-[10px] left-[24px] right-[24px] flex justify-between items-center z-5">
+                    <span className="text-[10px] font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">9:41</span>
+                    <div className="flex items-center gap-1">
+                      <div className="flex gap-[2px]">
+                        <div className="w-[3px] h-[4px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                        <div className="w-[3px] h-[6px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                        <div className="w-[3px] h-[8px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                        <div className="w-[3px] h-[10px] rounded-sm bg-[#A89F94] dark:bg-[#6B6259]" />
+                      </div>
+                      <div className="w-[18px] h-[9px] rounded-[2px] border border-[#1F1B16] dark:border-[#F0ECE6] relative ml-1">
+                        <div className="absolute inset-[1.5px] rounded-[1px] bg-[#7A9B7E] w-[60%]" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* App content inside screen */}
+                  <div className="pt-[46px] px-5 h-full flex flex-col">
                     {/* Status row */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-medium text-[#1F1B16] dark:text-[#FAFAF8]">Teeto</span>
+                      <span className="text-[11px] font-medium text-[#1F1B16] dark:text-[#F0ECE6]">Teeto</span>
                       <div className="w-[6px] h-[6px] rounded-full bg-[#7A9B7E]" />
                     </div>
                     
                     {/* Glance card */}
                     <div className="flex-1 flex flex-col items-center justify-center -mt-4">
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] dark:text-[#6C6C64] font-medium">Last Feed</span>
-                      <span className="text-[42px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-1" style={{ fontVariantNumeric: 'tabular-nums' }}>2h 14m</span>
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#A89F94] dark:text-[#6B6259] font-medium">Last Feed</span>
+                      <span className="text-[42px] font-bold text-[#1F1B16] dark:text-[#F0ECE6] leading-none mt-1" style={{ fontVariantNumeric: 'tabular-nums' }}>2h 14m</span>
                       <span className="text-[12px] text-[#6B6259] dark:text-[#9C9C94] mt-1">90ml · Mum</span>
                       
                       {/* Secondary rows */}
-                      <div className="mt-5 w-full space-y-2 px-2">
+                      <div className="mt-5 w-full space-y-2.5 px-2">
                         <div className="flex items-center gap-2">
                           <div className="w-[6px] h-[6px] rounded-full bg-[#C49B7A]" />
                           <span className="text-[10px] text-[#6B6259] dark:text-[#9C9C94]">Last nappy · 45m · Wet</span>
@@ -215,18 +264,21 @@ export default function LandingPage() {
                     </div>
                     
                     {/* Bottom buttons */}
-                    <div className="flex gap-2 pb-6 px-1">
-                      <div className="flex-1 py-2 rounded-xl bg-[#7A9B7E]/15 text-center">
+                    <div className="flex gap-2 pb-7 px-1">
+                      <div className="flex-1 py-2.5 rounded-xl bg-[#7A9B7E]/15 text-center">
                         <span className="text-[10px] font-medium text-[#7A9B7E]">Feed</span>
                       </div>
-                      <div className="flex-1 py-2 rounded-xl bg-[#C49B7A]/15 text-center">
+                      <div className="flex-1 py-2.5 rounded-xl bg-[#C49B7A]/15 text-center">
                         <span className="text-[10px] font-medium text-[#C49B7A]">Nappy</span>
                       </div>
-                      <div className="flex-1 py-2 rounded-xl bg-[#9B7E9B]/15 text-center">
+                      <div className="flex-1 py-2.5 rounded-xl bg-[#9B7E9B]/15 text-center">
                         <span className="text-[10px] font-medium text-[#9B7E9B]">Sleep</span>
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Home indicator bar */}
+                  <div className="absolute bottom-[6px] left-1/2 -translate-x-1/2 w-[100px] h-[4px] rounded-full bg-[#1F1B16] dark:bg-[#F0ECE6] opacity-20" />
                 </div>
               </div>
             </div>
@@ -244,7 +296,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Sound familiar?
             </h2>
@@ -297,7 +349,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Three taps. Seven seconds. Done.
             </h2>
@@ -320,43 +372,87 @@ export default function LandingPage() {
                 </div>
 
                 {/* Visual Mockup */}
-                <div className="reveal-scale relative w-[220px] h-[440px] mx-auto flex-shrink-0">
-                  <div className="absolute inset-0 rounded-[40px] bg-[#1F1B16] shadow-xl border border-[#3A3530]/20">
-                    <div className="absolute top-[10px] left-[10px] right-[10px] bottom-[10px] rounded-[32px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden flex flex-col justify-between p-3.5 pb-5 transition-colors duration-200">
+                <div className="reveal-scale relative w-[220px] h-[450px] mx-auto flex-shrink-0">
+                  {/* Phone outer shadow for depth */}
+                  <div className="absolute inset-0 rounded-[44px] bg-gradient-to-b from-[#2A2725] to-[#1A1816] blur-[1px] scale-[1.01]" />
+
+                  {/* Phone body */}
+                  <div className="relative w-full h-full rounded-[42px] bg-gradient-to-b from-[#2A2725] to-[#1F1B16] p-[8px] shadow-[0_20px_50px_rgba(31,27,22,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(143,184,154,0.08)]">
+                    
+                    {/* Side button details */}
+                    <div className="absolute right-[-2px] top-[95px] w-[2.5px] h-[25px] rounded-r-full bg-[#3A3530]" />
+                    <div className="absolute right-[-2px] top-[135px] w-[2.5px] h-[40px] rounded-r-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[110px] w-[2.5px] h-[20px] rounded-l-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[145px] w-[2.5px] h-[35px] rounded-l-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[190px] w-[2.5px] h-[35px] rounded-l-full bg-[#3A3530]" />
+
+                    {/* Screen bezel */}
+                    <div className="w-full h-full rounded-[34px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden relative border border-[#E8E0D6] dark:border-[#2A2A28]">
                       
-                      {/* Notch */}
-                      <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#1F1B16] rounded-full z-10" />
-
-                      <span className="font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-[13px] px-2 pt-6 block text-left">Log feed</span>
-                      
-                      <div className="flex bg-[#F2EDE6] dark:bg-[#0A0A09] rounded-lg p-0.5 mt-2 transition-colors duration-200">
-                        <div className="flex-1 text-center py-1 bg-[#7A9B7E] dark:bg-[#8FB89A] text-white dark:text-[#111110] rounded-md font-semibold text-[10px] shadow-sm">Bottle</div>
-                        <div className="flex-1 text-center py-1 text-[#6B6259] dark:text-[#9C9C94] font-medium text-[10px]">Breast</div>
-                      </div>
-
-                      <div className="mt-4 space-y-1 px-1">
-                        <span className="block text-[9px] font-bold text-[#6B6259] dark:text-[#9C9C94] uppercase tracking-wider">Volume</span>
-                        <div className="flex justify-between items-center bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-lg px-3 py-1.5 shadow-sm transition-colors duration-200">
-                          <span className="font-bold text-[#6B6259] dark:text-[#9C9C94] text-xs">-</span>
-                          <span className="font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-sm">90ml</span>
-                          <span className="font-bold text-[#6B6259] dark:text-[#9C9C94] text-xs">+</span>
+                      {/* Dynamic Island */}
+                      <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[76px] h-[20px] bg-[#1F1B16] dark:bg-[#000000] rounded-full z-10">
+                        {/* Camera dot */}
+                        <div className="absolute right-[14px] top-1/2 -translate-y-1/2 w-[6px] h-[6px] rounded-full bg-[#2A2725] dark:bg-[#1A1A1A]">
+                          <div className="absolute inset-[1.5px] rounded-full bg-[#1F1B16] dark:bg-[#0A0A0A]" />
                         </div>
                       </div>
 
-                      <div className="mt-4 space-y-1 px-1">
-                        <span className="block text-[9px] font-bold text-[#6B6259] dark:text-[#9C9C94] uppercase tracking-wider">Time</span>
-                        <div className="flex justify-between items-center bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-lg px-3 py-2 shadow-sm transition-colors duration-200">
-                          <span className="text-[11px] text-[#1F1B16] dark:text-[#FAFAF8]">Now</span>
-                          <span className="text-[10px] text-[#A89F94] dark:text-[#6C6C64]">Select</span>
+                      {/* Status bar */}
+                      <div className="absolute top-[8px] left-[18px] right-[18px] flex justify-between items-center z-5">
+                        <span className="text-[8px] font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">9:41</span>
+                        <div className="flex items-center gap-1">
+                          <div className="flex gap-[1.5px]">
+                            <div className="w-[2.5px] h-[3px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[4.5px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[6px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[7.5px] rounded-sm bg-[#A89F94] dark:bg-[#6B6259]" />
+                          </div>
+                          <div className="w-[14px] h-[7px] rounded-[1.5px] border border-[#1F1B16] dark:border-[#F0ECE6] relative ml-0.5">
+                            <div className="absolute inset-[1px] rounded-[0.5px] bg-[#7A9B7E] w-[60%]" />
+                          </div>
                         </div>
                       </div>
 
-                      <div className="mt-auto pt-3">
-                        <div className="w-full py-2.5 bg-[#7A9B7E] dark:bg-[#8FB89A] text-white dark:text-[#111110] text-center font-bold rounded-xl tracking-wider uppercase text-[10px] shadow-sm">
-                          Log feed
+                      {/* App content inside screen */}
+                      <div className="pt-[34px] px-3.5 h-full flex flex-col justify-between pb-4">
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">Log feed</span>
+                            <div className="w-[5px] h-[5px] rounded-full bg-[#7A9B7E]" />
+                          </div>
+                          
+                          <div className="flex bg-[#F2EDE6] dark:bg-[#131110] rounded-lg p-0.5 mt-2 transition-colors duration-200">
+                            <div className="flex-1 text-center py-1 bg-[#7A9B7E] dark:bg-[#8FB89A] text-white dark:text-[#111110] rounded-md font-semibold text-[9px] shadow-sm">Bottle</div>
+                            <div className="flex-1 text-center py-1 text-[#6B6259] dark:text-[#9C9C94] font-medium text-[9px]">Breast</div>
+                          </div>
+
+                          <div className="mt-3 space-y-1 px-1">
+                            <span className="block text-[8px] font-bold text-[#6B6259] dark:text-[#9C9C94] uppercase tracking-wider">Volume</span>
+                            <div className="flex justify-between items-center bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-lg px-2.5 py-1 shadow-sm transition-colors duration-200">
+                              <span className="font-bold text-[#6B6259] dark:text-[#9C9C94] text-[10px]">-</span>
+                              <span className="font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-xs">90ml</span>
+                              <span className="font-bold text-[#6B6259] dark:text-[#9C9C94] text-[10px]">+</span>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 space-y-1 px-1">
+                            <span className="block text-[8px] font-bold text-[#6B6259] dark:text-[#9C9C94] uppercase tracking-wider">Time</span>
+                            <div className="flex justify-between items-center bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] rounded-lg px-2.5 py-1.5 shadow-sm transition-colors duration-200">
+                              <span className="text-[10px] text-[#1F1B16] dark:text-[#FAFAF8]">Now</span>
+                              <span className="text-[9px] text-[#A89F94] dark:text-[#6C6C64]">Select</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-2">
+                          <div className="w-full py-2 bg-[#7A9B7E] dark:bg-[#8FB89A] text-white dark:text-[#111110] text-center font-bold rounded-xl tracking-wider uppercase text-[9px] shadow-sm">
+                            Log feed
+                          </div>
                         </div>
                       </div>
 
+                      {/* Home indicator bar */}
+                      <div className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[80px] h-[3.5px] rounded-full bg-[#1F1B16] dark:bg-[#F0ECE6] opacity-20" />
                     </div>
                   </div>
                 </div>
@@ -453,31 +549,70 @@ export default function LandingPage() {
                 </div>
 
                 {/* Visual Mockup */}
-                <div className="reveal-scale relative w-[220px] h-[440px] mx-auto flex-shrink-0">
-                  <div className="absolute inset-0 rounded-[40px] bg-[#1F1B16] shadow-xl border border-[#3A3530]/20">
-                    <div className="absolute top-[10px] left-[10px] right-[10px] bottom-[10px] rounded-[32px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden flex flex-col justify-between p-3.5 pb-5 transition-colors duration-200">
+                <div className="reveal-scale relative w-[220px] h-[450px] mx-auto flex-shrink-0">
+                  {/* Phone outer shadow for depth */}
+                  <div className="absolute inset-0 rounded-[44px] bg-gradient-to-b from-[#2A2725] to-[#1A1816] blur-[1px] scale-[1.01]" />
+
+                  {/* Phone body */}
+                  <div className="relative w-full h-full rounded-[42px] bg-gradient-to-b from-[#2A2725] to-[#1F1B16] p-[8px] shadow-[0_20px_50px_rgba(31,27,22,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_40px_rgba(143,184,154,0.08)]">
+                    
+                    {/* Side button details */}
+                    <div className="absolute right-[-2px] top-[95px] w-[2.5px] h-[25px] rounded-r-full bg-[#3A3530]" />
+                    <div className="absolute right-[-2px] top-[135px] w-[2.5px] h-[40px] rounded-r-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[110px] w-[2.5px] h-[20px] rounded-l-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[145px] w-[2.5px] h-[35px] rounded-l-full bg-[#3A3530]" />
+                    <div className="absolute left-[-2px] top-[190px] w-[2.5px] h-[35px] rounded-l-full bg-[#3A3530]" />
+
+                    {/* Screen bezel */}
+                    <div className="w-full h-full rounded-[34px] bg-[#FBF8F4] dark:bg-[#1C1C1A] overflow-hidden relative border border-[#E8E0D6] dark:border-[#2A2A28]">
                       
-                      {/* Notch */}
-                      <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#1F1B16] rounded-full z-10" />
-
-                      <div className="px-3 pt-6 flex justify-between items-center w-full">
-                        <span className="text-[8px] font-bold text-[#A89F94] dark:text-[#6C6C64] uppercase tracking-widest">Teeto</span>
-                        <div className="w-1 h-1 rounded-full bg-[#7A9B7E]" />
+                      {/* Dynamic Island */}
+                      <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[76px] h-[20px] bg-[#1F1B16] dark:bg-[#000000] rounded-full z-10">
+                        {/* Camera dot */}
+                        <div className="absolute right-[14px] top-1/2 -translate-y-1/2 w-[6px] h-[6px] rounded-full bg-[#2A2725] dark:bg-[#1A1A1A]">
+                          <div className="absolute inset-[1.5px] rounded-full bg-[#1F1B16] dark:bg-[#0A0A0A]" />
+                        </div>
                       </div>
 
-                      <div className="flex-1 flex flex-col items-center justify-center text-center mt-3">
-                        <span className="text-[7px] uppercase tracking-wider text-[#A89F94] dark:text-[#6C6C64] font-medium">Last Feed</span>
-                        <span className="text-[28px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-0.5 tracking-tight">2h 14m</span>
-                        <span className="text-[10px] text-[#6B6259] dark:text-[#9C9C94] mt-0.5">90ml · Mum</span>
+                      {/* Status bar */}
+                      <div className="absolute top-[8px] left-[18px] right-[18px] flex justify-between items-center z-5">
+                        <span className="text-[8px] font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">9:41</span>
+                        <div className="flex items-center gap-1">
+                          <div className="flex gap-[1.5px]">
+                            <div className="w-[2.5px] h-[3px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[4.5px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[6px] rounded-sm bg-[#1F1B16] dark:bg-[#F0ECE6]" />
+                            <div className="w-[2.5px] h-[7.5px] rounded-sm bg-[#A89F94] dark:bg-[#6B6259]" />
+                          </div>
+                          <div className="w-[14px] h-[7px] rounded-[1.5px] border border-[#1F1B16] dark:border-[#F0ECE6] relative ml-0.5">
+                            <div className="absolute inset-[1px] rounded-[0.5px] bg-[#7A9B7E] w-[60%]" />
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Simple Bottom Row */}
-                      <div className="grid grid-cols-3 gap-1 pt-3">
-                        <div className="h-8 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Feed</div>
-                        <div className="h-8 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Nappy</div>
-                        <div className="h-8 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Sleep</div>
+                      {/* App content inside screen */}
+                      <div className="pt-[34px] px-3 h-full flex flex-col justify-between pb-4">
+                        <div className="flex justify-between items-center w-full">
+                          <span className="text-[8px] font-bold text-[#A89F94] dark:text-[#6C6C64] uppercase tracking-widest">Teeto</span>
+                          <div className="w-1 h-1 rounded-full bg-[#7A9B7E]" />
+                        </div>
+
+                        <div className="flex-1 flex flex-col items-center justify-center text-center mt-2">
+                          <span className="text-[7px] uppercase tracking-wider text-[#A89F94] dark:text-[#6C6C64] font-medium">Last Feed</span>
+                          <span className="text-[28px] font-bold text-[#1F1B16] dark:text-[#FAFAF8] leading-none mt-0.5 tracking-tight">2h 14m</span>
+                          <span className="text-[10px] text-[#6B6259] dark:text-[#9C9C94] mt-0.5">90ml · Mum</span>
+                        </div>
+
+                        {/* Simple Bottom Row */}
+                        <div className="grid grid-cols-3 gap-1 pt-2">
+                          <div className="py-1.5 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Feed</div>
+                          <div className="py-1.5 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Nappy</div>
+                          <div className="py-1.5 rounded-lg bg-white dark:bg-[#242422] border border-[#F2EDE6] dark:border-[#2A2A28] text-[8px] flex items-center justify-center font-bold text-[#6B6259] dark:text-[#9C9C94] shadow-xs transition-colors duration-200">Sleep</div>
+                        </div>
                       </div>
 
+                      {/* Home indicator bar */}
+                      <div className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-[80px] h-[3.5px] rounded-full bg-[#1F1B16] dark:bg-[#F0ECE6] opacity-20" />
                     </div>
                   </div>
                 </div>
@@ -494,7 +629,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Built for the hardest job you'll ever love.
             </h2>
@@ -559,7 +694,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#FAFAF8] text-center tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Common questions from parents
             </h2>
@@ -607,7 +742,7 @@ export default function LandingPage() {
             
             <h2 
               className="reveal text-3xl md:text-4xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight"
-              style={{ fontFamily: "'DM Serif Display', serif" }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Start logging in 30 seconds.
             </h2>
@@ -652,7 +787,7 @@ export default function LandingPage() {
                 </p>
               </div>
             ) : (
-              <div className="mt-10 flex flex-col items-center text-center py-6 animate-fade-in">
+              <div className="mt-10 max-w-md mx-auto text-center animate-fade-in">
                 <style>{`
                   @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(10px); }
@@ -662,18 +797,30 @@ export default function LandingPage() {
                     animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                   }
                 `}</style>
-                <div className="w-16 h-16 rounded-full bg-[#7A9B7E]/10 dark:bg-[#8FB89A]/10 flex items-center justify-center text-[#7A9B7E] dark:text-[#8FB89A] mb-6">
-                  <Mail size={32} strokeWidth={1.5} />
+                {/* Mail icon */}
+                <div className="flex justify-center mb-6">
+                  <Mail size={48} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
                 </div>
                 <h3 
                   className="text-xl font-semibold text-[#1F1B16] dark:text-[#FAFAF8] tracking-tight"
-                  style={{ fontFamily: "'DM Serif Display', serif" }}
+                  style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   Check your email
                 </h3>
-                <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 max-w-[280px] leading-relaxed">
-                  We sent a sign-in link to <span className="font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">{email}</span>. Click the link to launch Nestly.
+                <p className="text-sm text-[#6B6259] dark:text-[#9C9C94] mt-2 leading-relaxed">
+                  We sent a sign-in link to <strong>{email}</strong>
                 </p>
+                {/* Try another email button */}
+                <button
+                  onClick={() => {
+                    setSent(false)
+                    setEmail('')
+                    setError('')
+                  }}
+                  className="mt-4 text-sm font-medium text-[#7A9B7E] dark:text-[#8FB89A] hover:underline"
+                >
+                  Use a different email
+                </button>
               </div>
             )}
 
@@ -683,18 +830,15 @@ export default function LandingPage() {
         {/* SECTION 7: FOOTER */}
         <footer className="border-t border-[#F2EDE6] dark:border-[#2A2A28] py-8 px-6 bg-[#FBF8F4] dark:bg-[#111110]">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Logo */}
-            <div className="flex items-center gap-2">
+            {/* Left: Logo + credit */}
+            <div className="flex items-center gap-3">
               <NestlyLogo size={24} className="text-[#7A9B7E] dark:text-[#8FB89A]" />
               <span className="text-sm font-semibold text-[#1F1B16] dark:text-[#FAFAF8]">Nestly</span>
+              <span className="text-xs text-[#A89F94] dark:text-[#6C6C64]">·</span>
+              <span className="text-xs text-[#A89F94] dark:text-[#6C6C64]">Made by Remy with ❤️ © 2026</span>
             </div>
-            
-            {/* Credit */}
-            <p className="text-xs text-[#A89F94] dark:text-[#6C6C64]">
-              Made by Remy with ❤️ · © 2025
-            </p>
-            
-            {/* Legal links */}
+
+            {/* Right: Legal links */}
             <div className="flex gap-6">
               <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-xs text-[#A89F94] dark:text-[#6C6C64] hover:text-[#1F1B16] dark:hover:text-[#FAFAF8] transition-colors">
                 Privacy Policy

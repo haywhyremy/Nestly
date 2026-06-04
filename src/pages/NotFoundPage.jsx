@@ -10,7 +10,7 @@ export default function NotFoundPage() {
       {/* 404 number */}
       <h1 
         className="text-6xl font-bold text-[#1F1B16] dark:text-[#FAFAF8] mt-6"
-        style={{ fontFamily: "'DM Serif Display', serif" }}
+        style={{ fontFamily: "'Playfair Display', serif" }}
       >
         404
       </h1>
