@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RefreshCw, Calendar } from 'lucide-react'
 import { format, isToday } from 'date-fns'
 
 import { FilterChips } from '../components/timeline/FilterChips'
@@ -24,6 +24,7 @@ export default function TimelinePage() {
   const { household } = useHousehold()
   const [activeFilter, setActiveFilter] = useState('all')
   const [selectedDate, setSelectedDate] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   const [editingEvent, setEditingEvent] = useState(null)
   const [editSheetType, setEditSheetType] = useState(null)
@@ -117,17 +118,22 @@ export default function TimelinePage() {
           <ChevronLeft size={18} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
         </button>
 
-        {/* Current date display */}
+        {/* Current date display — tap to open date picker */}
         <button
-          onClick={() => setSelectedDate(new Date())}
+          onClick={() => setShowDatePicker(!showDatePicker)}
           className="text-center focus:outline-none"
         >
-          <p className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">
-            {isToday(selectedDate) ? 'Today' : format(selectedDate, 'EEEE')}
-          </p>
-          <p className="text-xs text-[#6B6259] dark:text-[#9C9C94] mt-0.5">
-            {format(selectedDate, 'd MMM yyyy')}
-          </p>
+          <div className="flex items-center gap-1.5">
+            <Calendar size={14} className="text-[#A89F94] dark:text-[#6B6259]" />
+            <div className="text-left">
+              <p className="text-sm font-semibold text-[#1F1B16] dark:text-[#F0ECE6]">
+                {isToday(selectedDate) ? 'Today' : format(selectedDate, 'EEEE')}
+              </p>
+              <p className="text-xs text-[#6B6259] dark:text-[#9C9C94]">
+                {format(selectedDate, 'd MMM yyyy')}
+              </p>
+            </div>
+          </div>
         </button>
 
         {/* Next day — disabled if already on today */}
@@ -144,6 +150,23 @@ export default function TimelinePage() {
           <ChevronRight size={18} className="text-[#1F1B16] dark:text-[#F0ECE6]" />
         </button>
       </div>
+
+      {showDatePicker && (
+        <div className="px-4 pb-3">
+          <input
+            type="date"
+            value={format(selectedDate, 'yyyy-MM-dd')}
+            max={format(new Date(), 'yyyy-MM-dd')}
+            onChange={(e) => {
+              if (e.target.value) {
+                setSelectedDate(new Date(e.target.value + 'T00:00:00'))
+                setShowDatePicker(false)
+              }
+            }}
+            className="w-full h-[44px] px-4 rounded-xl bg-[#FFFFFF] dark:bg-[#242220] border border-[#F2EDE6] dark:border-[#2A2A28] text-sm text-[#1F1B16] dark:text-[#F0ECE6]"
+          />
+        </div>
+      )}
 
       {/* Visual Timeline Ribbon Chart for Selected Date */}
       <div className="mt-4">

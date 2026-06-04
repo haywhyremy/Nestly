@@ -17,6 +17,9 @@ import { useSync } from '../hooks/useSync'
 import { trackEvent, setHouseholdGroup } from '../services/analytics'
 import { useNotificationBadge, updateNotificationBadge } from '../hooks/useNotificationBadge'
 import { InstallPromptBanner } from '../components/layout/InstallPromptBanner'
+import { useLiveQuery } from 'dexie-react-hooks'
+import db from '../db/dexie'
+import { LogEntryCard } from '../components/cards/LogEntryCard'
 
 export default function GlancePage() {
   const { user } = useAuth()
@@ -36,6 +39,23 @@ export default function GlancePage() {
 
   // Core Sync orchestrator hook
   const syncState = useSync(household?.id)
+
+  // Get the 10 most recent entries across all types for this household
+  const recentEntries = useLiveQuery(
+    async () => {
+      if (!household?.id) return [];
+      const events = await db.events
+        .where('householdId')
+        .equals(household.id)
+        .filter(e => !e.deletedAt)
+        .toArray();
+      return events
+        .sort((a, b) => new Date(b.eventTime) - new Date(a.eventTime))
+        .slice(0, 10);
+    },
+    [household?.id],
+    []
+  );
 
   // Track app opened and group analytics on mount/household resolution
   useEffect(() => {
@@ -64,7 +84,7 @@ export default function GlancePage() {
   const hasEntries = !!(lastFeed || lastNappy || lastSleep || activeSleep)
 
   return (
-    <div className="flex flex-col min-h-dvh bg-surface-base animate-fade-in">
+    <div className="flex flex-col min-h-dvh bg-[#FBF8F4] dark:bg-[#1A1816] animate-fade-in">
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
@@ -116,41 +136,49 @@ export default function GlancePage() {
       <InstallPromptBanner hasLoggedEntry={!!(lastFeed || lastNappy || lastSleep)} />
 
       {/* Sleep Ongoing Notification Banner */}
-      <SleepBanner 
-        activeSleep={activeSleep} 
-        onTap={() => {
-          // Simply scroll down to QuickLogRow (as specified in the guidelines)
-          const quickLogElement = document.querySelector('.sticky');
-          if (quickLogElement) {
-            quickLogElement.scrollIntoView({ behavior: 'smooth' })
-          }
-        }} 
-      />
+      <SleepBanner activeSleep={activeSleep} onTap={() => {}} />
 
-      {/* Main Glance Card / Empty State Container */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 w-full max-w-md mx-auto">
-        {isLoading ? (
-          <GlanceSkeleton />
-        ) : hasEntries ? (
-          <GlanceCard 
-            lastFeed={lastFeed} 
-            lastNappy={lastNappy} 
-            lastSleep={lastSleep} 
-            activeSleep={activeSleep} 
-          />
-        ) : (
-          <EmptyStateCard />
-        )}
-      </main>
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto w-full max-w-md mx-auto">
+        {/* Glance card — compact, at the top, not centered */}
+        <div className="px-4 pt-4 pb-2">
+          {isLoading ? (
+            <GlanceSkeleton />
+          ) : hasEntries ? (
+            <GlanceCard 
+              lastFeed={lastFeed} 
+              lastNappy={lastNappy} 
+              lastSleep={lastSleep} 
+              activeSleep={activeSleep} 
+            />
+          ) : (
+            <EmptyStateCard />
+          )}
+        </div>
 
-      {/* Timeline Quick Link */}
-      <div className="text-center py-2">
-        <Link 
-          to="/app/timeline" 
-          className="text-xs font-medium text-ink-tertiary tracking-wide hover:text-ink-secondary active:text-ink-primary transition-colors"
-        >
-          View today's timeline →
-        </Link>
+        {/* Divider */}
+        <div className="mx-4 border-t border-[#F2EDE6] dark:border-[#242220]" />
+
+        {/* "View log timeline" link */}
+        <div className="px-4 py-3 flex items-center justify-between">
+          <span className="text-xs font-semibold text-[#1F1B16] dark:text-[#F0ECE6] uppercase tracking-wider">Recent Activity</span>
+          <Link to="/app/timeline" className="text-xs font-medium text-[#7A9B7E] dark:text-[#8FB89A]">
+            View log timeline →
+          </Link>
+        </div>
+
+        {/* Recent log entries — same style as timeline */}
+        <div className="px-2 pb-4">
+          {recentEntries && recentEntries.length > 0 ? (
+            recentEntries.map((event, index) => (
+              <LogEntryCard key={event.clientId || index} event={event} onTap={() => {}} />
+            ))
+          ) : (
+            <p className="text-sm text-[#A89F94] dark:text-[#6B6259] text-center py-8">
+              No activity yet. Tap below to log your first entry.
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Quick Logging Row buttons bar */}

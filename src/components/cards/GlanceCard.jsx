@@ -33,14 +33,14 @@ export function GlanceCard({
   const renderHeroSection = () => {
     if (!lastFeed) {
       return (
-        <div className="text-center py-6 select-none">
+        <div className="text-center py-4 select-none">
           <span className="block text-xs font-semibold tracking-widest uppercase text-[#A89F94] dark:text-[#6B6259] mb-1">
             LAST FEED
           </span>
           <span className="text-6xl font-semibold tracking-tight text-[#1F1B16] dark:text-[#F0ECE6]">
             —
           </span>
-          <p className="text-sm text-[#A89F94] dark:text-[#6B6259] mt-2">
+          <p className="text-sm text-[#A89F94] dark:text-[#6B6259] mt-1">
             No feeds logged yet
           </p>
         </div>
@@ -59,7 +59,7 @@ export function GlanceCard({
     }
 
     return (
-      <div className="text-center py-6 select-none animate-fade-in">
+      <div className="text-center py-4 select-none animate-fade-in">
         <span className="block text-xs font-semibold tracking-widest uppercase text-[#A89F94] dark:text-[#6B6259] mb-1">
           LAST FEED
         </span>
@@ -147,7 +147,7 @@ export function GlanceCard({
     <div className="w-full flex flex-col items-center">
       {renderHeroSection()}
 
-      <div className="mt-6 space-y-3 w-full px-2">
+      <div className="mt-4 space-y-2 w-full px-2">
         {renderNappyRow()}
         {renderSleepRow()}
       </div>
