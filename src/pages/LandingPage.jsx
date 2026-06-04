@@ -78,7 +78,11 @@ export default function LandingPage() {
       setSent(true)
     } catch (err) {
       console.error('Failed to send sign-in link:', err)
-      setError(err.message || 'Failed to send sign-in link. Please try again.')
+      if (err.message && err.message.toLowerCase().includes('rate limit')) {
+        setError('Too many sign-in attempts. Please wait a few minutes and try again.')
+      } else {
+        setError(err.message || 'Failed to send sign-in link. Please try again.')
+      }
     } finally {
       setIsSending(false)
     }
