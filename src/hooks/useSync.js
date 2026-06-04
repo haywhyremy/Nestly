@@ -22,6 +22,7 @@ export function useSync(householdId) {
     syncingRef.current = true
     setIsSyncing(true)
     try {
+      console.log('[Sync] Starting sync for household:', householdId);
       // Eviction Safeguard: check if Dexie events cache got cleared
       const localCount = await db.events.where('householdId').equals(householdId).count()
       if (localCount === 0) {
@@ -39,9 +40,11 @@ export function useSync(householdId) {
         return
       }
 
-      await processUploadQueue(householdId)
-      const downloaded = await downloadNewEvents(householdId)
-      const conflictsFlagged = await detectConflicts(downloaded, householdId)
+      const uploadedCount = await processUploadQueue(householdId)
+      console.log('[Sync] Uploaded', uploadedCount, 'events');
+      const downloadedEvents = await downloadNewEvents(householdId)
+      console.log('[Sync] Downloaded', downloadedEvents.length, 'new events');
+      const conflictsFlagged = await detectConflicts(downloadedEvents, householdId)
       console.log('[Sync] Conflicts detected:', conflictsFlagged.length)
       setLastSynced(new Date())
       const count = await getQueueLength()

@@ -16,6 +16,7 @@ import db from '../db/dexie'
 import { supabase } from '../services/supabase'
 import { useNotificationBadge } from '../hooks/useNotificationBadge'
 import { trackEvent } from '../services/analytics'
+import { rehydrateFromServer } from '../db/syncQueue'
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -411,6 +412,24 @@ export default function SettingsPage() {
               disabled={syncState.isSyncing}
             >
               {syncState.isSyncing ? 'Syncing...' : 'Sync now'}
+            </SecondaryButton>
+
+            <SecondaryButton
+              onClick={async () => {
+                if (!household?.id) return
+                const confirmForce = window.confirm("Force sync from server? This will download all events and overwrite local cache.")
+                if (!confirmForce) return
+                try {
+                  const count = await rehydrateFromServer(household.id)
+                  alert(`Rehydrated ${count} events`)
+                  window.location.reload()
+                } catch (err) {
+                  console.error('Force Sync failed:', err)
+                  alert('Force Sync failed: ' + err.message)
+                }
+              }}
+            >
+              Force Sync
             </SecondaryButton>
             
             <SecondaryButton

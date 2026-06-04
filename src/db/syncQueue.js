@@ -79,39 +79,56 @@ export async function downloadNewEvents(householdId) {
     .order('updated_at', { ascending: true })
 
   if (error) throw error
-  if (!remoteEvents || remoteEvents.length === 0) return []
 
   const processedEvents = []
 
-  for (const row of remoteEvents) {
-    // Transform from Supabase snake_case back to Dexie camelCase
-    const dexieEvent = {
-      clientId: row.client_id,
-      householdId: row.household_id,
-      babyId: row.baby_id,
-      loggedBy: row.logged_by,
-      loggedByName: row.logged_by_name,
-      deviceId: row.device_id,
-      eventType: row.event_type,
-      eventSubtype: row.event_subtype,
-      metadata: row.metadata,
-      parentId: row.parent_id,
-      conflictStatus: row.conflict_status,
-      eventTime: row.event_time,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
-      deletedAt: row.deleted_at,
-      syncStatus: 'synced' // Mark as synced
+  if (remoteEvents && remoteEvents.length > 0) {
+    for (const row of remoteEvents) {
+      // Transform from Supabase snake_case back to Dexie camelCase
+      const dexieEvent = {
+        clientId: row.client_id,
+        householdId: row.household_id,
+        babyId: row.baby_id,
+        loggedBy: row.logged_by,
+        loggedByName: row.logged_by_name,
+        deviceId: row.device_id,
+        eventType: row.event_type,
+        eventSubtype: row.event_subtype,
+        metadata: row.metadata,
+        parentId: row.parent_id,
+        conflictStatus: row.conflict_status,
+        eventTime: row.event_time,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+        deletedAt: row.deleted_at,
+        syncStatus: 'synced' // Mark as synced
+      }
+
+      // Check if clientId already exists and overwrite / insert
+      await db.events.put(dexieEvent)
+      processedEvents.push(dexieEvent)
     }
 
-    // Check if clientId already exists and overwrite / insert
-    await db.events.put(dexieEvent)
-    processedEvents.push(dexieEvent)
+    // Update lastSyncTimestamp in metadata to the latest updated_at value from downloaded events
+    const latestUpdatedAt = remoteEvents[remoteEvents.length - 1].updated_at
+    await db.metadata.put({ key: 'lastSyncTimestamp', value: latestUpdatedAt })
   }
 
-  // Update lastSyncTimestamp in metadata to the latest updated_at value from downloaded events
-  const latestUpdatedAt = remoteEvents[remoteEvents.length - 1].updated_at
-  await db.metadata.put({ key: 'lastSyncTimestamp', value: latestUpdatedAt })
+  // After normal delta download, verify we have all events
+  const { count: serverCount } = await supabase
+    .from('events')
+    .select('*', { count: 'exact', head: true })
+    .eq('household_id', householdId)
+
+  const localCount = await db.events
+    .where('householdId')
+    .equals(householdId)
+    .count()
+
+  if (serverCount && localCount < serverCount) {
+    console.warn(`[Sync] Local has ${localCount} events but server has ${serverCount}. Triggering full rehydration.`)
+    await rehydrateFromServer(householdId)
+  }
 
   return processedEvents
 }

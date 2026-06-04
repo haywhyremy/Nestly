@@ -159,20 +159,27 @@ export default function GlancePage() {
         {/* Divider */}
         <div className="mx-4 border-t border-[#F2EDE6] dark:border-[#242220]" />
 
-        {/* "View log timeline" link */}
-        <div className="px-4 py-3 flex items-center justify-between">
+        {/* "Recent Activity" header */}
+        <div className="px-4 py-3">
           <span className="text-xs font-semibold text-[#1F1B16] dark:text-[#F0ECE6] uppercase tracking-wider">Recent Activity</span>
-          <Link to="/app/timeline" className="text-xs font-medium text-[#7A9B7E] dark:text-[#8FB89A]">
-            View log timeline →
-          </Link>
         </div>
 
         {/* Recent log entries — same style as timeline */}
         <div className="px-2 pb-4">
           {recentEntries && recentEntries.length > 0 ? (
-            recentEntries.map((event, index) => (
-              <LogEntryCard key={event.clientId || index} event={event} onTap={() => {}} />
-            ))
+            <>
+              {recentEntries.map((event, index) => (
+                <LogEntryCard key={event.clientId || index} event={event} onTap={() => {}} />
+              ))}
+              
+              {/* View more button at the bottom */}
+              <Link 
+                to="/app/timeline"
+                className="block text-center py-4 mt-2 text-sm font-medium text-[#7A9B7E] dark:text-[#8FB89A] hover:underline"
+              >
+                View more logs →
+              </Link>
+            </>
           ) : (
             <p className="text-sm text-[#A89F94] dark:text-[#6B6259] text-center py-8">
               No activity yet. Tap below to log your first entry.
